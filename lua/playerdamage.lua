@@ -389,3 +389,26 @@ Hooks:PreHook(PlayerDamage, "revive", "eclipse_revive", function(self)
 		self._down_time = math.max(tweak_data.player.damage.DOWNED_TIME_MIN, self._down_time - tweak_data.player.damage.DOWNED_TIME_DEC)
 	end
 end)
+
+--make the downed state more dramatic
+function PlayerDamage:update_downed(t, dt)
+	if self._downed_timer and self._downed_paused_counter == 0 then
+		self._downed_timer = self._downed_timer - dt
+
+		if self._downed_start_time == 0 then
+			self._downed_progression = 100
+		else
+			self._downed_progression = math.clamp(1 - self._downed_timer / self._downed_start_time, 0, 1) * 100
+		end
+
+		if not _G.IS_VR then
+			managers.environment_controller:set_downed_value(self._downed_progression + 65)
+		end
+
+		SoundDevice:set_rtpc("downed_state_progression", self._downed_progression + 65)
+
+		return self._downed_timer <= 0
+	end
+
+	return false
+end

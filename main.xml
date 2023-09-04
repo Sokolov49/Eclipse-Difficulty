@@ -1,5 +1,10 @@
 <table>
 	<AddFiles directory="assets">
+		<!-- put the menu logo where it belongs and change it -->
+		<texture path="guis/textures/game_small_logo"/>
+		<texture path="guis/textures/menu_title_screen"/>
+		<texture path="units/menu/menu_scene/menu_cylinder_logo"/>
+
 		<!-- weapons -->
 		<object path="units/weapons/smoke_grenade_quick/smoke_grenade_quick"/>
 		
@@ -52,5 +57,6 @@
 	<Localization directory="loc" default="en.txt">
 	   <loc file="en.txt" language="english"/>
 	   <loc file="schinese.json" language="schinese"/>
+	   <loc file="ru.txt" language="russian"/>
     </Localization>
 </table>
