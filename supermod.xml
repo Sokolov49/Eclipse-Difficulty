@@ -11,11 +11,13 @@
 
 		<group hook_id="core/lib/">
 			<post :hook_id="managers/coreenvironmentcontrollermanager"/>
+			<post :hook_id="managers/coresequencemanager"/>
 			<post :hook_id="units/coreunitdamage"/>
 		</group>
 
 		<group hook_id="lib/">
 			<post :hook_id="utils/inventorydescription"/>
+			<post :hook_id="states/bootupstate"/>
 			<group :hook_id="managers/">
 				<group :hook_id="group_ai_states/">
 					<post :hook_id="groupaistatebase"/>

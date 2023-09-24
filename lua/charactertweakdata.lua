@@ -522,11 +522,25 @@ function CharacterTweakData:_presets(tweak_data, ...)
 
 	-- Enemy chatter
 	presets.enemy_chatter.cop.retreat = nil
+	presets.enemy_chatter.cop.flank = true
 	presets.enemy_chatter.cop.open_fire = true
+	presets.enemy_chatter.cop.watch_background = true
+	presets.enemy_chatter.cop.hostage_delay = true
+	presets.enemy_chatter.cop.get_hostages = true
+	presets.enemy_chatter.cop.get_loot = true
+	presets.enemy_chatter.cop.group_death = true
+	presets.enemy_chatter.cop.idle = true
+	presets.enemy_chatter.cop.report = true
 
 	presets.enemy_chatter.swat.push = true
+	presets.enemy_chatter.swat.flank = true
 	presets.enemy_chatter.swat.flash_grenade = true
 	presets.enemy_chatter.swat.open_fire = true
+	presets.enemy_chatter.swat.watch_background = true
+	presets.enemy_chatter.swat.hostage_delay = true
+	presets.enemy_chatter.swat.get_hostages = true
+	presets.enemy_chatter.swat.get_loot = true
+	presets.enemy_chatter.swat.group_death = true
 
 	presets.enemy_chatter.gangster = {
 		aggressive = true,
@@ -549,6 +563,8 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	-- sniper
 	self.sniper.suppression = nil
 	self.sniper.misses_first_player_shot = true
+	self.sniper.spawn_sound_event = "mga_deploy_snipers"
+	self.sniper.die_sound_event = "mga_death_scream"
 
 	-- cloaker
 	self.spooc.use_animation_on_fire_damage = true
@@ -742,6 +758,31 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.deep_boss.move_speed = self.presets.move_speed.slow
 	self.deep_boss.no_run_start = true
 	self.deep_boss.no_run_stop = true
+	
+	-- actually correct the gangster voicelines, chatter presets are fine but they make cop lines play instead
+	local job = Global.level_data and Global.level_data.level_id
+	if job == "nightclub" or job == "short2_stage1" or job == "jolly" or job == "spa" then
+		self.gangster.speech_prefix_p1 = "rt"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	elseif job == "alex_2" then
+		self.gangster.speech_prefix_p1 = "ict"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	elseif job == "welcome_to_the_jungle_1" then
+		self.gangster.speech_prefix_p1 = "bik"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	else
+		self.gangster.speech_prefix_p1 = "lt"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	end
+	
+	--same for mobsters
+	self.mobster.speech_prefix_p1 = "rt"
+	self.mobster.speech_prefix_p2 = nil
+	self.mobster.speech_prefix_count = 2
 
 	-- escort speed stuff
 	self.escort_cfo.move_speed = self.presets.move_speed.escort_normal

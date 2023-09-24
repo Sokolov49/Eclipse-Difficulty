@@ -208,17 +208,16 @@ function PlayerDamage:is_friendly_fire(unit)
 	if attacker_team ~= my_team and attacker_mov_ext:friendly_fire() then
 		return false
 	end
-
-	local friendly_fire = attacker_team and not attacker_team.foes[my_team.id] and Global.game_settings and not Global.game_settings.one_down
-	if Global.game_settings and Global.game_settings.one_down and unit:base() and unit:base().is_husk_player then
-		return false
-	elseif managers.groupai:state():all_AI_criminals()[self._unit:key()] and Global.game_settings and not Global.game_settings.one_down then
+	local pro_job_enabled = Global.game_settings and Global.game_settings.one_down
+	local attacked_by_foe = attacker_team and my_team and my_team.foes[attacker_team.id]
+	local friendly_fire_mutator_active = managers.mutators:modify_value("PlayerDamage:FriendlyFire", friendly_fire_mutator_active) == false
+	if not attacked_by_foe then
+		if pro_job_enabled or friendly_fire_mutator_active then
+			return false
+		end
 		return true
-	else
-		friendly_fire = managers.mutators:modify_value("PlayerDamage:FriendlyFire", friendly_fire)
 	end
-
-	return friendly_fire
+	return false
 end
 
 -- Armor Breaking GP / Panic
@@ -389,3 +388,26 @@ Hooks:PreHook(PlayerDamage, "revive", "eclipse_revive", function(self)
 		self._down_time = math.max(tweak_data.player.damage.DOWNED_TIME_MIN, self._down_time - tweak_data.player.damage.DOWNED_TIME_DEC)
 	end
 end)
+
+--make the downed state more dramatic
+function PlayerDamage:update_downed(t, dt)
+	if self._downed_timer and self._downed_paused_counter == 0 then
+		self._downed_timer = self._downed_timer - dt
+
+		if self._downed_start_time == 0 then
+			self._downed_progression = 100
+		else
+			self._downed_progression = math.clamp(1 - self._downed_timer / self._downed_start_time, 0, 1) * 100
+		end
+
+		if not _G.IS_VR then
+			managers.environment_controller:set_downed_value(self._downed_progression + 45)
+		end
+
+		SoundDevice:set_rtpc("downed_state_progression", self._downed_progression + 45)
+
+		return self._downed_timer <= 0
+	end
+
+	return false
+end

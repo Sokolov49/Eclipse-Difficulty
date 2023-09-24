@@ -251,7 +251,7 @@ end
 
 -- Auto Fire Sound Fix
 -- Thanks offyerrocker
-
+--[[ I don't know why this is here, it breaks echo effects for automatic weapons
 _G.AutoFireSoundFixBlacklist = {
 	["saw"] = true,
 	["saw_secondary"] = true,
@@ -296,7 +296,7 @@ end
 Hooks:PreHook(RaycastWeaponBase, "fire", "autofiresoundfix2_raycastweaponbase_fire", function(self, ...)
 	if not self:_soundfix_should_play_normal() then
 		self._bullets_fired = 0
-		self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire_single, "fire_single")
+		self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire_single, "fire_single", "fire")
 	end
 end)
 
@@ -307,3 +307,4 @@ function RaycastWeaponBase:stop_shooting(...)
 		return orig_stop_shooting(self, ...)
 	end
 end
+]]--

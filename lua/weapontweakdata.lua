@@ -1,5 +1,11 @@
 Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self)
 
+--actually give shotguns their own special muzzleflashes after all this time
+--only npc for now
+self.r870_npc.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+self.saiga_npc.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+self.benelli_npc.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+
 local SELECTION = {
 	SECONDARY = 1,
 	PRIMARY = 2,
@@ -1770,6 +1776,7 @@ self.system.use_data.selection_index = SELECTION.UNDERBARREL_PRIMARY
 -- Misc
 	self.m249_npc.usage = "is_lmg"
 	self.flamethrower_npc.flame_max_range = 800
+	self.mac11_npc.sounds.prefix = "mac10_npc"
 	self.benelli_npc.sounds.prefix = "benelli_m4_npc"
 	self.shepheard_npc.sounds.prefix = "shepheard_npc"
 	self.ksg_npc.sounds.prefix = "keltec_npc"
