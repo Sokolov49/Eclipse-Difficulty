@@ -111,8 +111,19 @@ function UpgradesTweakData:init(tweak_data)
 	self.skill_descs.inspire.multipro = "120"
 
 	-- FFriendship
+	self.definitions.player_extra_hostages = {
+		category = "feature",
+		name_id = "menu_shotgun_extra_hostages",
+		upgrade = {
+			category = "player",
+			upgrade = "extra_hostages",
+			value = 1,
+		},
+	}
+	self.values.player.extra_hostages = { true }
 	self.skill_descs.triathlete.multibasic = "4"
-	self.skill_descs.triathlete.multipro = "75%"
+	self.skill_descs.triathlete.multipro = "5"
+	self.skill_descs.triathlete.multipro2 = "75%"
 
 	-- Confident
 	self.skill_descs.cable_guy.multipro = "50%"
