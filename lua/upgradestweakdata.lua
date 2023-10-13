@@ -1030,4 +1030,21 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.player.passive_xp_multiplier[1] = 1.2
 	self.values.player.regain_throwable_from_ammo[1].chance = 0.02
 	self.values.player.regain_throwable_from_ammo[1].chance_inc = 0.001
+	
+	--remove bot boosts
+	self.values.team.crew_add_health = nil
+	self.values.team.crew_add_armor = nil
+	self.values.team.crew_add_dodge = nil
+	self.values.team.crew_add_concealment = nil
+	self.values.team.crew_add_stamina = nil
+	self.values.team.crew_reduce_speed_penalty = nil
+	self.values.team.crew_faster_reload = nil
+	self.values.team.crew_faster_swap = nil
+	self.values.team.crew_throwable_regen = nil
+	self.values.team.crew_health_regen = nil
+	self.values.team.crew_active = nil
+	self.values.team.crew_inspire = 9999999
+	self.values.team.crew_scavenge = nil
+	self.values.team.crew_interact = nil
+	self.values.team.crew_ai_ap_ammo = {false}
 end
