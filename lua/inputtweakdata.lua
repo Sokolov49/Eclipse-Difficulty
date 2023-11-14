@@ -31,4 +31,4 @@ function InputTweakData:init(tweak_data)
             look_speed_standard = 120
         }
     }
-end)
+end
