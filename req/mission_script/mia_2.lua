@@ -1,16 +1,44 @@
 return {
-	-- Boss spawn
-	[100154] = {
-		difficulty = 0.1
+    -- slow down a few roof spawnpoints
+	[101470] = {
+		values = {
+			interval = 20
+		}
 	},
-	-- Boss dead
-	[100153] = {
-		difficulty = 1
+	[100007] = {
+		values = {
+			interval = 30
+		}
 	},
-	[101133] = {
-		enemy = Idstring("units/payday2/characters/ene_spook_1/ene_spook_1")
+	[100019] = {
+		values = {
+			interval = 30
+		}
 	},
-	[101141] = {
-		enemy = Idstring("units/payday2/characters/ene_spook_1/ene_spook_1")
-	}
+	[100132] = {
+		values = {
+			interval = 30
+		}
+	},
+    -- slow down main entrance spawnpoints
+	[100131] = {
+		values = {
+			interval = 15
+		}
+	},
+	[100130] = {
+		values = {
+			interval = 15
+		}
+	},
+	[100133] = {
+		values = {
+			interval = 15
+		}
+	},
+	[100128] = {
+		values = {
+			interval = 15
+		}
+	},
 }
