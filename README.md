@@ -57,3 +57,16 @@ Expect an unwanted guest when you enter FFO while playing on Eclipse difficulty.
 
 
 additional note: you probably shouldn't jump into the highest difficulty right away
+
+extra additional note: my lawyer (gr1n) has instructed me to write out the changes that were made in this fork due to licensing mumbo jumbo and other things he's terrified of
+* Total RU localization by gr1n
+* A logo for the mod
+![Kickass mod logo](https://i.imgur.com/kDmUABS.jpg)
+* PDTH Shotgun muzzle effects for NPC's that were in the game files since forever and nobody even bothered restoring it for whatever reason
+* Gangsters and Mobsters use correct voicesets
+* Replaced intro with Hoxton Safehouse trailer because its not abruptly loud as the original one, also plays the Bad Ending if the user has finished White House before.
+* Sniper spawns are announced via the megaphone negotiator cop.
+* Blur and deafen on downed is increased for more drama.
+* Fixes the bag pickup/drop sounds to actually play.
+* Headshot effects and sounds.
+* Controller aiming tweaks by gr1n.
