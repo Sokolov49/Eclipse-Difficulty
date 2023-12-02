@@ -658,6 +658,7 @@ self.m134.AMMO_PICKUP = pickup_tables.minigun
 self.m134.kick = kick_tables.mini
 self.m134.spray = spray_tables.mini
 self.m134.recoil_recovery_timer = recovery_tables.high
+self.m134.can_shoot_through_enemy = true
 
 -- Microgun
 self.shuno.stats.damage = 60
@@ -667,6 +668,7 @@ self.shuno.AMMO_PICKUP = pickup_tables.minigun
 self.shuno.kick = kick_tables.micro
 self.shuno.spray = spray_tables.mini
 self.shuno.recoil_recovery_timer = recovery_tables.high
+self.shuno.can_shoot_through_enemy = true
 
 -- Hailstorm
 self.hailstorm.stats.concealment = 3
