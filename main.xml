@@ -1,0 +1,11 @@
+<table>
+	<AddFiles directory="assets">
+		<!-- put the menu logo where it belongs and change it -->
+		<texture path="guis/textures/game_small_logo"/>
+		<texture path="guis/textures/menu_title_screen"/>
+		<texture path="units/menu/menu_scene/menu_cylinder_logo"/>
+		
+				<!-- perk decks -->
+		<texture path="guis/textures/pd2/specialization/icons_atlas"/>
+	</AddFiles>
+</table>
