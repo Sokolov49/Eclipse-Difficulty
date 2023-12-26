@@ -1,4 +1,7 @@
 {
+	"bm_wp_enemy_piercing_desc": "High caliber hailstorm of bullets that can pierce through the enemy!",
+	"bm_wp_shield_piercing_desc": "Can penetrate Shields and has a chance to penetrate armor.",
+
 	"bm_wp_upg_a_custom_desc": "Bigger pellets with more impact.\nOne shell contains 6 pellets.\nDamage ramps up to 40% in a 3m range.\nDamage falloff starts earlier.",
 	"bm_wp_upg_a_explosive_desc": "One deadly high explosive slug.\nThis ammo type is harder to find.\nIncreased precision.\nNo damage falloff.",
 	"bm_wp_upg_a_piercing_desc": "Pointed steel projectiles.\nOne shell contains 12 flechettes.\nArmor piercing.\nDamage falloff starts later.",

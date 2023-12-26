@@ -659,6 +659,8 @@ self.m134.kick = kick_tables.mini
 self.m134.spray = spray_tables.mini
 self.m134.recoil_recovery_timer = recovery_tables.high
 self.m134.can_shoot_through_enemy = true
+self.m134.desc_id = "bm_wp_enemy_piercing_desc"
+self.m134.has_description = true
 
 -- Microgun
 self.shuno.stats.damage = 60
@@ -669,6 +671,8 @@ self.shuno.kick = kick_tables.micro
 self.shuno.spray = spray_tables.mini
 self.shuno.recoil_recovery_timer = recovery_tables.high
 self.shuno.can_shoot_through_enemy = true
+self.shuno.desc_id = "bm_wp_enemy_piercing_desc"
+self.shuno.has_description = true
 
 -- Hailstorm
 self.hailstorm.stats.concealment = 3
@@ -1412,9 +1416,13 @@ self.holt.kick = kick_tables.pistol_mid
 
 -- Deagle
 self.deagle.stats.damage = 140
-self.deagle.AMMO_MAX = total_ammo_tables.pistol_low
-self.deagle.AMMO_PICKUP = pickup_tables.pistol_low
+self.deagle.AMMO_MAX = total_ammo_tables.pistol_very_low
+self.deagle.AMMO_PICKUP = pickup_tables.pistol_ap
 self.deagle.kick = kick_tables.pistol_high
+self.deagle.can_shoot_through_shield = true
+self.deagle.armor_piercing_chance = 0.5
+self.deagle.desc_id = "bm_wp_shield_piercing_desc"
+self.deagle.has_description = true
 
 -- Beagle
 self.sparrow.stats.damage = 140
@@ -1476,9 +1484,13 @@ self.stech.kick = kick_tables.pistol_auto
 
 -- 5/7
 self.lemming.AMMO_MAX = total_ammo_tables.pistol_low
-self.lemming.AMMO_PICKUP = pickup_tables.pistol_ap
+self.lemming.AMMO_PICKUP = pickup_tables.pistol_low
 self.lemming.kick = kick_tables.pistol_mid
-
+self.lemming.can_shoot_through_enemy = false
+self.lemming.can_shoot_through_shield = false
+self.lemming.can_shoot_through_wall = false
+self.lemming.armor_piercing_chance = 0.75
+self.lemming.has_description = false
 
 -- Grenade / Rocket launchers
 
@@ -1641,8 +1653,12 @@ self.x_packrat.kick = kick_tables.pistol_mid
 -- Deagles
 self.x_deagle.stats.damage = 140
 self.x_deagle.AMMO_MAX = total_ammo_tables.akimbo_pis_low
-self.x_deagle.AMMO_PICKUP = pickup_tables.pistol_low
+self.x_deagle.AMMO_PICKUP = pickup_tables.pistol_ap
 self.x_deagle.kick = kick_tables.pistol_high
+self.x_deagle.can_shoot_through_shield = true
+self.x_deagle.armor_piercing_chance = 0.5
+self.x_deagle.desc_id = "bm_wp_shield_piercing_desc"
+self.x_deagle.has_description = true
 
 -- Castigos
 self.x_chinchilla.stats.damage = 120
