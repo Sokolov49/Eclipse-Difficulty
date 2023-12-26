@@ -1416,8 +1416,8 @@ self.holt.kick = kick_tables.pistol_mid
 
 -- Deagle
 self.deagle.stats.damage = 140
-self.deagle.AMMO_MAX = total_ammo_tables.pistol_very_low
-self.deagle.AMMO_PICKUP = pickup_tables.pistol_ap
+self.deagle.AMMO_MAX = total_ammo_tables.pistol_low
+self.deagle.AMMO_PICKUP = pickup_tables.pistol_low
 self.deagle.kick = kick_tables.pistol_high
 self.deagle.can_shoot_through_shield = true
 self.deagle.armor_piercing_chance = 0.5
