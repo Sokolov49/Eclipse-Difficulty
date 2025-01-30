@@ -1,3 +1,5 @@
+local level_id = Eclipse.utils.level_id()
+
 -- Improve enemy chatter, make proper use of chatter settings like duration and radius
 Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "sh__init_chatter_data", function(self)
 	local interval = { 1, 2 }
@@ -108,10 +110,6 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "eclipse__init_unit_ca
 		walk = true,
 	}
 
-	-- UNIT CATEGORIES
-	-- Honestly if only i could be arsed to actually support all factions
-
-	-- SWAT Rifleman
 	self.unit_categories.beat_cop = {
 		unit_types = {
 			america = {
@@ -254,6 +252,28 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "eclipse__init_unit_ca
 			},
 			federales = {
 				Idstring("units/payday2/characters/ene_fbi_swat_2/ene_fbi_swat_2"),
+			},
+		},
+		access = access_type_all,
+	}
+
+	-- Field Agent HRU
+	self.unit_categories.field_agent = {
+		unit_types = {
+			america = {
+				Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+			},
+			russia = {
+				Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+			},
+			zombie = {
+				Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+			},
+			murkywater = {
+				Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+			},
+			federales = {
+				Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
 			},
 		},
 		access = access_type_all,
@@ -822,6 +842,10 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 			"shield_cover",
 			"ranged_fire",
 		},
+		fbi_reserved = {
+			"ranged_fire",
+			"unit_cover",
+		},
 		fbi_shotgun = {
 			"charge",
 		},
@@ -1062,8 +1086,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 				tactics = self._tactics.fbi_rifle,
 			},
 			{
-				freq = 0.75,
-				amount_max = 3,
+				freq = 0.6,
+				amount_max = 2,
 				rank = 1,
 				unit = "fbi_r870",
 				tactics = self._tactics.fbi_shotgun,
@@ -1086,23 +1110,23 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 			{
 				freq = 0.75,
 				amount_max = 3,
-				rank = 1,
+				rank = 2,
 				unit = "heavy_fbi_m4",
 				tactics = self._tactics.fbi_rifle,
 			},
 			{
-				freq = 0.75,
-				amount_max = 3,
-				rank = 1,
+				freq = 0.6,
+				amount_max = 2,
+				rank = 2,
 				unit = "heavy_fbi_r870",
 				tactics = self._tactics.fbi_shotgun,
 			},
 			{
 				freq = 0.35,
 				amount_max = 1,
-				rank = 2,
+				rank = 1,
 				unit = "medic_unit",
-				tactics = self._tactics.fbi_special,
+				tactics = self._tactics.fbi_reserved,
 			},
 		},
 	}
@@ -1176,8 +1200,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 		},
 		spawn = {
 			{
-				freq = 0.66,
-				amount_max = 3,
+				freq = 0.5,
+				amount_max = 2,
 				rank = 2,
 				unit = "benelli_elite",
 				tactics = self._tactics.elite_shotgun,
@@ -1286,8 +1310,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 				tactics = self._tactics.elite_flank,
 			},
 			{
-				freq = 0.66,
-				amount_max = 3,
+				freq = 0.5,
+				amount_max = 2,
 				rank = 2,
 				unit = "benelli_elite",
 				tactics = self._tactics.elite_flank,
@@ -1311,9 +1335,9 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 			{
 				freq = 0.33,
 				amount_max = 1,
-				rank = 2,
+				rank = 1,
 				unit = "medic_unit",
-				tactics = self._tactics.elite_special,
+				tactics = self._tactics.fbi_reserved,
 			},
 			{
 				freq = 0.15,
@@ -1359,7 +1383,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 				amount_max = 1,
 				rank = 1,
 				unit = "medic_unit",
-				tactics = self._tactics.elite_special,
+				tactics = self._tactics.fbi_reserved,
 			},
 			{
 				amount_min = 1,
@@ -1394,8 +1418,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 		},
 		spawn = {
 			{
-				freq = 0.66,
-				amount_max = 3,
+				freq = 0.5,
+				amount_max = 2,
 				rank = 1,
 				unit = "ksg_zeal",
 				tactics = self._tactics.elite_shotgun,
@@ -1423,8 +1447,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 		},
 		spawn = {
 			{
-				freq = 0.66,
-				amount_max = 3,
+				freq = 0.5,
+				amount_max = 2,
 				rank = 1,
 				unit = "ksg_zeal",
 				tactics = self._tactics.elite_flank,
@@ -1488,8 +1512,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 		},
 		spawn = {
 			{
-				freq = 0.66,
-				amount_max = 2,
+				freq = 0.5,
+				amount_max = 1,
 				rank = 1,
 				unit = "ksg_heavy_zeal",
 				tactics = self._tactics.elite_shotgun,
@@ -1539,7 +1563,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 				tactics = self._tactics.elite_assault,
 			},
 			{
-				freq = 0.66,
+				freq = 0.44,
 				amount_max = 1,
 				rank = 2,
 				unit = "ksg_heavy_zeal",
@@ -1577,7 +1601,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 				tactics = self._tactics.elite_shield,
 			},
 			{
-				freq = 0.66,
+				freq = 0.44,
 				amount_max = 1,
 				rank = 1,
 				unit = "ksg_zeal",
@@ -1622,7 +1646,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 				tactics = self._tactics.elite_shield_charge,
 			},
 			{
-				freq = 0.66,
+				freq = 0.44,
 				amount_max = 1,
 				rank = 1,
 				unit = "ksg_heavy_zeal",
@@ -1672,48 +1696,56 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 	}
 	self.enemy_spawn_groups.reenforce_common = {
 		amount = {
-			4,
+			3,
 			4,
 		},
 		spawn = {
 			{
-				amount_min = 2,
-				freq = 2,
-				amount_max = 2,
-				rank = 1,
-				unit = "balaclava",
-				tactics = self._tactics.reenforce_aggressive,
-			},
-			{
-				amount_min = 2,
-				freq = 2,
-				amount_max = 2,
+				amount_min = 1,
+				freq = 0.55,
+				amount_max = 3,
 				rank = 1,
 				unit = "whiteshirt",
+				tactics = self._tactics.reenforce_passive,
+			},
+			{
+				amount_min = 1,
+				freq = 0.77,
+				amount_max = 3,
+				rank = 1,
+				unit = "field_agent",
 				tactics = self._tactics.reenforce_passive,
 			},
 		},
 	}
 	self.enemy_spawn_groups.recon_hrt = {
 		amount = {
-			4,
+			3,
 			4,
 		},
 		spawn = {
 			{
-				amount_min = 2,
-				freq = 1,
+				amount_min = 0,
+				freq = 0.66,
 				amount_max = 2,
 				rank = 1,
 				unit = "balaclava",
 				tactics = self._tactics.recon_rescue,
 			},
 			{
-				amount_min = 2,
-				freq = 1,
+				amount_min = 0,
+				freq = 0.66,
 				amount_max = 2,
 				rank = 1,
 				unit = "whiteshirt",
+				tactics = self._tactics.recon_rescue,
+			},
+			{
+				amount_min = 0,
+				freq = 0.66,
+				amount_max = 2,
+				rank = 1,
+				unit = "field_agent",
 				tactics = self._tactics.recon_rescue,
 			},
 		},
@@ -1775,6 +1807,32 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 	-- difficulty scaling
 	local f = ((difficulty_index ^ 2) / (difficulty_index * 3))
 	local is_pro = Global.game_settings and Global.game_settings.one_down
+	local map_scale_factor = 1
+	local map_scales = Eclipse.map_sizes
+
+	for _, sd in pairs(map_scales.severely_decreased_scaling_heists) do
+		if job == sd then
+			map_scale_factor = 0.5
+		end
+	end
+
+	for _, d in pairs(map_scales.decreased_scaling_heists) do
+		if job == d then
+			map_scale_factor = 0.75
+		end
+	end
+
+	for _, i in pairs(map_scales.increased_scaling_heists) do
+		if job == i then
+			map_scale_factor = 1.25
+		end
+	end
+
+	for _, si in pairs(map_scales.severely_increased_scaling_heists) do
+		if job == si then
+			map_scale_factor = 1.5
+		end
+	end
 
 	-- Assault Data
 	-- AI Tickrate
@@ -1796,13 +1854,13 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 	-- SPAWNS --
 
 	-- Spawncap
-	self.besiege.assault.force = { 4, 9, math.min(10, 7.5 * f) }
-	self.besiege.assault.force_balance_mul = { 1.5, 1.5, 1.75, 2 }
+	self.besiege.assault.force = { 4, 8, math.max(10, 9 * math.sqrt(f)) }
+	self.besiege.assault.force_balance_mul = { 1, 1.3, 1.5, 1.6 }
 
 	-- Spawnrate
-	self.spawn_kill_cooldown = 8 / (math.sqrt(f))
-	self.besiege.assault.spawnrate = { 1.6 / (math.sqrt(f)), 1.4 / (math.sqrt(f)), 1.2 / (math.sqrt(f)) }
-	self.besiege.assault.spawnrate_balance_mul = { 2, 1.6, 1.4, 1.2 }
+	self.spawn_kill_cooldown = 24 / (math.sqrt(f))
+	self.besiege.assault.spawnrate = { 1.8 / (math.sqrt(f)), 1.6 / (math.sqrt(f)), 1.4 / (math.sqrt(f)) }
+	self.besiege.assault.spawnrate_balance_mul = { 3, 2, 1.6, 1.2 }
 
 	-- Spawnpool
 	self.besiege.assault.force_pool = {
@@ -1814,23 +1872,23 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 	-- RECON / REENFORCE --
 
 	-- Reenforce spawn interval
-	self.besiege.reenforce.interval = { 60 / f, 40 / f, 20 / f }
+	self.besiege.reenforce.interval = { 60 / f, 50 / f, 30 / f }
 
 	-- Recon spawn interval and spawncap
 	self.besiege.recon.interval_variation = 0
-	self.besiege.recon.interval = { 20 / f, 16 / f, 10 / f }
+	self.besiege.recon.interval = { 30 / f, 25 / f, 20 / f }
 	self.besiege.recon.force = { 2, 4, 6 }
 
 	-- GRENADES --
 	-- global
-	self.min_grenade_timeout = 20 / f / ((is_pro and 1.25) or 1)
-	self.no_grenade_push_delay = 8 / (math.sqrt(f))
+	self.min_grenade_timeout = 20 / math.sqrt(f) / ((is_pro and 1.25) or 1)
+	self.no_grenade_push_delay = 20 / (math.sqrt(f))
 
 	-- flash
 	self.flash_grenade.light_color = Vector3(255, 255, 255)
-	self.flash_grenade.light_range = 500
+	self.flash_grenade.light_range = (is_pro and 0) or 500
 	self.flash_grenade_timeout = { 30 / f / ((is_pro and 1.25) or 1), 40 / f / ((is_pro and 1.25) or 1) }
-	self.flash_grenade.timer = 2 / f
+	self.flash_grenade.timer = (difficulty_index <= 5 and 3) or 2
 
 	-- smoke & gas
 	self.smoke_grenade_timeout = { 40 / f / ((is_pro and 1.25) or 1), 50 / f / ((is_pro and 1.25) or 1) }
@@ -1838,6 +1896,26 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 	self.cs_grenade_timeout = { 110 / f / ((is_pro and 1.25) or 1), 150 / f / ((is_pro and 1.25) or 1) }
 	self.cs_grenade_chance_times = { 120, 240 }
 	self.cs_grenade_lifetime = 10 * f
+
+	if difficulty_index < 4 then
+		self.besiege.faction = {
+			"CS",
+			"CS",
+			"CS",
+		}
+	elseif difficulty_index < 6 then
+		self.besiege.faction = {
+			"CS",
+			"FBI",
+			"FBI",
+		}
+	else
+		self.besiege.faction = {
+			"CS",
+			"FBI",
+			"Elite",
+		}
+	end
 
 	-- Spawngroups
 	if difficulty_index == 2 then
@@ -1932,7 +2010,6 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 	-- PONR --
 	self.ponr = deep_clone(self.besiege)
 
-	local job = Global.level_data and Global.level_data.level_id
 	local short_ponr_heists = {
 		bph = true,
 		red2 = true,
@@ -1941,28 +2018,46 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 		glace = true,
 		hox_2 = true,
 		firestarter_2 = true,
+		dah = true,
+		rvd2 = true,
+		man = true,
 	}
-
-	-- Sustain
-	self.ponr.assault.sustain_duration_min = { 900, 900, 900 }
-	self.ponr.assault.sustain_duration_max = { 900, 900, 900 }
 
 	-- Control
 	self.ponr.assault.delay = { 20, 20, 20 }
 	self.ponr.assault.hostage_hesitation_delay = { 10, 7.5, 5 }
 
-	if job and short_ponr_heists[job] then
+	if level_id and short_ponr_heists[level_id] then
 		self.ponr.assault.delay = { 5, 5, 5 }
 		self.ponr.assault.hostage_hesitation_delay = { 0, 0, 0 }
 	end
 
-	-- Spawncap & Spawnrate
-	self.ponr.assault.force = { 4, 9, math.min(12, 8 * f) }
-	self.ponr.assault.spawnrate = { 1.4 / (math.sqrt(f)), 1.2 / (math.sqrt(f)), 1 / (math.sqrt(f)) }
+	-- Spawnrate
+	self.ponr.assault.spawnrate = { 1.6 / (math.sqrt(f)), 1.4 / (math.sqrt(f)), 1.2 / (math.sqrt(f)) }
 
 	-- Recon
 	self.ponr.recon.groups = {}
 	self.ponr.recon.force = { 0, 0, 0 } -- no recon after ponr ran out
+
+	if difficulty_index < 4 then
+		self.ponr.faction = {
+			"FBI",
+			"FBI",
+			"FBI",
+		}
+	elseif difficulty_index < 6 then
+		self.ponr.faction = {
+			"Elite",
+			"Elite",
+			"Elite",
+		}
+	else
+		self.ponr.faction = {
+			"Zeal",
+			"Zeal",
+			"Zeal",
+		}
+	end
 
 	-- Spawngroups
 	if difficulty_index == 2 then
@@ -2024,14 +2119,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 		}
 	elseif difficulty_index == 6 then
 		self.ponr.assault.groups = {
-			zeal_lights_charge = { 1, 1, 1 },
-			zeal_lights_flank = { 0.75, 0.75, 0.75 },
-			zeal_heavies_ranged = { 0.55, 0.55, 0.55 },
-			zeal_heavies_charge = { 0.55, 0.55, 0.55 },
+			zeal_lights_charge = { 0.8, 0.8, 0.8 },
+			zeal_lights_flank = { 0.7, 0.7, 0.7 },
+			zeal_heavies_ranged = { 0.5, 0.5, 0.5 },
+			zeal_heavies_charge = { 0.5, 0.5, 0.5 },
 			zeal_shields = { 0.4, 0.4, 0.4 },
-			zeal_tasers = { 0.2, 0.2, 0.2 },
-			zeal_tanks = { 0.1, 0.1, 0.1 },
-			zeal_spoocs = { 0.1, 0.1, 0.1 },
+			zeal_tasers = { 0.3, 0.3, 0.3 },
+			zeal_tanks = { 0.2, 0.2, 0.2 },
+			zeal_spoocs = { 0.2, 0.2, 0.2 },
 		}
 		self.ponr.reenforce.groups = {
 			zeal_lights_charge = { 1, 1, 1 },

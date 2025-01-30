@@ -3,6 +3,28 @@
 -- Increasing the health granularity makes damage dealt more accurate to the actual weapon damage stats
 CopDamage._HEALTH_GRANULARITY = 8192
 
+function CopDamage:_send_melee_attack_result(attack_data, damage_percent, damage_effect_percent, hit_offset_height, variant, body_index)
+	body_index = math.clamp(body_index, 0, 128)
+	damage_percent = math.clamp(damage_percent, 0, self._HEALTH_GRANULARITY)
+	damage_effect_percent = math.clamp(damage_effect_percent, 0, self._HEALTH_GRANULARITY)
+	self._unit:network():send("damage_melee", attack_data.attacker_unit, damage_percent, damage_effect_percent, body_index, hit_offset_height, variant, self._dead and true or false)
+end
+
+-- Make enemy head hitbox size not egregiously large
+Hooks:PostHook(CopDamage, "init", "eclipse_init", function(self)
+	local is_dozer = self._unit:base()._tweak_table == "tank" or self._unit:base()._tweak_table == "tank_elite"
+	local head_body = self._unit:body(self._head_body_name or "head")
+	if head_body then
+		head_body:set_sphere_radius(16)
+	end
+
+	if not is_dozer and managers.player:has_category_upgrade("weapon", "magnetizing_bullets") then
+		if head_body then
+			head_body:set_sphere_radius(25) -- yes it really is just a bigger head hitbox. such a cool description though, right?
+		end
+	end
+end)
+
 -- Fixed critical hit mul and additional crit damage upgrade
 function CopDamage:roll_critical_hit(attack_data)
 	if not self:can_be_critical(attack_data) or math.random() >= managers.player:critical_hit_chance() then
@@ -27,11 +49,10 @@ function CopDamage:_sync_dismember(attacker_unit, ...)
 	end
 end
 
--- Don't set suppression to maximum on hit, increase by a static value instead
-local build_suppression_original = CopDamage.build_suppression
-function CopDamage:build_suppression(amount, ...)
-	return build_suppression_original(self, amount == "max" and 2 or amount, ...)
-end
+-- Additional suppression on hit
+Hooks:PreHook(CopDamage, "_on_damage_received", "sh__on_damage_received", function(self, damage_info)
+	self:build_suppression(4 * damage_info.damage / self._HEALTH_INIT, nil)
+end)
 
 -- Give flamethrowers a damage multiplier against dozers
 Hooks:PreHook(CopDamage, "damage_fire", "eclipse_damage_fire", function(self, attack_data)
@@ -248,165 +269,3 @@ function CopDamage:sync_damage_explosion(attacker_unit, damage_percent, i_attack
 
 	return result
 end
-
---headshot effects
-local ids_func = Idstring
-local table_contains = table.contains
-local has_prettierfbi = SystemFS:exists("assets/mod_overrides/Prettier FBI Units")
-local has_elitefbis = SystemFS:exists("assets/mod_overrides/FBI Elites Replace GenSec")
-local big_idstring_table = {
-	ids_func("units/payday2/characters/ene_tazer_1/ene_tazer_1"),
-	ids_func("units/payday2/characters/ene_tazer_1/ene_tazer_1_husk"), 		
-	ids_func("units/pd2_dlc_gitgud/characters/ene_zeal_tazer/ene_zeal_tazer"), 
-	ids_func("units/pd2_dlc_gitgud/characters/ene_zeal_tazer/ene_zeal_tazer_husk"), 
-	ids_func("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1"), 
-	ids_func("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1_husk"), 
-	ids_func("units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"), 
-	ids_func("units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer_husk"), 
-	ids_func("units/pd2_dlc_bex/characters/ene_swat_tazer_policia_federale/ene_swat_tazer_policia_federale"), 
-	ids_func("units/pd2_dlc_bex/characters/ene_swat_tazer_policia_federale/ene_swat_tazer_policia_federale_husk"), 
-	ids_func("units/pd2_dlc_hvh/characters/ene_shield_hvh_2/ene_shield_hvh_2"), 
-	ids_func("units/pd2_dlc_hvh/characters/ene_shield_hvh_2/ene_shield_hvh_2_husk"), 
-	ids_func("units/pd2_dlc_hvh/characters/ene_swat_heavy_hvh_1/ene_swat_heavy_hvh_1"), 
-	ids_func("units/pd2_dlc_hvh/characters/ene_swat_heavy_hvh_1/ene_swat_heavy_hvh_1_husk"), 
-	ids_func("units/pd2_dlc_hvh/characters/ene_swat_heavy_hvh_r870/ene_swat_heavy_hvh_r870"), 
-	ids_func("units/pd2_dlc_hvh/characters/ene_swat_heavy_hvh_r870/ene_swat_heavy_hvh_r870_husk"), 
-	ids_func("units/payday2/characters/ene_shield_2/ene_shield_2"),
-	ids_func("units/payday2/characters/ene_shield_2/ene_shield_2_husk"), 
-	ids_func("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1"),
-	ids_func("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1_husk"),
-	ids_func("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870"),
-	ids_func("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870_husk"),
-}	
-
-if has_prettierfbi then	
-	table.insert(big_idstring_table, Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"))	
-	table.insert(big_idstring_table, Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1_husk"))	
-	table.insert(big_idstring_table, Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870"))	
-	table.insert(big_idstring_table, Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870_husk"))	
-end
-	
-if has_elitefbis then	
-	table.insert(big_idstring_table, Idstring("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36"))	
-	table.insert(big_idstring_table, Idstring("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36_husk"))	
-	table.insert(big_idstring_table, Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870"))	
-	table.insert(big_idstring_table, Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870_husk"))	
-end
-
-local enemies_plink = {
-	ids_func("units/payday2/characters/ene_swat_1/ene_swat_1"),
-	ids_func("units/payday2/characters/ene_swat_1/ene_swat_1_husk"),
-	ids_func("units/payday2/characters/ene_swat_2/ene_swat_2"),
-	ids_func("units/payday2/characters/ene_swat_2/ene_swat_2_husk"),
-	ids_func("units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1"),
-	ids_func("units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1_husk"),
-	ids_func("units/payday2/characters/ene_fbi_swat_2/ene_fbi_swat_2"),
-	ids_func("units/payday2/characters/ene_fbi_swat_2/ene_fbi_swat_2_husk"),
-	ids_func("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"),
-	ids_func("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1_husk"),
-	ids_func("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_r870"),
-	ids_func("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_r870_husk"),
-	ids_func("units/payday2/characters/ene_shield_2/ene_shield_1"),
-	ids_func("units/payday2/characters/ene_shield_2/ene_shield_1_husk"),
-	ids_func("units/payday2/characters/ene_shield_2/ene_shield_2"),
-	ids_func("units/payday2/characters/ene_shield_2/ene_shield_2_husk"),
-	ids_func("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),
-	ids_func("units/payday2/characters/ene_city_swat_1/ene_city_swat_1_husk"),
-	ids_func("units/payday2/characters/ene_city_swat_2/ene_city_swat_2"),
-	ids_func("units/payday2/characters/ene_city_swat_2/ene_city_swat_2_husk"),
-	ids_func("units/payday2/characters/ene_city_swat_3/ene_city_swat_3"),
-	ids_func("units/payday2/characters/ene_city_swat_3/ene_city_swat_3_husk"),
-	ids_func("units/payday2/characters/ene_city_swat_3/ene_city_swat_r870"),
-	ids_func("units/payday2/characters/ene_city_swat_3/ene_city_swat_r870_husk"),
-	ids_func("units/payday2/characters/ene_city_swat_1/ene_city_heavy_g36"),
-	ids_func("units/payday2/characters/ene_city_swat_1/ene_city_heavy_g36_husk"),
-	ids_func("units/payday2/characters/ene_city_swat_1/ene_city_heavy_r870"),
-	ids_func("units/payday2/characters/ene_city_swat_1/ene_city_heavy_r870_husk"),
-}
-
-Hooks:PreHook( CopDamage, "_spawn_head_gadget", "smash_generics", function(self, params)
-	if not self._head_gear then
-		return
-	end
-
-	if self._head_gear_object then
-		if self._nr_head_gear_objects then
-			for i = 1, self._nr_head_gear_objects do
-				local head_gear_obj_name = self._head_gear_object .. tostring(i)
-
-				self._unit:get_object(Idstring(head_gear_obj_name)):set_visibility(false)
-			end
-		else
-			self._unit:get_object(Idstring(self._head_gear_object)):set_visibility(false)
-		end
-
-		if self._head_gear_decal_mesh then
-			local mesh_name_idstr = Idstring(self._head_gear_decal_mesh)
-
-			self._unit:decal_surface(mesh_name_idstr):set_mesh_material(mesh_name_idstr, Idstring("flesh"))
-		end
-	end
-
-	local my_unit = self._unit
-
-    local smashablefuckers = table_contains(big_idstring_table, my_unit:name())
-    local metalplink = table_contains(enemies_plink, my_unit:name())
-	
-	local head_obj = ids_func("Head")
-	local head_object_get = my_unit:get_object(head_obj)
-	
-	if not head_object_get then
-		return
-	end
-	
-	local world_g = World		
-	local sound_ext = my_unit:sound()	
-
-	if smashablefuckers then
-		world_g:effect_manager():spawn({
-			effect = ids_func("effects/particles/bullet_hit/glass_breakable/bullet_hit_glass_breakable"),
-			parent = head_object_get		
-		})
-		world_g:effect_manager():spawn({
-			effect = ids_func("effects/particles/bullet_hit/glass_breakable/bullet_hit_glass_breakable"),
-			parent = head_object_get		
-		})
-		world_g:effect_manager():spawn({
-			effect = ids_func("effects/payday2/particles/impacts/sparks/sparks_random_01"),
-			parent = head_object_get		
-		})
-		world_g:effect_manager():spawn({
-			effect = ids_func("effects/particles/bullet_hit/sheet_metal/bullet_hit_sheet_metal"),
-			parent = head_object_get		
-		})
-		world_g:effect_manager():spawn({
-			effect = ids_func("effects/payday2/particles/impacts/blood/blood_tendrils"),
-			parent = head_object_get		
-		})
-		sound_ext:play("swat_heavy_visor_shatter", nil, nil)
-		sound_ext:play("swat_heavy_visor_shatter", nil, nil)
-		sound_ext:play("swat_heavy_visor_shatter", nil, nil)
-		
-	elseif metalplink then
-				world_g:effect_manager():spawn({
-					effect = ids_func("effects/payday2/particles/impacts/metal_impact_pd2"),
-					parent = head_object_get		
-				})
-				world_g:effect_manager():spawn({
-					effect = ids_func("effects/payday2/particles/impacts/sparks/sparks_random_01"),
-					parent = head_object_get		
-				})
-				world_g:effect_manager():spawn({
-					effect = ids_func("effects/payday2/particles/impacts/blood/blood_tendrils"),
-					parent = head_object_get		
-				})
-				world_g:effect_manager():spawn({
-				effect = ids_func("effects/particles/bullet_hit/sheet_metal/bullet_hit_sheet_metal"),
-					parent = head_object_get		
-				})
-				world_g:effect_manager():spawn({
-					effect = ids_func("effects/payday2/particles/impacts/blood/blood_distance_dust_med"),
-					parent = head_object_get		
-				})
-	end
-end)

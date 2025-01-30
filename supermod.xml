@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <mod name="Eclipse">
-	<:include src="assets.xml" />
 
 	<tweak definition="tweak/animation.xml"/>
 	<tweak definition="tweak/network.xml"/>
@@ -12,13 +11,12 @@
 
 		<group hook_id="core/lib/">
 			<post :hook_id="managers/coreenvironmentcontrollermanager"/>
-			<post :hook_id="managers/coresequencemanager"/>
+			<post :hook_id="managers/coreworldinstancemanager"/>
 			<post :hook_id="units/coreunitdamage"/>
 		</group>
 
 		<group hook_id="lib/">
 			<post :hook_id="utils/inventorydescription"/>
-			<post :hook_id="states/bootupstate"/>
 			<group :hook_id="managers/">
 				<group :hook_id="group_ai_states/">
 					<post :hook_id="groupaistatebase"/>
@@ -36,7 +34,7 @@
 					<post :hook_id="hudmissionbriefing"/>
 					<post :hook_id="hudstageendscreen"/>
 					<post :hook_id="hudassaultcorner"/>
-                    <post :hook_id="hudhitconfirm"/>
+					<post :hook_id="hudhitconfirm"/>
 				</group>
 
 				<group :hook_id="menu/">
@@ -50,6 +48,7 @@
 				<post :hook_id="hudmanager"/>
 				<post :hook_id="menumanager"/>
 				<post :hook_id="savefilemanager"/>
+				<post :hook_id="statisticsmanager"/>
 				<post :hook_id="achievmentmanager"/>
 				<post :hook_id="tangomanager"/>
 				<post :hook_id="sidejobeventmanager"/>
@@ -61,13 +60,14 @@
 				<post :hook_id="crimenetmanager"/>
 				<post :hook_id="playermanager"/>
 				<post :hook_id="dlcmanager"/>
-                <post :hook_id="groupaimanager"/>
+				<post :hook_id="groupaimanager"/>
+				<post :hook_id="explosionmanager"/>
 			</group>
 
 			<group :hook_id="network/">
 				<post :hook_id="base/networkmanager"/>
 				<post :hook_id="handlers/unitnetworkhandler"/>
-                <post :hook_id="base/basenetworksession"/>
+				<post :hook_id="base/basenetworksession"/>
 			</group>
 
 			<post :hook_id="setups/gamesetup"/>
@@ -75,11 +75,13 @@
 			<group :hook_id="tweak_data/">
 				<post :hook_id="blackmarket/projectilestweakdata"/>
 				<post :hook_id="blackmarket/meleeweaponstweakdata"/>
+				<post :hook_id="equipmentstweakdata"/>
 				<post :hook_id="charactertweakdata"/>
 				<post :hook_id="guitweakdata"/>
 				<post :hook_id="dottweakdata"/>
 				<post :hook_id="firetweakdata"/>
 				<post :hook_id="groupaitweakdata"/>
+				<post :hook_id="leveltweakdata"/>
 				<post :hook_id="playertweakdata"/>
 				<post :hook_id="weapontweakdata"/>
 				<post :hook_id="upgradestweakdata"/>
@@ -95,12 +97,12 @@
 				<post :hook_id="tweakdata"/>
 				<post :hook_id="eventjobstweakdata"/>
 				<post :hook_id="tweakdatavr"/>
-				<post :hook_id="inputtweakdata"/>
 			</group>
 
 			<group :hook_id="units/">
 				<group :hook_id="beings/player/">
 					<post :hook_id="playerdamage"/>
+					<post :hook_id="playerequipment"/>
 					<post :hook_id="huskplayerdamage"/>
 					<post :hook_id="playercamera"/>
 					<post :hook_id="playermovement"/>
@@ -108,7 +110,11 @@
 					<post :hook_id="states/playertased"/>
 					<post :hook_id="states/playerdriving"/>
 					<post :hook_id="states/playerbleedout"/>
+					<post :hook_id="states/playerbipod"/>
+					<post :hook_id="states/playercarry"/>
 				</group>
+
+				<post :hook_id="characters/characterattentionobject"/>
 
 				<group :hook_id="civilians/">
 					<group :hook_id="logics/">
@@ -118,7 +124,6 @@
 					</group>
 
 					<post :hook_id="civilianbrain"/>
-					<post :hook_id="civiliandamage"/>
 				</group>
 
 				<post :hook_id="environment/environmentfire"/>
@@ -127,7 +132,7 @@
 					<post :hook_id="boss/logics/bosslogicattack"/>
 
 					<group :hook_id="cop/">
-					<post :hook_id="actions/full_body/copactionhurt"/>
+						<post :hook_id="actions/full_body/copactionhurt"/>
 
 						<group :hook_id="actions/lower_body/">
 							<post :hook_id="copactionidle"/>
@@ -158,6 +163,7 @@
 						<post :hook_id="copinventory"/>
 						<post :hook_id="copmovement"/>
 						<post :hook_id="copsound"/>
+						<post :hook_id="huskcopbrain"/>
 					</group>
 
 					<group :hook_id="spooc/">
@@ -167,26 +173,37 @@
 
 					<group :hook_id="tank/">
 						<post :hook_id="logics/tankcoplogicattack"/>
+						<post :hook_id="husktankcopdamage"/>
+						<post :hook_id="husktankmediccopdamage"/>
+						<post :hook_id="tankcopdamage"/>
+						<post :hook_id="tankmediccopdamage"/>
 					</group>
 
-					<post :hook_id="taser/logics/taserlogicattack"/>
 					<post :hook_id="medic/medicdamage"/>
+
+					<post :hook_id="shield/logics/shieldlogicattack"/>
+
+					<post :hook_id="taser/logics/taserlogicattack"/>
 				</group>
 
 				<group :hook_id="equipment/">
 					<post :hook_id="sentry_gun/sentrygunbase"/>
 					<post :hook_id="ammo_bag/ammobagbase"/>
 					<post :hook_id="ecm_jammer/ecmjammerbase"/>
+					<post :hook_id="first_aid_kit/firstaidkitbase"/>
 				</group>
 
 				<post :hook_id="civilians/civilianbase"/>
 				<post :hook_id="vehicles/animatedvehiclebase"/>
 				<post :hook_id="cameras/fpcameraplayerbase"/>
+				<post :hook_id="interactions/interactionext"/>
 
 				<group :hook_id="player_team/">
+					<post :hook_id="logics/teamailogicidle"/>
 					<post :hook_id="actions/lower_body/criminalactionwalk"/>
 					<post :hook_id="teamaidamage"/>
-                    <post :hook_id="huskteamaidamage"/>
+					<post :hook_id="teamaimovement"/>
+					<post :hook_id="huskteamaidamage"/>
 				</group>
 
 				<group :hook_id="props/">
@@ -206,6 +223,7 @@
 					</group>
 					<post :hook_id="projectiles/projectilebase"/>
 					<post :hook_id="shotgun/shotgunbase"/>
+					<post :hook_id="sawweaponbase "/>
 					<post :hook_id="akimboweaponbase"/>
 					<post :hook_id="sentrygunweapon"/>
 					<post :hook_id="raycastweaponbase"/>
@@ -217,4 +235,343 @@
 			</group>
 		</group>
 	</hooks>
+
+	<assets base_path="assets/">
+
+		<!-- sniper glare -->
+		<file name="effects/particles/weapons/sniper_glint.effect"/>
+		<file name="effects/textures/weapons/sniper_glint.dds"/>
+
+		<!-- weapons -->
+		<file name="units/weapons/smoke_grenade_quick/smoke_grenade_quick.object"/>
+
+		<!-- gun perk icons  -->
+		<group name="guis/dlcs/gunperk/textures/pd2/blackmarket/icons/mods/">
+			<file :name="wpn_fps_upg_perk_speedloader.texture"/>
+			<file :name="wpn_fps_upg_perk_haste.texture"/>
+			<file :name="wpn_fps_upg_perk_deadsilence.texture"/>
+			<file :name="wpn_fps_upg_perk_jawbreaker.texture"/>
+			<file :name="wpn_fps_upg_perk_whirlwind.texture"/>
+			<file :name="wpn_fps_upg_perk_stockpile.texture"/>
+		</group>
+
+		<!-- eclipse difficulty icon & risk level -->
+		<file name="guis/textures/pd2/risklevel_deathwish_easywish_blackscreen.texture"/>
+		<file name="guis/textures/pd2/mission_briefing/assets/assets_risklevel_4.texture"/>
+
+		<!-- old cook off bain lines -->
+		<file name="soundbanks/job_h_rat_stage1.bnk"/>
+
+		<!-- mute turret announcement -->
+		<group name="soundbanks/streamed/npc_cpa/">
+			<file :name="5329107.stream"/>
+			<file :name="51493853.stream"/>
+			<file :name="105420712.stream"/>
+			<file :name="118262913.stream"/>
+			<file :name="134430557.stream"/>
+			<file :name="232910351.stream"/>
+			<file :name="426753169.stream"/>
+			<file :name="458768143.stream"/>
+			<file :name="672371513.stream"/>
+			<file :name="688031761.stream"/>
+			<file :name="750865112.stream"/>
+			<file :name="761299230.stream"/>
+			<file :name="800778394.stream"/>
+			<file :name="899866889.stream"/>
+			<file :name="912704165.stream"/>
+			<file :name="930435211.stream"/>
+			<file :name="935526825.stream"/>
+			<file :name="938455201.stream"/>
+		</group>
+
+		<!-- new weapons -->
+		<group name="units/payday2/weapons/">
+
+			<!-- huntsman retexture/model -->
+			<file :name="wpn_npc_sawnoff_shotgun/sawnoff_df.texture"/>
+			<file :name="wpn_npc_sawnoff_shotgun/sawnoff_nm.texture"/>
+			<file :name="wpn_npc_sawnoff_shotgun/wpn_npc_sawnoff_shotgun.model"/>
+
+			<!-- bulldozer reinfeld -->
+			<file :name="wpn_npc_r870_bulldozer/wpn_npc_r870_bulldozer.unit"/>
+			<file :name="wpn_npc_r870_bulldozer/wpn_npc_r870_bulldozer.model" />
+			<file :name="wpn_npc_r870_bulldozer/wpn_npc_r870_bulldozer.cooked_physics" />
+			<file :name="wpn_npc_r870_bulldozer/wpn_npc_r870_bulldozer.object" />
+
+			<!-- aa12 -->
+			<file :name="wpn_npc_aa12/aa12_df.texture" />
+			<file :name="wpn_npc_aa12/aa12_nm.texture" />
+			<file :name="wpn_npc_aa12/wpn_npc_aa12.unit"/>
+			<file :name="wpn_npc_aa12/wpn_npc_aa12.material_config" />
+			<file :name="wpn_npc_aa12/wpn_npc_aa12_contour.material_config" />
+			<file :name="wpn_npc_aa12/wpn_npc_aa12.model" />
+			<file :name="wpn_npc_aa12/wpn_npc_aa12.cooked_physics" />
+			<file :name="wpn_npc_aa12/wpn_npc_aa12.object" />
+
+			<!-- bulldozer aa12 -->
+			<file :name="wpn_npc_aa12_bulldozer/wpn_npc_aa12_bulldozer.unit"/>
+			<file :name="wpn_npc_aa12_bulldozer/wpn_npc_aa12_bulldozer.model" />
+			<file :name="wpn_npc_aa12_bulldozer/wpn_npc_aa12_bulldozer.cooked_physics" />
+			<file :name="wpn_npc_aa12_bulldozer/wpn_npc_aa12_bulldozer.object" />
+
+			<!-- bulldozer m249 -->
+			<file :name="wpn_npc_m249_bulldozer/wpn_npc_m249_bulldozer.cooked_physics"/>
+			<file :name="wpn_npc_m249_bulldozer/wpn_npc_m249_bulldozer.model"/>
+			<file :name="wpn_npc_m249_bulldozer/wpn_npc_m249_bulldozer.object"/>
+			<file :name="wpn_npc_m249_bulldozer/wpn_npc_m249_bulldozer.unit"/>
+
+			<!-- bulldozer benelli -->
+			<file :name="wpn_npc_benelli_bulldozer/wpn_npc_benelli_bulldozer.cooked_physics"/>
+			<file :name="wpn_npc_benelli_bulldozer/wpn_npc_benelli_bulldozer.material_config"/>
+			<file :name="wpn_npc_benelli_bulldozer/wpn_npc_benelli_bulldozer.model"/>
+			<file :name="wpn_npc_benelli_bulldozer/wpn_npc_benelli_bulldozer.object"/>
+			<file :name="wpn_npc_benelli_bulldozer/wpn_npc_benelli_bulldozer.unit"/>
+
+			<!-- ksg -->
+			<file :name="wpn_npc_ksg/ksg_df.texture"/>
+			<file :name="wpn_npc_ksg/ksg_nm.texture"/>
+			<file :name="wpn_npc_ksg/wpn_npc_ksg.cooked_physics"/>
+			<file :name="wpn_npc_ksg/wpn_npc_ksg.material_config"/>
+			<file :name="wpn_npc_ksg/wpn_npc_ksg.model"/>
+			<file :name="wpn_npc_ksg/wpn_npc_ksg.object"/>
+			<file :name="wpn_npc_ksg/wpn_npc_ksg.unit"/>
+
+			<!-- s552 -->
+			<file :name="wpn_npc_s552/s552_zeal_df.texture"/>
+			<file :name="wpn_npc_s552/s552_zeal_nm.texture"/>
+			<file :name="wpn_npc_s552/wpn_npc_s552_zeal.cooked_physics"/>
+			<file :name="wpn_npc_s552/wpn_npc_s552_zeal.material_config"/>
+			<file :name="wpn_npc_s552/wpn_npc_s552_zeal_contour.material_config"/>
+			<file :name="wpn_npc_s552/wpn_npc_s552_zeal.model"/>
+			<file :name="wpn_npc_s552/wpn_npc_s552_zeal.object"/>
+			<file :name="wpn_npc_s552/wpn_npc_s552_zeal.unit"/>
+
+			<!-- gewehr -->
+			<file :name="wpn_npc_g3/g3_df.texture"/>
+			<file :name="wpn_npc_g3/g3_nm.texture"/>
+			<file :name="wpn_npc_g3/wpn_npc_g3.cooked_physics"/>
+			<file :name="wpn_npc_g3/wpn_npc_g3.material_config"/>
+			<file :name="wpn_npc_g3/wpn_npc_g3_contour.material_config"/>
+			<file :name="wpn_npc_g3/wpn_npc_g3.model"/>
+			<file :name="wpn_npc_g3/wpn_npc_g3.object"/>
+			<file :name="wpn_npc_g3/wpn_npc_g3.unit"/>
+
+			<!-- mpx -->
+			<file :name="wpn_npc_shepheard/shepheard_df.texture"/>
+			<file :name="wpn_npc_shepheard/shepheard_nm.texture"/>
+			<file :name="wpn_npc_shepheard/wpn_npc_shepheard.cooked_physics"/>
+			<file :name="wpn_npc_shepheard/wpn_npc_shepheard.material_config"/>
+			<file :name="wpn_npc_shepheard/wpn_npc_shepheard.model"/>
+			<file :name="wpn_npc_shepheard/wpn_npc_shepheard.object"/>
+			<file :name="wpn_npc_shepheard/wpn_npc_shepheard.unit"/>
+
+			<!-- ump & huntsman sound -->
+			<file :name="wpn_npc_ump/wpn_npc_ump.unit" dyn_package="false"/>
+		</group>
+
+
+		<group name="units/payday2/characters/" dyn_package="false" from_type="custom_xml" to_type="binary">
+			<file :name="shared_textures/swat_equipment_df.texture" />
+			<file :name="shared_textures/swat_equipment_nm.texture" />
+
+			<file :name="ene_acc_bulldozer_back/ene_acc_bulldozer_back.model" />
+
+			<file :name="ene_acc_bulldozer_back_2/ene_acc_bulldozer_back_2.model" />
+
+			<file :name="ene_acc_bulldozer_chest/ene_acc_bulldozer_chest.model" />
+
+			<file :name="ene_acc_bulldozer_chest_2/ene_acc_bulldozer_chest_2.model" />
+
+			<file :name="ene_acc_bulldozer_helmet_plate/ene_acc_bulldozer_helmet_plate.model" />
+
+			<file :name="ene_acc_bulldozer_helmet_plate_2/ene_acc_bulldozer_helmet_plate_2.model" />
+
+			<file :name="ene_acc_bulldozer_helmet_plate_3/ene_acc_bulldozer_helmet_plate_3.model" />
+
+			<file :name="ene_acc_bulldozer_neck/ene_acc_bulldozer_neck.model" />
+
+			<file :name="ene_acc_bulldozer_neck_2/ene_acc_bulldozer_neck_2.model" />
+
+			<file :name="ene_acc_bulldozer_neck_3/ene_acc_bulldozer_neck_3.model" />
+
+			<file :name="ene_acc_bulldozer_stomache/ene_acc_bulldozer_stomache.model" />
+
+			<file :name="ene_acc_bulldozer_stomache_2/ene_acc_bulldozer_stomache_2.model" />
+
+			<file :name="ene_acc_bulldozer_throat/ene_acc_bulldozer_throat.model" />
+
+			<file :name="ene_acc_bulldozer_throat_2/ene_acc_bulldozer_throat_2.model" />
+
+			<file :name="ene_acc_bulldozer_throat_3/ene_acc_bulldozer_throat_3.model" />
+
+			<file :name="ene_bulldozer_1/ene_bulldozer_1.material_config" />
+			<file :name="ene_bulldozer_1/ene_bulldozer_1_contour.material_config" />
+			<file :name="ene_bulldozer_1/ene_bulldozer_1.model" />
+			<file :name="ene_bulldozer_1/ene_bulldozer_1.object" />
+			<file :name="ene_bulldozer_1/ene_bulldozer_1.unit" />
+			<file :name="ene_bulldozer_1/ene_bulldozer_1_husk.unit" />
+
+			<file :name="ene_bulldozer_2/ene_bulldozer_2.material_config" />
+			<file :name="ene_bulldozer_2/ene_bulldozer_2_contour.material_config" />
+			<file :name="ene_bulldozer_2/ene_bulldozer_2.model" />
+			<file :name="ene_bulldozer_2/ene_bulldozer_2.object" />
+			<file :name="ene_bulldozer_2/ene_bulldozer_2.unit" />
+			<file :name="ene_bulldozer_2/ene_bulldozer_2_husk.unit" />
+
+			<file :name="ene_bulldozer_3/ene_bulldozer_3.material_config" />
+			<file :name="ene_bulldozer_3/ene_bulldozer_3_contour.material_config" />
+			<file :name="ene_bulldozer_3/ene_bulldozer_3.model" />
+			<file :name="ene_bulldozer_3/ene_bulldozer_3.object" />
+			<file :name="ene_bulldozer_3/ene_bulldozer_3.unit" />
+			<file :name="ene_bulldozer_3/ene_bulldozer_3_husk.unit" />
+		</group>
+
+
+		<group name="units/pd2_dlc_vip/characters/" dyn_package="false" from_type="custom_xml" to_type="binary">
+
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_top.cooked_physics" />
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_top.model" />
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_top.object" />
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_top.unit" />
+
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_right.cooked_physics" />
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_right.model" />
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_right.object" />
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_right.unit" />
+
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_left.cooked_physics" />
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_left.model" />
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_left.object" />
+			<file 	:name="ene_acc_shield_phalanx/debris/ene_acc_shield_phalanx_debris_left.unit" />
+					
+			<xml 	:name="ene_acc_shield_phalanx/ene_acc_shield_phalanx.sequence_manager" />
+			<file 	:name="ene_acc_shield_phalanx/ene_acc_shield_phalanx.material_config" />
+			<file 	:name="ene_acc_shield_phalanx/ene_acc_shield_phalanx.model" />
+			<file 	:name="ene_acc_shield_phalanx/ene_acc_shield_phalanx.object" />
+			<file 	:name="ene_acc_shield_phalanx/ene_acc_shield_phalanx.unit" />
+			<file 	:name="ene_acc_shield_phalanx/ene_acc_shield_phalanx_dummy.unit" />
+
+			<file 	:name="ene_acc_phalanx_helmet/ene_acc_phalanx_helmet.model" />
+			
+			<file 	:name="ene_phalanx_1/ene_phalanx_1.material_config" />
+			<file 	:name="ene_phalanx_1/ene_phalanx_1_contour.material_config" />
+			<file 	:name="ene_phalanx_1/ene_phalanx_1.model" />
+			<file 	:name="ene_phalanx_1/ene_phalanx_1.object" />
+			<file 	:name="ene_phalanx_1/ene_phalanx_1.unit" />
+			<file 	:name="ene_phalanx_1/ene_phalanx_1_husk.unit" />
+			
+		</group>
+
+
+		<group name="units/pd2_dlc_drm/characters/" dyn_package="false" from_type="custom_xml" to_type="binary">
+			<file :name="ene_acc_bulldozer_minigun_classic_back/ene_acc_bulldozer_minigun_classic_back.model" />
+
+			<file :name="ene_acc_bulldozer_minigun_classic_chest/ene_acc_bulldozer_minigun_classic_chest.model" />
+
+			<file :name="ene_acc_bulldozer_minigun_classic_helmet_plate/ene_acc_bulldozer_minigun_classic_helmet_plate.model" />
+
+			<file :name="ene_acc_bulldozer_minigun_classic_neck/ene_acc_bulldozer_minigun_classic_neck.model" />
+
+			<file :name="ene_acc_bulldozer_minigun_classic_stomache/ene_acc_bulldozer_minigun_classic_stomache.model" />
+
+			<file :name="ene_acc_bulldozer_minigun_classic_throat/ene_acc_bulldozer_minigun_classic_throat.model" />
+
+			<file :name="ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic.material_config" />
+			<file :name="ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic_contour.material_config" />
+			<file :name="ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic.model" />
+			<file :name="ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic.object" />
+			<file :name="ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic.unit" />
+			<file :name="ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic_husk.unit" />
+		</group>
+
+
+		<!-- zeals -->
+		<group name="units/pd2_dlc_gitgud/characters/" dyn_package="false">
+			<file :name="shared_textures/swat_df.texture"/>
+			<file :name="shared_textures/swat_nm.texture"/>
+			<file :name="shared_textures/swat_head_df.texture"/>
+			<file :name="shared_textures/swat_head_nm.texture"/>
+			<file :name="shared_textures/swat_heavy_df.texture"/>
+			<file :name="shared_textures/swat_heavy_nm.texture"/>
+			<file :name="shared_textures/swat_heavy_head_df.texture"/>
+			<file :name="shared_textures/swat_heavy_head_nm.texture"/>
+			<file :name="shared_textures/zeal_medic_df.texture"/>
+			<file :name="shared_textures/zeal_medic_head_df.texture"/>
+
+			<file :name="ene_acc_zeal_swat_helmet/ene_acc_zeal_swat_helmet.material_config"/>
+			<file :name="ene_acc_zeal_swat_helmet/ene_acc_zeal_swat_helmet.model"/>
+			<file :name="ene_acc_zeal_swat_heavy_helmet/ene_acc_zeal_swat_heavy_helmet.material_config"/>
+			<file :name="ene_acc_zeal_swat_heavy_helmet/ene_acc_zeal_swat_heavy_helmet.model"/>
+
+			<!-- fix shield illumination -->
+			<file :name="ene_acc_shield_new_swat/ene_acc_shield_new_swat.model"/>
+			<file :name="ene_acc_shield_new_swat/ene_acc_shield_new_swat.object"/>
+
+			<!-- make original zeal swat distinct -->
+			<file :name="ene_zeal_swat/ene_zeal_swat.material_config"/>
+			<file :name="ene_zeal_swat/ene_zeal_swat_contour.material_config"/>
+			<file :name="ene_zeal_swat/ene_zeal_swat.model"/>
+			<file :name="ene_zeal_swat/ene_zeal_swat.unit"/>
+			<file :name="ene_zeal_swat/ene_zeal_swat_husk.unit"/>
+
+			<!-- make shield use unique model -->
+			<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield.material_config"/>
+			<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield_contour.material_config"/>
+			<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield.model"/>
+			<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield.unit"/>
+			<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield_husk.unit"/>
+
+			<!-- make heavy zeal distinct -->
+			<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy.material_config"/>
+			<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy_contour.material_config"/>
+			<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy.model"/>
+			<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy.unit"/>
+			<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy_husk.unit"/>
+
+			<!-- add zeal shotgunner -->
+			<file :name="ene_zeal_swat_2/ene_zeal_swat_2.cooked_physics"/>
+			<file :name="ene_zeal_swat_2/ene_zeal_swat_2.material_config"/>
+			<file :name="ene_zeal_swat_2/ene_zeal_swat_2_contour.material_config"/>
+			<file :name="ene_zeal_swat_2/ene_zeal_swat_2.model"/>
+			<file :name="ene_zeal_swat_2/ene_zeal_swat_2.object"/>
+			<file :name="ene_zeal_swat_2/ene_zeal_swat_2.unit"/>
+			<file :name="ene_zeal_swat_2/ene_zeal_swat_2_husk.unit"/>
+
+			<!-- add heavy zeal shotgunner -->
+			<file :name="ene_zeal_swat_heavy_2/ene_zeal_swat_heavy_2.cooked_physics"/>
+			<file :name="ene_zeal_swat_heavy_2/ene_zeal_swat_heavy_2.material_config"/>
+			<file :name="ene_zeal_swat_heavy_2/ene_zeal_swat_heavy_2_contour.material_config"/>
+			<file :name="ene_zeal_swat_heavy_2/ene_zeal_swat_heavy_2.model"/>
+			<file :name="ene_zeal_swat_heavy_2/ene_zeal_swat_heavy_2.object"/>
+			<file :name="ene_zeal_swat_heavy_2/ene_zeal_swat_heavy_2.unit"/>
+			<file :name="ene_zeal_swat_heavy_2/ene_zeal_swat_heavy_2_husk.unit"/>
+
+			<!-- add zeal m4 medic -->
+			<file :name="ene_zeal_medic_m4/ene_zeal_medic_m4.cooked_physics"/>
+			<file :name="ene_zeal_medic_m4/ene_zeal_medic_m4.material_config"/>
+			<file :name="ene_zeal_medic_m4/ene_zeal_medic_m4_contour.material_config"/>
+			<file :name="ene_zeal_medic_m4/ene_zeal_medic_m4.model"/>
+			<file :name="ene_zeal_medic_m4/ene_zeal_medic_m4.object"/>
+			<file :name="ene_zeal_medic_m4/ene_zeal_medic_m4.unit"/>
+			<file :name="ene_zeal_medic_m4/ene_zeal_medic_m4_husk.unit"/>
+
+			<!-- add zeal r870 medic -->
+			<file :name="ene_zeal_medic_r870/ene_zeal_medic_r870.unit"/>
+			<file :name="ene_zeal_medic_r870/ene_zeal_medic_r870_husk.unit"/>
+		</group>
+
+		<!-- Improve navigation data -->
+		<group name="levels/narratives/">
+			<file :name="classics/flat/nav_manager_data.nav_data"/>
+			<file :name="dentist/hox/stage_2/nav_manager_data.nav_data"/>
+			<file :name="e_framing_frame/stage_1/nav_manager_data.nav_data"/>
+			<file :name="e_framing_frame/stage_3/nav_manager_data.nav_data"/>
+			<file :name="h_alex_must_die/stage_1/nav_manager_data.nav_data"/>
+			<file :name="skm/skm_big2/nav_manager_data.nav_data"/>
+		</group>
+
+		<!-- animations -->
+		<file name="anims/shared/boss/shield/cbt_crh_melee.animation"/>
+
+	</assets>
 </mod>

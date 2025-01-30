@@ -1,3 +1,4 @@
+CopMovement._action_variants.fbi_shield = CopMovement._action_variants.shield
 CopMovement._action_variants.tank_elite = CopMovement._action_variants.tank
 CopMovement._action_variants.phalanx_minion_break = CopMovement._action_variants.city_swat
 CopMovement._action_variants.zeal_swat = CopMovement._action_variants.city_swat
@@ -5,6 +6,36 @@ CopMovement._action_variants.zeal_heavy_swat = CopMovement._action_variants.city
 CopMovement._action_variants.zeal_medic = CopMovement._action_variants.city_swat
 CopMovement._action_variants.zeal_shield = CopMovement._action_variants.shield
 CopMovement._action_variants.zeal_taser = CopMovement._action_variants.taser
+
+function CopMovement:speed_modifier()
+	local final_modifier = 1
+
+	local move_speed_mul = self._tweak_data.move_speed_mul
+
+	-- Enemies can now have additional move speed multipliers independent of their preset
+	if self._ext_anim.run then
+		final_modifier = final_modifier * (move_speed_mul and move_speed_mul.run or 1)
+	else
+		final_modifier = final_modifier * (move_speed_mul and move_speed_mul.walk or 1)
+	end
+
+	local spooc_action = self._active_actions[1]
+
+	-- Cloakers move faster while charging
+	if spooc_action and spooc_action:type() == "spooc" then
+		final_modifier = final_modifier * (self._tweak_data.spooc_charge_move_speed_mul or 1.5)
+	end
+
+	if self._carry_speed_modifier then
+		final_modifier = final_modifier * self._carry_speed_modifier
+	end
+
+	if self._hostage_speed_modifier then
+		final_modifier = final_modifier * self._hostage_speed_modifier
+	end
+
+	return final_modifier ~= 1 and final_modifier
+end
 
 -- Fix enemies playing the suppressed stand-to-crouch animation when shot even if they are already crouching
 local play_redirect_original = CopMovement.play_redirect
@@ -14,31 +45,6 @@ function CopMovement:play_redirect(redirect_name, ...)
 		self._machine:set_parameter(result, "from_stand", 0)
 	end
 	return result
-end
-
--- Fix attention synch not providing the old attention
-function CopMovement:synch_attention(attention)
-	if attention and self._unit:character_damage():dead() then
-		StreamHeist:warn("Attention synch to dead unit")
-	end
-
-	self:_remove_attention_destroy_listener(self._attention)
-	self:_add_attention_destroy_listener(attention)
-
-	if attention and attention.unit and not attention.destroy_listener_key then
-		StreamHeist:warn("Attention synch with invalid data")
-		return self:synch_attention(nil)
-	end
-
-	local old_attention = self._attention
-	self._attention = attention
-	self._action_common_data.attention = attention
-
-	for _, action in ipairs(self._active_actions) do
-		if action and action.on_attention then
-			action:on_attention(attention, old_attention)
-		end
-	end
 end
 
 -- counterstrike stuff
@@ -231,3 +237,30 @@ end)
 Hooks:PostHook(CopMovement, "on_suppressed", "sh_on_suppressed", function(self)
 	self._force_head_upd = true
 end)
+
+-- Skip damage actions on units that are already in a death action
+-- Redirect stun animations for Bulldozers and Shields
+local damage_clbk_original = CopMovement.damage_clbk
+function CopMovement:damage_clbk(my_unit, damage_info)
+	if self._active_actions[1] and self._active_actions[1]._hurt_type == "death" then
+		return
+	end
+
+	if damage_info.variant == "stun" then
+		if self._unit:base():has_tag("tank") then
+			damage_info.variant = "hurt"
+			damage_info.result = {
+				variant = "hurt",
+				type = "expl_hurt",
+			}
+		elseif self._unit:base():has_tag("shield") then
+			damage_info.variant = "hurt"
+			damage_info.result = {
+				variant = "hurt",
+				type = "concussion",
+			}
+		end
+	end
+
+	return damage_clbk_original(self, my_unit, damage_info)
+end

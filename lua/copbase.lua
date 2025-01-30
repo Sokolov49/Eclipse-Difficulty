@@ -1,6 +1,6 @@
 -- Dynamically load throwable if we have one
 local unit_ids = Idstring("unit")
-Hooks:PostHook(CopBase, "init", "sh_init", function(self)
+Hooks:PostHook(CopBase, "init", "eclipse_init", function(self)
 	local throwable = self._char_tweak.throwable
 	if not throwable then
 		return
@@ -11,12 +11,12 @@ Hooks:PostHook(CopBase, "init", "sh_init", function(self)
 	local sprint_unit_name = tweak_entry.sprint_unit and Idstring(tweak_entry.sprint_unit)
 
 	if not PackageManager:has(unit_ids, unit_name) then
-		StreamHeist:log("Loading projectile unit", throwable)
+		Eclipse:log("Loading projectile unit", throwable)
 		managers.dyn_resource:load(unit_ids, unit_name, managers.dyn_resource.DYN_RESOURCES_PACKAGE)
 	end
 
 	if sprint_unit_name and not PackageManager:has(unit_ids, sprint_unit_name) then
-		StreamHeist:log("Loading projectile sprint unit", throwable)
+		Eclipse:log("Loading projectile sprint unit", throwable)
 		managers.dyn_resource:load(unit_ids, sprint_unit_name, managers.dyn_resource.DYN_RESOURCES_PACKAGE)
 	end
 end)
@@ -24,7 +24,7 @@ end)
 -- fix yufu wang hitbox
 Hooks:PostHook(CopBase, "post_init", "hitbox_fix_post_init", function(self)
 	if self._tweak_table == "triad_boss" then
-		self._unit:body("head"--[[self._unit:character_damage()._head_body_name--]]):set_sphere_radius(15)
+		self._unit:body("head"--[[self._unit:character_damage()._head_body_name--]]):set_sphere_radius(16)
 		self._unit:body("body"):set_sphere_radius(22)
 
 		self._unit:body("rag_LeftArm"):set_enabled(true)
@@ -46,14 +46,32 @@ Hooks:PostHook(CopBase, "post_init", "hitbox_fix_post_init", function(self)
 end)
 
 -- Check for weapon changes
+CopBase.unit_weapon_mapping = Eclipse:require("unit_weapons")
 if Network:is_client() then
 	return
 end
 
-local weapon_mapping = StreamHeist:require("unit_weapons")
+-- disable leg hitboxes for shields
+CopBase.shield_tweak_names = {
+	shield = true,
+	phalanx_minion = true,
+}
+
+-- Check for weapon changes
 Hooks:PreHook(CopBase, "post_init", "sh_post_init", function(self)
-	self._default_weapon_id = weapon_mapping[self._unit:name():key()] or self._default_weapon_id
-	if type(self._default_weapon_id) == "table" then
-		self._default_weapon_id = table.random(self._default_weapon_id)
+	local mapping = self.unit_weapon_mapping[self._unit:name():key()]
+	local mapping_type = type(mapping)
+	if mapping_type == "table" then
+		local selector = WeightedSelector:new()
+		for k, v in pairs(mapping) do
+			if type(k) == "number" then
+				selector:add(v, 1)
+			else
+				selector:add(k, v)
+			end
+		end
+		self._default_weapon_id = selector:select() or self._default_weapon_id
+	elseif mapping_type == "string" then
+		self._default_weapon_id = mapping
 	end
 end)

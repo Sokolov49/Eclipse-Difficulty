@@ -1,8 +1,3 @@
-local REACT_IDLE = AIAttentionObject.REACT_IDLE
-local REACT_AIM = AIAttentionObject.REACT_AIM
-local REACT_ARREST = AIAttentionObject.REACT_ARREST
-local REACT_COMBAT = AIAttentionObject.REACT_COMBAT
-
 -- Make cops react more aggressively when appropriate (less stare, more shoot)
 local _chk_reaction_to_attention_object_original = CopLogicIdle._chk_reaction_to_attention_object
 function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, ...)
@@ -11,8 +6,8 @@ function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, ..
 	end
 
 	local attention_reaction = attention_data.settings.reaction
-	if attention_data.settings.relation ~= "foe" and attention_reaction <= REACT_AIM then
-		return REACT_IDLE
+	if attention_data.settings.relation ~= "foe" and attention_reaction <= AIAttentionObject.REACT_AIM then
+		return AIAttentionObject.REACT_IDLE
 	end
 
 	local record = attention_data.criminal_record
@@ -21,19 +16,19 @@ function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, ..
 	end
 
 	if record.status == "dead" or record.being_arrested then
-		return math.min(attention_reaction, REACT_AIM)
+		return math.min(attention_reaction, AIAttentionObject.REACT_AIM)
 	end
 
 	if record.status == "disabled" then
 		if record.assault_t and record.assault_t - record.disabled_t > 0.6 or data.tactics and data.tactics.murder then
-			return REACT_COMBAT
+			return AIAttentionObject.REACT_COMBAT
 		end
-		return math.min(attention_reaction, REACT_AIM)
+		return math.min(attention_reaction, AIAttentionObject.REACT_AIM)
 	end
 
 	local can_arrest = not record.status and record.arrest_timeout < data.t and CopLogicBase._can_arrest(data)
 	if not can_arrest or record.assault_t and attention_data.unit:base():arrest_settings().aggression_timeout > data.t - record.assault_t then
-		return attention_data.verified and REACT_COMBAT or attention_reaction
+		return attention_data.verified and AIAttentionObject.REACT_COMBAT or attention_reaction
 	end
 
 	for u_key, other_crim_rec in pairs(managers.groupai:state():all_criminals()) do
@@ -45,15 +40,15 @@ function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, ..
 				or other_crim_attention_info.verified and other_crim_rec.assault_t and data.t - other_crim_rec.assault_t < other_crim_rec.unit:base():arrest_settings().aggression_timeout
 			)
 		then
-			return attention_data.verified and REACT_COMBAT or attention_reaction
+			return attention_data.verified and AIAttentionObject.REACT_COMBAT or attention_reaction
 		end
 	end
 
 	if attention_data.dis > 2000 then
-		return math.min(attention_reaction, REACT_AIM)
+		return math.min(attention_reaction, AIAttentionObject.REACT_AIM)
 	end
 
-	return math.min(attention_reaction, REACT_ARREST)
+	return math.min(attention_reaction, AIAttentionObject.REACT_ARREST)
 end
 
 -- Fix defend_area objectives being force relocated to areas with players in them
@@ -66,7 +61,7 @@ function CopLogicIdle._chk_relocate(data)
 
 	if objective_type == "follow" then
 		local follow_unit = objective.follow_unit
-		local unit_pos = follow_unit:movement().get_walk_to_pos and follow_unit:movement():get_walk_to_pos() or follow_unit:movement():m_pos()
+		local unit_pos = follow_unit:movement().get_walk_to_pos and follow_unit:movement():get_walk_to_pos() or follow_unit:movement():m_newest_pos()
 		local dis_sq = mvector3.distance_sq(data.m_pos, unit_pos)
 
 		if data.is_tied and objective.lose_track_dis and dis_sq > objective.lose_track_dis ^ 2 then
@@ -74,8 +69,8 @@ function CopLogicIdle._chk_relocate(data)
 			return true
 		end
 
-		local relocated_dis_sq = data.is_tied and my_data.advancing and objective.distance and (objective.distance * 0.5) ^ 2 or 100
-			if objective.relocated_to and mvector3.distance_sq(objective.relocated_to, unit_pos) < relocated_dis_sq then
+		local relocated_dis_sq = data.is_tied and my_data.advancing and objective.distance and math.max(objective.distance * 0.5 ^ 2, 100) or 100
+		if objective.relocated_to and mvector3.distance_sq(objective.relocated_to, unit_pos) < relocated_dis_sq then
 			return
 		elseif data.is_converted then
 			if not TeamAILogicIdle._check_should_relocate(data, data.internal_data, objective) then
@@ -83,7 +78,7 @@ function CopLogicIdle._chk_relocate(data)
 			end
 		elseif math.abs(unit_pos.z - data.m_pos.z) > 200 or objective.distance and dis_sq > objective.distance ^ 2 then
 		elseif managers.navigation:raycast({ pos_from = data.m_pos, pos_to = unit_pos }) then
-		elseif objective.shield_cover_unit and data.attention_obj and data.attention_obj.verified and data.attention_obj.reaction >= AIAttentionObject.REACT_AIM then
+		elseif objective.cover_unit and data.attention_obj and data.attention_obj.verified and data.attention_obj.reaction >= AIAttentionObject.REACT_AIM then
 			if mvector3.distance_sq(objective.relocated_to or data.m_pos, data.attention_obj.m_pos) > mvector3.distance_sq(unit_pos, data.attention_obj.m_pos) then
 				return
 			end

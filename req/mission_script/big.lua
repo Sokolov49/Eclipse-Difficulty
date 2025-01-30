@@ -1,8 +1,13 @@
+local elevator_spawn = {
+	values = {
+		interval = 20
+	}
+}
 return {
 	[100809] = {
 		ponr = {
 			length = 180,
-			player_mul = {2, 1.25, 1., 1}
+			player_mul = { 2, 1.25, 1., 1 }
 		}
 	},
 	[105844] = {
@@ -19,20 +24,14 @@ return {
 			}
 		}
 	},
+	-- enable roof spawngroups
+	[100006] = {
+		values = {
+			spawn_groups = { 100019, 100007, 100692 }
+		}
+	},
 	-- slow down elevator spawn points
-	[105550] = {
-		values = {
-			interval = 20
-		}
-	},
-	[105434] = {
-		values = {
-			interval = 20
-		}
-	},
-	[105450] = {
-		values = {
-			interval = 20
-		}
-	}
+	[105550] = elevator_spawn,
+	[105434] = elevator_spawn,
+	[105450] = elevator_spawn,
 }

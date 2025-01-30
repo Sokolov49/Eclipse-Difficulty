@@ -1,7 +1,7 @@
 -- Remove position reservations on death
 -- Improve reaction to ECM feedback by playing specific voicelines and pain sounds
 if Network:is_server() then
-	Hooks:PostHook(CopActionHurt, "init", "sh_init", function(self)
+	Hooks:PostHook(CopActionHurt, "init", "eclipse_init", function(self)
 		if self._hurt_type == "death" then
 			self._unit:brain():rem_all_pos_rsrv()
 		elseif self._hurt_type == "hurt_sick" then
@@ -57,6 +57,22 @@ Hooks:OverrideFunction(CopActionHurt, "chk_block", function(self, action_type, t
 	return CopActionAct.chk_block(self, action_type, t)
 end)
 
+-- Allow dodge and surrender actions to interrupt hurt actions
+CopActionHurt.allowed_client_act_variants = {
+	hands_up = true,
+	hands_back = true,
+	tied = true,
+	tied_all_in_one = true,
+}
+
+function CopActionHurt:chk_block_client(action_desc, action_type, t)
+	if action_desc.type == "dodge" or action_desc.type == "act" and self.allowed_client_act_variants[action_desc.variant] then
+		return false
+	end
+
+	return self:chk_block(action_type, t)
+end
+
 -- Fix pseudo random number generator having very low entropy
 function CopActionHurt:_pseudorandom(a, b)
 	if CopActionHurt._host_peer == nil then
@@ -87,5 +103,17 @@ function CopActionHurt:_pseudorandom(a, b)
 		return math.floor(math.lerp(1, a + 1, val))
 	else
 		return val
+	end
+end
+
+-- Fix shooting direction while hurt being specified as rotation instead of a vector
+function CopActionHurt:clbk_shooting_hurt()
+	self._delayed_shooting_hurt_clbk_id = nil
+	if not alive(self._weapon_unit) then
+		return
+	end
+	local fire_obj = self._weapon_unit:base().fire_object and self._weapon_unit:base():fire_object()
+	if fire_obj then
+		self._weapon_unit:base():singleshot(fire_obj:position(), fire_obj:rotation():y())
 	end
 end

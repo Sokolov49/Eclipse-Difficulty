@@ -116,9 +116,7 @@ Hooks:PreHook(CopLogicAttack, "aim_allow_fire", "sh_aim_allow_fire", function(sh
 	if not chatter then
 		return
 	elseif data.unit:in_slot(16) then
-		if not data.combat_chatter_cooldown_t then
-			data.combat_chatter_cooldown_t = data.t + math.rand(30, 90)
-		elseif aim and is_off_cooldown and chatter.aggressive and not data.unit:sound():speaking(data.t) then
+		if aim and is_off_cooldown and chatter.aggressive and not data.unit:sound():speaking(data.t) then
 			data.unit:sound():say(shoot and "lk3a" or "lk3b", true)
 			data.combat_chatter_cooldown_t = data.t + math.rand(30, 90)
 		end
@@ -130,13 +128,6 @@ Hooks:PreHook(CopLogicAttack, "aim_allow_fire", "sh_aim_allow_fire", function(sh
 		if CopLogicAttack._chk_say_chatter(data, "aggressive") then
 			data.combat_chatter_cooldown_t = data.t + math.rand(10, 20)
 		end
-	end
-end)
-
--- Make suppressed chatter less frequent
-Hooks:PostHook(CopLogicAttack, "on_suppressed_state", "sh_on_suppressed_state", function(data)
-	if data.is_suppressed and data.char_tweak.chatter and data.char_tweak.chatter.suppress then
-		managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "suppress")
 	end
 end)
 
@@ -169,7 +160,7 @@ function CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 		mvector3.copy(from_pos),
 		to_pos,
 	}
-	CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
+	CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, math.random() < 0.5 and "run" or "walk")
 end
 
 -- Empty this function (path starting position is corrected in CopActionWalk as it covers all cases)
@@ -228,7 +219,7 @@ function CopLogicAttack._update_cover(data)
 	local focus_enemy = data.attention_obj
 	local objective = data.objective
 
-	if not focus_enemy or not focus_enemy.nav_tracker or focus_enemy.reaction < AIAttentionObject.REACT_COMBAT or objective and objective.shield_cover_unit then
+	if not focus_enemy or not focus_enemy.nav_tracker or focus_enemy.reaction < AIAttentionObject.REACT_COMBAT or objective and objective.cover_unit then
 		if best_cover and mvector3.distance_sq(best_cover[1][1], data.m_pos) > 100 ^ 2 then
 			CopLogicAttack._set_best_cover(data, my_data, nil)
 		end
@@ -395,3 +386,27 @@ function MarshalLogicAttack._upd_combat_movement(data)
 end
 
 function MarshalLogicAttack.update_cover(data) end
+
+--Medic attack logic
+MedicLogicAttack = MedicLogicAttack or class(CopLogicAttack)
+
+function MedicLogicAttack._upd_combat_movement(data)
+	local my_data = data.internal_data
+	local focus_enemy = data.attention_obj
+
+	if data.logic.action_taken(data, my_data) or CopLogicAttack._upd_pose(data, my_data) then
+		return
+	end
+
+	if data.unit:movement():chk_action_forbidden("walk") or not CopLogicAttack._can_move(data) then
+		return
+	end
+
+	if focus_enemy.verified then
+		if CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, true, "optimal") then
+			return
+		end
+	end
+
+	CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
+end

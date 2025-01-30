@@ -1,44 +1,20 @@
+local scripted_enemy = Eclipse.scripted_enemy
+
+local cloaker = scripted_enemy.cloaker
+
 return {
-    -- slow down a few roof spawnpoints
-	[101470] = {
-		values = {
-			interval = 20
-		}
+	-- Boss spawn
+	[100154] = {
+		difficulty = 0.1
 	},
-	[100007] = {
-		values = {
-			interval = 30
-		}
+	-- Boss dead
+	[100153] = {
+		difficulty = 1
 	},
-	[100019] = {
-		values = {
-			interval = 30
-		}
+	[101133] = {
+		enemy = cloaker
 	},
-	[100132] = {
-		values = {
-			interval = 30
-		}
-	},
-    -- slow down main entrance spawnpoints
-	[100131] = {
-		values = {
-			interval = 15
-		}
-	},
-	[100130] = {
-		values = {
-			interval = 15
-		}
-	},
-	[100133] = {
-		values = {
-			interval = 15
-		}
-	},
-	[100128] = {
-		values = {
-			interval = 15
-		}
-	},
+	[101141] = {
+		enemy = cloaker
+	}
 }

@@ -7,12 +7,10 @@ Hooks:OverrideFunction(ElementSpawnEnemyGroup, "on_executed", function(self, ins
 	self:_check_spawn_points()
 
 	if #self._spawn_points > 0 then
-		if self._group_data.spawn_type == "group" then
+		local spawn_type = self._group_data.spawn_type
+		if spawn_type == "group" or spawn_type == "group_guaranteed" then
 			local spawn_group_data = managers.groupai:state():create_spawn_group(self._id, self, self._spawn_points)
-			managers.groupai:state():force_spawn_group(spawn_group_data, self._values.preferred_spawn_groups)
-		elseif self._group_data.spawn_type == "group_guaranteed" then
-			local spawn_group_data = managers.groupai:state():create_spawn_group(self._id, self, self._spawn_points)
-			managers.groupai:state():force_spawn_group(spawn_group_data, self._values.preferred_spawn_groups, true)
+			managers.groupai:state():force_spawn_group(spawn_group_data, self._values.preferred_spawn_groups, spawn_type == "group_guaranteed")
 		else
 			for i = 1, self:get_random_table_value(self._group_data.amount) do
 				local element = self._spawn_points[self:_get_spawn_point(i)]
@@ -27,7 +25,7 @@ Hooks:OverrideFunction(ElementSpawnEnemyGroup, "on_executed", function(self, ins
 end)
 
 -- Update preferred spawn groups to contain new groups and add intervals to groups with special spawn actions
-local group_mapping = {
+ElementSpawnEnemyGroup.group_mapping = {
 	tac_swat_rifle = {
 		"beat_cops",
 		"blue_swats",
@@ -67,10 +65,10 @@ local group_mapping = {
 		"zeal_tanks",
 	},
 }
-group_mapping.tac_swat_rifle_flank = group_mapping.tac_swat_rifle
-group_mapping.tac_shield_wall_ranged = group_mapping.tac_shield_wall
-group_mapping.tac_shield_wall_charge = group_mapping.tac_shield_wall
-group_mapping.tac_tazer_charge = group_mapping.tac_tazer_flanking
+ElementSpawnEnemyGroup.group_mapping.tac_swat_rifle_flank = ElementSpawnEnemyGroup.group_mapping.tac_swat_rifle
+ElementSpawnEnemyGroup.group_mapping.tac_shield_wall_ranged = ElementSpawnEnemyGroup.group_mapping.tac_shield_wall
+ElementSpawnEnemyGroup.group_mapping.tac_shield_wall_charge = ElementSpawnEnemyGroup.group_mapping.tac_shield_wall
+ElementSpawnEnemyGroup.group_mapping.tac_tazer_charge = ElementSpawnEnemyGroup.group_mapping.tac_tazer_flanking
 
 Hooks:PostHook(ElementSpawnEnemyGroup, "_finalize_values", "sh__finalize_values", function(self)
 	if not self._values.preferred_spawn_groups then
@@ -89,7 +87,7 @@ Hooks:PostHook(ElementSpawnEnemyGroup, "_finalize_values", "sh__finalize_values"
 
 	local new_groups = {}
 	for _, initial_group in pairs(self._values.preferred_spawn_groups) do
-		local mapping = group_mapping[initial_group]
+		local mapping = self.group_mapping[initial_group]
 		if mapping then
 			for _, added_group in pairs(mapping) do
 				new_groups[added_group] = true
@@ -98,6 +96,6 @@ Hooks:PostHook(ElementSpawnEnemyGroup, "_finalize_values", "sh__finalize_values"
 			new_groups[initial_group] = true
 		end
 	end
-	
+
 	self._values.preferred_spawn_groups = table.map_keys(new_groups)
 end)

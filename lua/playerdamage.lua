@@ -1,5 +1,5 @@
 -- uppers cooldown
-PlayerDamage._UPPERS_COOLDOWN = 90
+PlayerDamage._UPPERS_COOLDOWN = 120
 
 -- Pro-Job adds bleedout time and revive health scaling (as well as friendly fire)
 Hooks:PreHook(PlayerDamage, "replenish", "eclipse_replenish", function(self)
@@ -131,21 +131,15 @@ function PlayerDamage:damage_bullet(attack_data)
 		self._unit:sound():play("player_hit_permadamage")
 	end
 
-	local shake_armor_multiplier = managers.player:body_armor_value("damage_shake") * (self:get_real_armor() > 0 and 1 or 2)
-	self._unit:camera()._damage_bullet_shake_multiplier = math.clamp(attack_data.damage, 0, 20) * shake_armor_multiplier
+	local shake_armor_multiplier = managers.player:body_armor_value("damage_shake") * (self:get_real_armor() > 0 and 0.33 or 1)
+	local shake_injector_multiplier = (managers.player:has_activate_temporary_upgrade("temporary", "chico_injector") and 0.5) or 1
+	self._unit:camera()._damage_bullet_shake_multiplier = math.clamp(attack_data.damage, 0, 20) * shake_armor_multiplier * shake_injector_multiplier
 	local gui_shake_number = tweak_data.gui.armor_damage_shake_base / shake_armor_multiplier
 	gui_shake_number = gui_shake_number + pm:upgrade_value("player", "damage_shake_addend", 0)
 	shake_armor_multiplier = tweak_data.gui.armor_damage_shake_base / gui_shake_number
 	local shake_multiplier = math.clamp(attack_data.damage, 0.2, 2) * shake_armor_multiplier
 
-	-- The stronger the damage - the more lengthy and powerful the aimpunch
-	if attack_data.damage < 12.5 then
-		self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
-	elseif attack_data.damage < 23 then
-		self._unit:camera():play_shaker("player_bullet_damage_strong", 1 * shake_multiplier)
-	else
-		self._unit:camera():play_shaker("player_bullet_damage_knock_out", 1 * shake_multiplier)
-	end
+	self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
 
 	if not _G.IS_VR then
 		managers.rumble:play("damage_bullet")
@@ -291,16 +285,23 @@ function PlayerDamage:_chk_dmg_too_soon()
 	return managers.player:player_timer():time() < next_allowed_dmg_t
 end
 
--- Make <50%hp invuln upgrade not proc on armor hits
 function PlayerDamage:_calc_health_damage(attack_data)
-	if attack_data.weapon_unit then
-		local weap_base = alive(attack_data.weapon_unit) and attack_data.weapon_unit:base()
-		local weap_tweak_data = weap_base and weap_base.weapon_tweak_data and weap_base:weapon_tweak_data()
+	-- damage tagging, (IT WAS NOT) worth the experiment i think
+	-- if attack_data.weapon_unit and attack_data.damage > 15 then
+	-- 	local armor_value_tagged = managers.player:body_armor_value("damage_tagged")
+	-- 	local skill_value_tagged = managers.player:upgrade_value("player", "player_tagged_speed_mul", 1)
+	-- 	local slowdown_data = {
+	-- 		max_mul = math.clamp(0.2 * armor_value_tagged * skill_value_tagged, 0, 1),
+	-- 		add_mul = math.clamp(math.min(0.07, 0.0015 * attack_data.damage) / armor_value_tagged * skill_value_tagged, 0, 1),
+	-- 		decay_time = math.min(1.5, 0.01 * attack_data.damage),
+	-- 		id = "snowthrower_cold",
+	-- 		duration = 2,
+	-- 		mul = math.clamp(math.min(0.7, 60 / attack_data.damage) * armor_value_tagged / skill_value_tagged, 0, 1),
+	-- 		prevents_running = false,
+	-- 	}
 
-		if weap_tweak_data and weap_tweak_data.slowdown_data then
-			self:apply_slowdown(weap_tweak_data.slowdown_data)
-		end
-	end
+	-- 	self:apply_slowdown(slowdown_data)
+	-- end
 
 	if managers.player:has_activate_temporary_upgrade("temporary", "mrwi_health_invulnerable") then
 		return 0
@@ -325,6 +326,7 @@ function PlayerDamage:_calc_health_damage(attack_data)
 		local health_threshold = self._mrwi_health_invulnerable_threshold or 0.5
 		local is_cooling_down = managers.player:get_temporary_property("mrwi_health_invulnerable", false)
 
+		-- Make <50%hp invuln upgrade not proc on armor hits
 		if self:health_ratio() <= health_threshold and health_subtracted > 0 and not is_cooling_down then -- was it so hard to just add one more check, overkill?
 			local cooldown_time = self._mrwi_health_invulnerable_cooldown or 10
 
@@ -358,17 +360,26 @@ function PlayerDamage:_calc_health_damage(attack_data)
 	return health_subtracted
 end
 
+function PlayerDamage:on_incapacitated()
+	local is_pro = Global.game_settings and Global.game_settings.one_down
+
+	self:on_downed()
+
+	if is_pro then
+		self._revives = Application:digest_value(Application:digest_value(self._revives, false) - 1, true) -- instant incaps (cloakers / tasers) count as downs
+		self:_send_set_revives()
+	end
+
+	self._incapacitated = true
+end
+
 -- make healing fixed instead of % of max health
 function PlayerDamage:restore_health(health_restored, is_static, chk_health_ratio)
 	if chk_health_ratio and managers.player:is_damage_health_ratio_active(self:health_ratio()) then
 		return false
 	end
 
-	if is_static then
-		return self:change_health(health_restored * self._healing_reduction)
-	else
-		return self:change_health(health_restored * self._healing_reduction)
-	end
+	return self:change_health(health_restored * self._healing_reduction)
 end
 
 -- lower the on-kill godmode length for leech
@@ -380,6 +391,8 @@ end
 -- add an upgrade that gives increased bleedout timer
 Hooks:PostHook(PlayerDamage, "_regenerated", "eclipse__regenerated", function(self)
 	self._down_time = tweak_data.player.damage.DOWNED_TIME + managers.player:upgrade_value("player", "increased_bleedout_timer", 0)
+
+	self._down_timer_max = self._down_time -- store the max bleedout timer so that fak down restore can go up to 35
 end)
 
 -- bring back decreasing bleedout timer based on the amount of downs
@@ -389,25 +402,32 @@ Hooks:PreHook(PlayerDamage, "revive", "eclipse_revive", function(self)
 	end
 end)
 
---make the downed state more dramatic
-function PlayerDamage:update_downed(t, dt)
-	if self._downed_timer and self._downed_paused_counter == 0 then
-		self._downed_timer = self._downed_timer - dt
-
-		if self._downed_start_time == 0 then
-			self._downed_progression = 100
-		else
-			self._downed_progression = math.clamp(1 - self._downed_timer / self._downed_start_time, 0, 1) * 100
-		end
-
-		if not _G.IS_VR then
-			managers.environment_controller:set_downed_value(self._downed_progression + 45)
-		end
-
-		SoundDevice:set_rtpc("downed_state_progression", self._downed_progression + 45)
-
-		return self._downed_timer <= 0
+-- faks only heal a small portion but then heal you over time
+function PlayerDamage:band_aid_health(hot_regen)
+	if managers.platform:presence() == "Playing" and (self:arrested() or self:need_revive()) then
+		return
 	end
 
-	return false
+	self:restore_health(tweak_data.upgrades.values.first_aid_kit.heal_amount)
+	if hot_regen then
+		managers.player:activate_temporary_upgrade("temporary", "first_aid_health_regen")
+	end
+
+	self._said_hurt = false
+end
+
+-- Fix Anarchist regen not triggering HUD armor update for clients
+Hooks:PostHook(PlayerDamage, "change_armor", "sh_change_armor", function(self, change)
+	if change > 0 and self:armor_ratio() < 1 then
+		self:_send_set_armor()
+	end
+end)
+
+-- armor regen time depends on the armor you're wearing
+function PlayerDamage:set_regenerate_timer_to_max()
+	local mul = managers.player:body_armor_regen_multiplier(alive(self._unit) and self._unit:movement():current_state()._moving, self:health_ratio())
+	self._regenerate_timer = managers.player:body_armor_value("regen_timer") * mul
+	self._regenerate_timer = self._regenerate_timer * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
+	self._regenerate_speed = self._regenerate_speed or 1
+	self._current_state = self._update_regenerate_timer
 end

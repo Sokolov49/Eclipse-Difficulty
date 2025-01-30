@@ -1,13 +1,13 @@
 {
-  	"name" : "Eclipse",
+	"name" : "Eclipse",
 	"description" : "A total PAYDAY overhaul that aims to make the game experience way more challenging and engaging!",
-	"author" : "nikita, Hoppip, Rockymoto, RedFlame and many others...",
+	"author" : "nikita, Hoppip, Rockymoto, SonicSoapyBoi and many others...",
 	"contact" : "nikita_was_taken on Discord",
 	"image" : "mod.png",
 	"blt_version" : 2,
-	"version" : "5.4.6.1",
+	"version" : "6.0dev22",
 	"updates" : [{
-		"identifier" : "eclipse_difficulty",
-		"host" : { "meta" : "https://raw.githubusercontent.com/Sokolov49/Eclipse-Difficulty/main/meta.json" }
+		"identifier" : "eclipse_difficulty_dev",
+		"host" : { "meta" : "https://raw.githubusercontent.com/mrcreepysos/Eclipse-Difficulty/dev/meta.json" }
 	}]
 }

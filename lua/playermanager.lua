@@ -31,15 +31,32 @@ Hooks:OverrideFunction(PlayerManager, "get_hostage_bonus_addend", function(self,
 	return addend * hostages
 end)
 
+-- add fak health regen
+function PlayerManager:health_regen()
+	local health_regen = tweak_data.player.damage.HEALTH_REGEN
+	health_regen = health_regen + self:temporary_upgrade_value("temporary", "wolverine_health_regen", 0)
+	health_regen = health_regen + self:get_hostage_bonus_addend("health_regen")
+	health_regen = health_regen + self:upgrade_value("player", "passive_health_regen", 0)
+	health_regen = health_regen + self:temporary_upgrade_value("temporary", "first_aid_health_regen", 0)
+
+	return health_regen
+end
+
 function PlayerManager:on_headshot_dealt()
 	local t = Application:time()
 	local player_unit = self:player_unit()
 	local damage_ext = player_unit:character_damage()
 	local has_hitman_ammo_refund = managers.player:has_enabled_cooldown_upgrade("cooldown", "hitman_ammo_refund")
+	local weapon_unit = self:equipped_weapon_unit()
+	local weapon = weapon_unit:base()
+	local regen_armor_bonus = managers.player:upgrade_value("player", "headshot_regen_armor_bonus", 0)
+	local meets_bullseye_conditions = weapon and weapon:is_category("snp") and regen_armor_bonus > 0
 
 	if not player_unit then
 		return
 	end
+
+	self._message_system:notify(Message.OnHeadShot, nil, nil)
 
 	-- hitman refunds ammo on headshots
 	if has_hitman_ammo_refund and variant ~= "melee" then
@@ -47,22 +64,20 @@ function PlayerManager:on_headshot_dealt()
 		managers.player:disable_cooldown_upgrade("cooldown", "hitman_ammo_refund")
 	end
 
-	-- make headshot regen check for maxed out armor
-	if damage_ext and damage_ext:armor_ratio() == 1 then
-		self._on_headshot_dealt_t = 0
-	else
-		if self._on_headshot_dealt_t and t < self._on_headshot_dealt_t then
-			return
+	-- make bullseye only work with sniper rifles, also make it work with non max armor
+	if meets_bullseye_conditions then
+		if damage_ext and damage_ext:armor_ratio() == 1 then
+			self._on_headshot_dealt_t = 0
+		else
+			if self._on_headshot_dealt_t and t < self._on_headshot_dealt_t then
+				return
+			end
+			self._on_headshot_dealt_t = t + (tweak_data.upgrades.on_headshot_dealt_cooldown or 0)
 		end
-		self._on_headshot_dealt_t = t + (tweak_data.upgrades.on_headshot_dealt_cooldown or 0)
-	end
 
-	self._message_system:notify(Message.OnHeadShot, nil, nil)
-
-	local regen_armor_bonus = managers.player:upgrade_value("player", "headshot_regen_armor_bonus", 0)
-
-	if damage_ext and regen_armor_bonus > 0 then
-		damage_ext:restore_armor(regen_armor_bonus)
+		if damage_ext then
+			damage_ext:restore_armor(regen_armor_bonus)
+		end
 	end
 end
 
@@ -207,4 +222,17 @@ function PlayerManager:skill_dodge_chance(...)
 	end
 
 	return dodge
+end
+
+-- Reduce damage taken while inside of vehicles
+local damage_reduction_skill_multiplier_original = PlayerManager.damage_reduction_skill_multiplier
+function PlayerManager:damage_reduction_skill_multiplier(...)
+	local dmg_reduction = damage_reduction_skill_multiplier_original(self, ...)
+
+	local player = self:player_unit()
+	if player and player:movement()._current_state_name == "driving" then
+		dmg_reduction = dmg_reduction * 0.33
+	end
+
+	return dmg_reduction
 end

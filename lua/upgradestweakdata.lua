@@ -47,14 +47,36 @@ function UpgradesTweakData:_init_pd2_values(tweak_data)
 		-0.55,
 	}
 
-	-- ictv nerf
-	self.values.player.body_armor.armor[7] = 13
+	-- movement tagging
+	self.values.player.body_armor.damage_tagged = {
+		0.8,
+		0.85,
+		0.9,
+		0.95,
+		1,
+		1.05,
+		1.1,
+	}
 
-	-- bullseye nerf
-	self.on_headshot_dealt_cooldown = 5
+	-- regen timer
+	self.values.player.body_armor.regen_timer = {
+		3,
+		3.33,
+		3.66,
+		4,
+		4.5,
+		5,
+		5.5,
+	}
+
+	-- ictv nerf
+	self.values.player.body_armor.armor[7] = 18
 
 	-- make sna less cancer
 	self.values.player.shield_knock_bullet.chance = 0.7
+
+	-- fak heals 90hp on use
+	self.values.first_aid_kit.heal_amount = 9
 end
 
 local old_init = UpgradesTweakData.init
@@ -120,9 +142,9 @@ function UpgradesTweakData:init(tweak_data)
 			value = 1,
 		},
 	}
-	self.values.player.extra_hostages = { true }
+	self.values.player.extra_hostages = { 2 }
 	self.skill_descs.triathlete.multibasic = "4"
-	self.skill_descs.triathlete.multipro = "5"
+	self.skill_descs.triathlete.multipro = "2"
 	self.skill_descs.triathlete.multipro2 = "75%"
 
 	-- Confident
@@ -188,9 +210,62 @@ function UpgradesTweakData:init(tweak_data)
 	self.skill_descs.black_marketeer.multibasic3 = "5"
 	self.skill_descs.black_marketeer.multipro = "12"
 
-	-- Lock N' Load
-	self.values.weapon.swap_speed_multiplier = { 1.25 }
-	self.skill_descs.rifleman.multibasic2 = "25%"
+	-- Stable Shot
+	self.definitions.assault_rifle_spread_index_addend = {
+		name_id = "menu_assault_rifle_spread_index_addend",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "spread_index_addend",
+			category = "assault_rifle",
+		},
+	}
+	self.values.assault_rifle.spread_index_addend = { 1 }
+
+	self.definitions.snp_spread_index_addend = {
+		name_id = "menu_snp_spread_index_addend",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "spread_index_addend",
+			category = "snp",
+		},
+	}
+	self.values.snp.spread_index_addend = { 1 }
+
+	self.definitions.team_weapon_spread_index_addend = {
+		name_id = "menu_team_weapon_spread_index_addend",
+		category = "team",
+		upgrade = {
+			value = 1,
+			upgrade = "spread_index_addend",
+			category = "weapon",
+		},
+	}
+	self.values.team.weapon.spread_index_addend = { 1 }
+	self.skill_descs.stable_shot.multibasic = "4"
+	self.skill_descs.stable_shot.multipro = "4"
+
+	-- Rifleman
+	self.values.weapon.enter_steelsight_speed_multiplier[1] = 1.5
+	self.values.weapon.swap_speed_multiplier = { 1.33 }
+	self.skill_descs.rifleman.multibasic = "50%"
+	self.skill_descs.rifleman.multipro = "33%"
+
+	-- Marksman
+	self.values.player.not_moving_accuracy_increase[1] = 3
+	self.values.weapon.steelsight_recoil_multiplier = { 0.8 }
+	self.definitions.weapon_steelsight_recoil_multiplier = {
+		name_id = "menu_weapon_steelsight_recoil_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "steelsight_recoil_multiplier",
+			category = "weapon",
+		},
+	}
+	self.skill_descs.sharpshooter.multibasic = "20%"
+	self.skill_descs.sharpshooter.multipro = "12"
 
 	-- Kilmer
 	self.values.snp.reload_speed_multiplier = { 1.25 }
@@ -201,29 +276,51 @@ function UpgradesTweakData:init(tweak_data)
 	self.skill_descs.speedy_reload.multipro = "40%"
 	self.skill_descs.speedy_reload.multipro2 = "6"
 
-	-- Mind Blown
-	self.values.snp.graze_damage = {
-		{
-			radius = 500,
-			times = 1,
-			damage_factor = 0.35,
-			damage_factor_kill = 0.35,
-		},
-		{
-			radius = 500,
-			times = 1,
-			damage_factor = 0.35,
-			damage_factor_kill = 1,
+	-- Bullseye
+	self.values.weapon.magnetizing_bullets = { true } -- unused
+	self.definitions.weapon_magnetizing_bullets = {
+		name_id = "menu_weapon_magnetizing_bullets",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "magnetizing_bullets",
+			category = "weapon",
 		},
 	}
-	self.skill_descs.single_shot_ammo_return.multibasic = "35%"
-	self.skill_descs.single_shot_ammo_return.multibasic2 = "5m"
-	self.skill_descs.single_shot_ammo_return.multipro = "100%"
+
+	-- unused
+	self.values.weapon.no_pen_damage_penalty = { true } -- unused
+	self.definitions.weapon_no_pen_damage_penalty = {
+		name_id = "menu_weapon_no_pen_damage_penalty",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "no_pen_damage_penalty",
+			category = "weapon",
+		},
+	}
+
+	self.values.snp.graze_damage = {
+		{
+			radius = 300,
+			damage_factor = 0.5,
+		},
+		{ -- unused
+			radius = 500,
+			damage_factor = 0.5,
+		},
+	}
+	self.values.player.headshot_regen_armor_bonus[1] = 5
+	self.on_headshot_dealt_cooldown = 3
+	self.skill_descs.single_shot_ammo_return.multibasic = "50%"
+	self.skill_descs.single_shot_ammo_return.multibasic2 = "3m"
+	self.skill_descs.single_shot_ammo_return.multipro = "50"
+	self.skill_descs.single_shot_ammo_return.multipro2 = "3"
 
 	-- Enforcer --
 
 	-- Hard Boiled
-	self.values.shotgun.swap_speed_multiplier = { 1.25 }
+	self.values.shotgun.swap_speed_multiplier = { 1.2 }
 	self.definitions.shotgun_swap_speed_multiplier = {
 		name_id = "menu_shotgun_swap_speed_multiplier",
 		category = "feature",
@@ -234,7 +331,7 @@ function UpgradesTweakData:init(tweak_data)
 		},
 	}
 	self.skill_descs.underdog.multibasic = "5%"
-	self.skill_descs.underdog.multipro = "25%"
+	self.skill_descs.underdog.multipro = "20%"
 
 	-- Fast Hands
 	self.values.shotgun.pump_reload_speed = { 1.25, 1.5 }
@@ -260,8 +357,9 @@ function UpgradesTweakData:init(tweak_data)
 	self.skill_descs.shotgun_cqb.multipro = "25%"
 
 	-- Point Blank
-	self.values.shotgun.extra_pellets = { 4 }
-	self.values.shotgun.hip_fire_spread_multiplier[1] = 1.25
+	self.values.shotgun.extra_pellets = { 2 }
+	self.values.shotgun.spread_index_addend = { 1 }
+	self.values.shotgun.recoil_index_addend[1] = 1
 	self.definitions.shotgun_extra_pellets = {
 		name_id = "menu_shotgun_extra_pellets",
 		category = "feature",
@@ -271,8 +369,17 @@ function UpgradesTweakData:init(tweak_data)
 			category = "shotgun",
 		},
 	}
+	self.definitions.shotgun_spread_index_addend = {
+		name_id = "menu_shotgun_spread_index_addend",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "spread_index_addend",
+			category = "shotgun",
+		},
+	}
 	self.skill_descs.shotgun_impact.multibasic = "4"
-	self.skill_descs.shotgun_impact.multipro = "25%"
+	self.skill_descs.shotgun_impact.multipro = "2"
 
 	-- Shotgun CQB
 	self.definitions.shotgun_speed_stack_on_kill = {
@@ -342,17 +449,45 @@ function UpgradesTweakData:init(tweak_data)
 	self.skill_descs.pack_mule.multipro3 = "7"
 
 	-- Thick Skin
-	self.values.player.damage_shake_addend[1] = 1
-	self.skill_descs.show_of_force.multibasic = "10"
+	self.values.player.damage_shake_addend[1] = 1.5
+	self.skill_descs.show_of_force.multibasic = "15"
 
 	-- Shock and Awe
-	self.values.team.armor.regen_time_multiplier[1] = 0.9
-	self.skill_descs.iron_man.multibasic2 = "10%"
+	self.values.player.tagged_speed_mul = { 0.5 }
+	self.definitions.player_tagged_speed_mul = {
+		name_id = "menu_player_tagged_speed_mul",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "tagged_speed_mul",
+			category = "player",
+		},
+	}
+	self.skill_descs.iron_man.multibasic = "50%"
+	self.skill_descs.iron_man.multipro = "50%"
 
-	-- Bullseye
-	self.values.player.headshot_regen_armor_bonus[2] = 4.5
-	self.skill_descs.prison_wife.multibasic2 = "5"
-	self.skill_descs.prison_wife.multipro3 = "40"
+	-- Nerves of Steel
+	self.definitions.player_health_multiplier_1 = {
+		name_id = "menu_player_health_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "health_multiplier",
+			category = "player",
+		},
+	}
+	self.definitions.player_health_multiplier_2 = {
+		name_id = "menu_player_health_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "health_multiplier",
+			category = "player",
+		},
+	}
+	self.values.player.health_multiplier = { 1.1, 1.3 }
+	self.skill_descs.prison_wife.multibasic = "10%"
+	self.skill_descs.prison_wife.multipro = "20%"
 
 	-- Scavenger
 	self.values.player.increased_pickup_area[1] = 1.3
@@ -377,13 +512,28 @@ function UpgradesTweakData:init(tweak_data)
 
 	-- Technician --
 
+	-- Transporter
+	self.values.carry.interact_speed_multiplier[1] = 0.75
+	self.skill_descs.defense_up.multibasic = "25%"
+
 	-- Rifleman
 	self.skill_descs.defense_up.multibasic = "50%"
 	self.skill_descs.defense_up.multipro = "50%"
 
-	-- Die Hard
-	self.values.player.interacting_damage_multiplier[1] = 0.75 --0.25 is 75%, 0.75 is 25%, confusing isn't it?
-	self.skill_descs.sentry_targeting_package.multibasic = "25%"
+	-- Daredevil
+	self.values.player.total_interaction_timer_multiplier = { 0.9 }
+	self.definitions.player_total_interaction_timer_multiplier = {
+		name_id = "menu_player_total_interaction_timer_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "total_interaction_timer_multiplier",
+			category = "player",
+		},
+	}
+	self.values.player.interacting_damage_multiplier[1] = 0.65
+	self.skill_descs.sentry_targeting_package.multibasic = "10%"
+	self.skill_descs.sentry_targeting_package.multipro = "35%"
 
 	-- Defense Package
 	self.skill_descs.engineering.multibasic = "150%"
@@ -434,8 +584,34 @@ function UpgradesTweakData:init(tweak_data)
 	self.skill_descs.fire_trap.multibasic = "20"
 	self.skill_descs.fire_trap.multipro = "20"
 
-	-- Oppressor
+	-- Steady Grip
+	self.definitions.smg_recoil_index_addend = {
+		name_id = "menu_smg_recoil_index_addend",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "recoil_index_addend",
+			category = "smg",
+		},
+	}
+	self.values.smg.recoil_index_addend = { 1 }
 
+	self.definitions.minigun_recoil_index_addend = {
+		name_id = "menu_smg_recoil_index_addend",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "recoil_index_addend",
+			category = "minigun",
+		},
+	}
+	self.values.minigun.recoil_index_addend = { 1 }
+	self.values.team.weapon.recoil_index_addend[1] = 1
+	self.values.team.weapon.suppression_recoil_index_addend[1] = 1
+	self.skill_descs.steady_grip.multibasic = "4"
+	self.skill_descs.steady_grip.multipro = "4"
+
+	-- Oppressor
 	self.definitions.player_suppression_bonus_2 = {
 		name_id = "menu_player_suppression_bonus",
 		category = "feature",
@@ -448,6 +624,60 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.player.suppression_multiplier = { 1.15, 1.45 }
 	self.skill_descs.heavy_impact.multibasic = "15%"
 	self.skill_descs.heavy_impact.multipro = "30%"
+
+	-- Fire Control
+	self.definitions.minigun_spray_recoil_multiplier = {
+		name_id = "menu_minigun_spray_recoil_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "spray_recoil_multiplier",
+			category = "minigun",
+		},
+	}
+	self.values.minigun.spray_recoil_multiplier = {
+		0.005,
+	}
+	self.definitions.lmg_spray_recoil_multiplier = {
+		name_id = "menu_lmg_spray_recoil_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "spray_recoil_multiplier",
+			category = "lmg",
+		},
+	}
+	self.values.lmg.spray_recoil_multiplier = {
+		0.01,
+	}
+	self.definitions.smg_spray_recoil_multiplier = {
+		name_id = "menu_smg_spray_recoil_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "spray_recoil_multiplier",
+			category = "smg",
+		},
+	}
+	self.values.smg.spray_recoil_multiplier = {
+		0.015,
+	}
+
+	self.values.weapon.hipfire_spread_penalty_reduction = { 0.8 }
+	self.definitions.weapon_hipfire_spread_penalty_reduction = {
+		name_id = "menu_hipfire_spread_penalty_reduction",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "hipfire_spread_penalty_reduction",
+			category = "weapon",
+		},
+	}
+
+	self.values.player.weapon_movement_stability[1] = 0.9
+	self.max_spray_recoil_reduction = 0.5
+	self.skill_descs.fire_control.multibasic = "20%"
+	self.skill_descs.fire_control.multipro = "50%"
 
 	-- Sleight of Hand
 	self.values.lmg.reload_speed_multiplier = { 1.2 }
@@ -465,8 +695,8 @@ function UpgradesTweakData:init(tweak_data)
 		},
 	}
 	self.values.player.automatic_mag_increase = { 5, 15 }
-	self.skill_descs.fast_fire.multibasic = "5"
-	self.skill_descs.fast_fire.multipro = "10"
+	self.skill_descs.carbon_blade.multibasic = "5"
+	self.skill_descs.carbon_blade.multipro = "10"
 
 	-- Heavy Gun Expert
 	self.values.player.no_movement_penalty = { true }
@@ -490,10 +720,10 @@ function UpgradesTweakData:init(tweak_data)
 	self.skill_descs.cleaner.multibasic2 = "1"
 	self.skill_descs.cleaner.multipro2 = "3"
 
-	-- Logistician
-	self.values.carry.interact_speed_multiplier = { 0.5, 0.25 }
+	-- Winstone Wolfe
 	self.values.player.pick_lock_easy_speed_multiplier[1] = 0.5
-	self.skill_descs.second_chances.multibasic = "50%"
+	self.skill_descs.second_chances.multibasic = "1"
+	self.skill_descs.second_chances.multibasic2 = "3"
 	self.skill_descs.second_chances.multipro = "50%"
 	self.skill_descs.second_chances.multipro2 = "50%"
 
@@ -584,6 +814,7 @@ function UpgradesTweakData:init(tweak_data)
 		3,
 	}
 	self.skill_descs.scavenger.multibasic = "5%"
+	self.skill_descs.scavenger.multibasic2 = "200%"
 	self.skill_descs.scavenger.multipro = "3"
 
 	-- Eagle Eye
@@ -593,9 +824,10 @@ function UpgradesTweakData:init(tweak_data)
 	self.skill_descs.thick_skin.multipro = "4"
 
 	-- The Professional
-	self.skill_descs.silence_expert.multibasic = "8"
-	self.skill_descs.silence_expert.multipro = "12"
-	self.skill_descs.silence_expert.multipro2 = "100%"
+	self.values.weapon.silencer_enter_steelsight_speed_multiplier[1] = 1.5
+	self.skill_descs.silence_expert.multibasic = "50%"
+	self.skill_descs.silence_expert.multipro = "1"
+	self.skill_descs.silence_expert.multipro2 = "2"
 
 	-- HVT
 	self.values.player.marked_inc_dmg_distance[1][2] = 1.2
@@ -624,9 +856,18 @@ function UpgradesTweakData:init(tweak_data)
 			value = 1,
 		},
 	}
+	self.definitions.weapon_silencer_fire_rate_multiplier = {
+		category = "feature",
+		name_id = "silencer_fire_rate_multiplier",
+		upgrade = {
+			category = "weapon",
+			upgrade = "silencer_fire_rate_multiplier",
+			value = 1,
+		},
+	}
+	self.values.weapon.silencer_fire_rate_multiplier = { 1.15 }
 	self.values.weapon.armor_piercing_chance_silencer[1] = 0.5
-	self.skill_descs.backstab.multibasic = "1"
-	self.skill_descs.backstab.multibasic2 = "2"
+	self.skill_descs.backstab.multibasic = "15%"
 	self.skill_descs.backstab.multipro = "15%"
 	self.skill_descs.backstab.multipro2 = "50%"
 
@@ -649,7 +890,6 @@ function UpgradesTweakData:init(tweak_data)
 	self.skill_descs.unseen_strike.multibasic2 = "2"
 	self.skill_descs.unseen_strike.multibasic3 = "35"
 	self.skill_descs.unseen_strike.multibasic4 = "30%"
-	self.skill_descs.unseen_strike.multibasic5 = "200%"
 	self.skill_descs.unseen_strike.multipro = "3%"
 	self.skill_descs.unseen_strike.multipro2 = "1"
 	self.skill_descs.unseen_strike.multipro3 = "100%"
@@ -694,12 +934,31 @@ function UpgradesTweakData:init(tweak_data)
 	self.skill_descs.up_you_go.multipro2 = "10"
 
 	-- Uppers
-	self.values.first_aid_kit.quantity = { 3, 7 }
-	self.values.first_aid_kit.first_aid_kit_auto_recovery[1] = 300
-	self.skill_descs.feign_death.multibasic = "3"
-	self.skill_descs.feign_death.multipro = "4"
-	self.skill_descs.feign_death.multipro2 = "3"
-	self.skill_descs.feign_death.multipro3 = "90"
+	self.definitions.first_aid_kit_hot_regen_1 = {
+		name_id = "menu_first_aid_kit_hot_regen_1",
+		category = "equipment_upgrade",
+		upgrade = {
+			value = 1,
+			upgrade = "first_aid_kit_hot_regen",
+			category = "first_aid_kit",
+		},
+	}
+	self.definitions.player_first_aid_health_regen = {
+		name_id = "menu_temporary_first_aid_health_regen",
+		category = "temporary",
+		upgrade = {
+			value = 1,
+			upgrade = "first_aid_health_regen",
+			category = "temporary",
+		},
+	}
+	self.values.first_aid_kit.first_aid_kit_hot_regen = { true }
+	self.values.temporary.first_aid_health_regen = { { 1, 60.1 } }
+	self.skill_descs.feign_death.multibasic = "10"
+	self.skill_descs.feign_death.multibasic2 = "5"
+	self.skill_descs.feign_death.multibasic3 = "60"
+	self.skill_descs.feign_death.multipro = "5"
+	self.skill_descs.feign_death.multipro2 = "120"
 
 	-- Swan Song
 	self.values.temporary.berserker_damage_multiplier[2] = { 1, 9 }
@@ -793,16 +1052,16 @@ function UpgradesTweakData:init(tweak_data)
 
 	-- Muscle
 	self.values.player.passive_health_regen = { 0.8 }
-	self.values.temporary.mrwi_health_invulnerable[1][3] = 30
+	self.values.temporary.mrwi_health_invulnerable[1][3] = 60
 	self.specialization_descs[2][9].multiperk = "40%"
 	self.specialization_descs[2][9].multiperk2 = "8"
 	self.specialization_descs[2][7].multiperk = "50%"
 	self.specialization_descs[2][7].multiperk2 = "2"
-	self.specialization_descs[2][7].multiperk3 = "30"
+	self.specialization_descs[2][7].multiperk3 = "60"
 
 	-- Armorer
-	self.values.temporary.armor_break_invulnerable = { { 2, 30 } }
-	self.specialization_descs[3][7].multiperk3 = "30"
+	self.values.temporary.armor_break_invulnerable = { { 2, 45 } }
+	self.specialization_descs[3][7].multiperk3 = "45"
 	self.specialization_descs[3][1].multiperk = "5%"
 	self.specialization_descs[3][3].multiperk = "5%"
 	self.specialization_descs[3][5].multiperk = "5%"
@@ -981,14 +1240,32 @@ function UpgradesTweakData:init(tweak_data)
 	self.specialization_descs[15][9].multiperk3 = "30%"
 
 	-- Biker
-	self.wild_trigger_time = 8
+	self.wild_trigger_time = 16
 	self.wild_max_triggers_per_time = 2
 	self.values.player.wild_health_amount = { 0.75 }
+	self.values.player.less_health_wild_cooldown = {
+		{
+			1 / 6,
+			1,
+		},
+	}
+	self.values.player.less_armor_wild_cooldown = {
+		{
+			1 / 6,
+			1,
+		},
+	}
 	self.specialization_descs[16][1].multiperk = "7.5"
 	self.specialization_descs[16][1].multiperk3 = "2"
-	self.specialization_descs[16][1].multiperk4 = "8"
+	self.specialization_descs[16][1].multiperk4 = "16"
+	self.specialization_descs[16][5].multiperk = "1/6"
+	self.specialization_descs[16][5].multiperk2 = "16"
+	self.specialization_descs[16][5].multiperk3 = "1"
+	self.specialization_descs[16][9].multiperk = "1/6"
+	self.specialization_descs[16][9].multiperk2 = "16"
+	self.specialization_descs[16][9].multiperk3 = "1"
 
-	-- KP
+	-- Kingpin
 	self.specialization_descs[17][1].multiperk3 = "45"
 	self.specialization_descs[17][9].multiperk3 = "5 points"
 	self.specialization_descs[17][9].multiperk3 = "1"
@@ -1043,21 +1320,4 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.player.passive_xp_multiplier[1] = 1.2
 	self.values.player.regain_throwable_from_ammo[1].chance = 0.02
 	self.values.player.regain_throwable_from_ammo[1].chance_inc = 0.001
-	
-	--[[remove bot boosts
-	self.values.team.crew_add_health = nil
-	self.values.team.crew_add_armor = nil
-	self.values.team.crew_add_dodge = nil
-	self.values.team.crew_add_concealment = nil
-	self.values.team.crew_add_stamina = nil
-	self.values.team.crew_reduce_speed_penalty = nil
-	self.values.team.crew_faster_reload = nil
-	self.values.team.crew_faster_swap = nil
-	self.values.team.crew_throwable_regen = nil
-	self.values.team.crew_health_regen = nil
-	self.values.team.crew_active = nil
-	self.values.team.crew_inspire = 9999999
-	self.values.team.crew_scavenge = nil
-	self.values.team.crew_interact = nil
-	self.values.team.crew_ai_ap_ammo = {false}]]--
 end

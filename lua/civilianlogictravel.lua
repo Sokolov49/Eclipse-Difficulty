@@ -1,3 +1,4 @@
+-- Improve civilian pathing by reordering checks and using direct paths if possible
 Hooks:OverrideFunction(CivilianLogicTravel, "update", function(data)
 	local my_data = data.internal_data
 	local unit = data.unit
