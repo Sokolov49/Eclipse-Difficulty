@@ -16,6 +16,7 @@
 		</group>
 
 		<group hook_id="lib/">
+			<post :hook_id="states/bootupstate"/>
 			<post :hook_id="utils/inventorydescription"/>
 			<group :hook_id="managers/">
 				<group :hook_id="group_ai_states/">
@@ -35,6 +36,7 @@
 					<post :hook_id="hudstageendscreen"/>
 					<post :hook_id="hudassaultcorner"/>
 					<post :hook_id="hudhitconfirm"/>
+					<post :hook_id="hudblackscreen"/>
 				</group>
 
 				<group :hook_id="menu/">
@@ -42,8 +44,16 @@
 					<post :hook_id="ingamecontractgui"/>
 					<post :hook_id="blackmarketgui"/>
 					<post :hook_id="playerinventorygui"/>
+					<post :hook_id="menucomponentmanager"/>
+					<post :hook_id="crewmanagementgui"/>
+					<post :hook_id="skilltreegui"/>
+					<post :hook_id="skilltreeguinew"/>
 				</group>
 
+				<post :hook_id="gameplaycentralmanager"/>
+				<post :hook_id="localizationmanager"/>
+				<post :hook_id="menumanagerdialogs"/>
+				<post :hook_id="skilltreemanager"/>
 				<post :hook_id="missionmanager"/>
 				<post :hook_id="hudmanager"/>
 				<post :hook_id="menumanager"/>
@@ -77,6 +87,7 @@
 				<post :hook_id="blackmarket/meleeweaponstweakdata"/>
 				<post :hook_id="equipmentstweakdata"/>
 				<post :hook_id="charactertweakdata"/>
+				<post :hook_id="timespeedeffecttweakdata"/>
 				<post :hook_id="guitweakdata"/>
 				<post :hook_id="dottweakdata"/>
 				<post :hook_id="firetweakdata"/>
@@ -88,7 +99,6 @@
 				<post :hook_id="enveffecttweakdata"/>
 				<post :hook_id="skilltreetweakdata"/>
 				<post :hook_id="interactiontweakdata"/>
-				<post :hook_id="weaponfallofftweakdata"/>
 				<post :hook_id="weaponfactorytweakdata"/>
 				<post :hook_id="blackmarkettweakdata"/>
 				<post :hook_id="preplanningtweakdata"/>
@@ -97,6 +107,10 @@
 				<post :hook_id="tweakdata"/>
 				<post :hook_id="eventjobstweakdata"/>
 				<post :hook_id="tweakdatavr"/>
+				<post :hook_id="inputtweakdata"/>
+				<post :hook_id="tipstweakdata"/>
+				<post :hook_id="moneytweakdata"/>
+				<post :hook_id="armorskinstweakdata"/>
 			</group>
 
 			<group :hook_id="units/">
@@ -106,6 +120,8 @@
 					<post :hook_id="huskplayerdamage"/>
 					<post :hook_id="playercamera"/>
 					<post :hook_id="playermovement"/>
+					<post :hook_id="huskplayerinventory"/>
+					<post :hook_id="HuskPlayerMovement"/>
 					<post :hook_id="states/playerstandard"/>
 					<post :hook_id="states/playertased"/>
 					<post :hook_id="states/playerdriving"/>
@@ -188,6 +204,7 @@
 
 				<group :hook_id="equipment/">
 					<post :hook_id="sentry_gun/sentrygunbase"/>
+					<post :hook_id="sentry_gun/sentrygunbrain"/>
 					<post :hook_id="ammo_bag/ammobagbase"/>
 					<post :hook_id="ecm_jammer/ecmjammerbase"/>
 					<post :hook_id="first_aid_kit/firstaidkitbase"/>
@@ -209,6 +226,7 @@
 				<group :hook_id="props/">
 					<post :hook_id="carrydata"/>
 					<post :hook_id="timergui"/>
+					<post :hook_id="drill"/>
 				</group>
 
 				<group :hook_id="weapons/">
@@ -220,7 +238,11 @@
 						<post :hook_id="molotovgrenade"/>
 						<post :hook_id="incendiarygrenade"/>
 						<post :hook_id="grenadebase"/>
+						<post :hook_id="concussiongrenade"/>
+						<post :hook_id="electricgrenade"/>
+						<post :hook_id="poisongasgrenade"/>
 					</group>
+					<post :hook_id="weaponflashlight"/>
 					<post :hook_id="projectiles/projectilebase"/>
 					<post :hook_id="shotgun/shotgunbase"/>
 					<post :hook_id="sawweaponbase "/>

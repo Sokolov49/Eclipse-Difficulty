@@ -2,5 +2,51 @@
 	<AddFiles directory="assets">
 		<!-- perk decks -->
 		<texture path="guis/textures/pd2/specialization/icons_atlas"/>
+		
+		<!-- leftover muzzleflash effect but without smoke -->
+		<effect path="effects/payday2/particles/weapons/shotgun/sho_muzzleflash"/>
+		
+		<texture path="guis/textures/pd2/risklevel_blackscreen" force="true"/>
+		<texture path="guis/textures/pd2/risklevel_deathwish_easywish_blackscreen" force="true"/>
+		<texture path="guis/textures/pd2/risklevel_deathwish_sm_blackscreen" force="true"/>
+		<texture path="guis/textures/pd2/risklevel_deathwish_blackscreen" force="true"/>
+		<texture path="guis/textures/pd2/hitdirection" force="true"/>
+		
+		<texture path="core/textures/cg_nice" force="true"/>
+		<texture path="core/textures/cg_xxxgen" force="true"/>
+		<texture path="core/textures/cg_bhd" force="true"/>
+		
+		<!-- original weapon gadget scale and shotgun suppressor -->
+		<model path="units/payday2/weapons/wpn_fps_upg_fl_pis_laser/wpn_fps_upg_fl_pis_laser" force="true"/>
+		<model path="units/payday2/weapons/wpn_fps_upg_fl_pis_tlr1/wpn_fps_upg_fl_pis_tlr1" force="true"/>
+		<model path="units/payday2/weapons/wpn_fps_upg_ns_shot_thick/wpn_fps_upg_ns_shot_thick" force="true"/>
+		
+						<!-- Skill icons -->
+		<texture path="guis/textures/pd2/skilltree/op_icons_atlas" force="true"/>
+		
+						<!-- Lobby states -->
+		<animation path="anims/shared/special/criminal_idle_card1" force="true"/>
+		<animation path="anims/shared/special/criminal_idle_card2" force="true"/>
+		<animation path="anims/shared/special/criminal_idle_card3" force="true"/>
+		<animation path="anims/shared/special/criminal_idle_card4" force="true"/>
+		<animation path="anims/shared/special/lobby_generic_idle1" force="true"/>
+		<animation path="anims/shared/special/lobby_generic_idle2" force="true"/>
+		<animation path="anims/shared/special/lobby_generic_idle3" force="true"/>
+		<animation path="anims/shared/special/lobby_generic_idle4" force="true"/>
+		
+						<!-- recoil animations -->
+		<animation path="anims/fps/ak47/ak47_get_up" force="true"/>
+		<animation path="anims/fps/ak47/ak47_gogo" force="true"/>
+		<animation path="anims/fps/ak47/ak47_idle" force="true"/>
+		<animation path="anims/fps/ak47/ak47_recoil" force="true"/>
+		<animation path="anims/fps/ak47/ak47_recoil_enter" force="true"/>
+		<animation path="anims/fps/ak47/ak47_recoil_exit" force="true"/>
+		<animation path="anims/fps/ak47/ak47_recoil_loop" force="true"/>
+		<animation path="anims/fps/m4/m4_get_up" force="true"/>
+		<animation path="anims/fps/m4/m4_gogo" force="true"/>
+		<animation path="anims/fps/m4/m4_recoil" force="true"/>
+		<animation path="anims/fps/m4/m4_recoil_enter" force="true"/>
+		<animation path="anims/fps/m4/m4_recoil_exit" force="true"/>
+		<animation path="anims/fps/m4/m4_recoil_loop" force="true"/>
 	</AddFiles>
 </table>

@@ -1,3 +1,19 @@
+# "VERY IMPORTANT BIG SUPER MEGA ULTRA NOTE**
+This version / fork of Eclipse has been (sloppily) put together to include Original Pack skilltrees & perks.
+The gameplay will likely be much more difficult considering that money is now for more things than just buying weapons.
+As well as the fact that the only thing keeping you alive will be your own armor and your teammates, some maps may be more difficult than usual.
+
+Extensive balancing is on hold until the new version of the (original) Eclipse goes live to public.
+That way I'll be able to try to properly balance the mod for perk-less gameplay. It'll likely just involve adding damage falloff to cops and changing skills a bit (like Enforcer's).
+Although if you're feeling brave (and also have friends) you can try playing as it is right now. It's fun either way.
+
+Hoxton skilltree is unavailable until I get around to replacing everything that Original Pack introduced in that tree. (stuff that no one even used in the first place)
+It'll include some of Eclipse's skills since most are based on self-improvement anyways.
+
+I'm pretty sure nobody'll ask this, but the reason why I made this is because I like OGP's skill trees & perks but it lacks Eclipse's gunplay & cop balance so I think this can be the best of both worlds at the same time.
+This fork will also never go public anywhere aside of this GitHub page so only the very curious people would be able to stumble across this abomination and play it.. and probably hate it.
+It's mostly meant to serve as a way to have easier updates for my friends when we play this.
+
 # "What if Goldfarb suddenly came back?" twist to Payday
 **Eclipse is a complete Payday 2 overhaul that aims to provide early-payday hardcore gameplay feel while adapting it for modern age.**
 

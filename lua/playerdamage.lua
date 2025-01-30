@@ -431,3 +431,78 @@ function PlayerDamage:set_regenerate_timer_to_max()
 	self._regenerate_speed = self._regenerate_speed or 1
 	self._current_state = self._update_regenerate_timer
 end
+
+--danger effective audio feedback
+Hooks:PostHook(PlayerDamage, "update", "post_update", function(self, unit, t, dt)
+	
+	local cur_state = self._unit:movement():current_state_name()	
+	local armor_broken = self:_max_armor() > 0 and self:get_real_armor() <= 0
+	local armor_regenerated = self:get_real_armor() > 0
+	local current_max_health = self:_max_health() / 100
+	local current_health = self:get_real_health()
+	local low_health = current_max_health * 20 >= current_health
+	
+	local concuss_chk = not self._concussion_data or not self._concussion_data.intensity or self._concussion_data and self._concussion_data.intensity and self._concussion_data.intensity <= 0
+	
+	local tinnitus_chk = not self._tinnitus_data or not self._tinnitus_data.intensity or self._tinnitus_data and self._tinnitus_data.intensity and self._tinnitus_data.intensity <= 0
+	
+	if not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and concuss_chk and tinnitus_chk and not self._downed_progression then
+		if armor_broken and self:is_regenerating_armor() then
+			if not low_health then
+				self._needs_dedampen = 32
+			else
+				self._needs_dedampen = 50
+			end
+			SoundDevice:set_rtpc("downed_state_progression", self._needs_dedampen)	
+			SoundDevice:set_rtpc("concussion_effect", self._needs_dedampen)			
+			--log("damping sound")
+		end
+	end
+	
+	if self:_max_armor() > 0 and armor_regenerated then
+		self._should_dedampen = true
+	else
+		self._should_dedampen = nil
+	end
+	
+	if self._should_dedampen then
+		self:_begin_smooth_snddedampen()
+	end
+end)
+
+function PlayerDamage:_begin_smooth_snddedampen()
+	local t = TimerManager:game():time()
+	local dedamp_t_chk = not self._next_dedampen_t or self._next_dedampen_t and self._next_dedampen_t < t
+	if self._needs_dedampen and self._needs_dedampen > 0 and dedamp_t_chk then
+		self._needs_dedampen = self._needs_dedampen - 1
+		self._next_dedampen_t = t + 0.011
+		--log("dedamping sound")
+		SoundDevice:set_rtpc("downed_state_progression", self._needs_dedampen)
+		SoundDevice:set_rtpc("concussion_effect", self._needs_dedampen)
+	else
+		--self._is_damping = nil
+		self._should_dedampen = nil
+	end
+end
+
+Hooks:PostHook(PlayerDamage, "_regenerate_armor", "post_regenarmor", function(self, no_sound)
+	if self._needs_dedampen then
+		--self._is_damping = true
+		self:_begin_smooth_snddedampen()
+	end
+end)
+
+function PlayerDamage:update_downed(t, dt)
+	if self._downed_timer and self._downed_paused_counter == 0 then
+		self._downed_timer = self._downed_timer - dt
+		if self._downed_start_time == 0 then
+			self._downed_progression = 100
+		else
+			self._downed_progression = math.clamp(1 - self._downed_timer / self._downed_start_time, 0, 1) * 100
+		end
+		managers.environment_controller:set_downed_value(self._downed_progression + 37) -- self._downed_progression + 50 should be ok
+		SoundDevice:set_rtpc("downed_state_progression", self._downed_progression + 37)
+		return self._downed_timer <= 0
+	end
+	return false
+end

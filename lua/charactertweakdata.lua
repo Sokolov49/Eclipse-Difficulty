@@ -97,6 +97,7 @@ function CharacterTweakData:_presets(tweak_data, ...)
 		RELOAD_SPEED = 1,
 	})
 
+	-- have to give these new dmg_mul's a try before adding damage falloff to compensate for lack of perks
 	presets.weapon.base.is_pistol.FALLOFF = {
 		{ dmg_mul = 3.5 * dmg_mul, r = 0, acc = { 0.3, 0.8 }, recoil = { 0.15, 0.3 }, mode = { 1, 0, 0, 0 } },
 		{ dmg_mul = 3.5 * dmg_mul, r = 3000, acc = { 0.05, 0.1 }, recoil = { 0.3, 0.6 }, mode = { 1, 0, 0, 0 } },
@@ -394,6 +395,31 @@ function CharacterTweakData:_presets(tweak_data, ...)
 	speed_multiplier(presets.move_speed.fast, 1.15)
 	speed_multiplier(presets.move_speed.very_fast, 1.3)
 	speed_multiplier(presets.move_speed.lightning, 1.4)
+
+	-- give bots normal weapon presets, laser aim hurts to look at
+	presets.weapon.gang_member.is_rifle.FALLOFF = {
+		{ r=300, acc={0.7, 0.9}, dmg_mul=5, recoil={0.25, 0.45}, mode={ 0.1, 0.3, 4, 7 } },
+		{ r=2000, acc={0.1, 0.6}, dmg_mul=2.5, recoil={0.25, 2}, mode={ 2, 2, 5, 8 } },
+		{ r=10000, acc={0, 0.15}, dmg_mul=0.5, recoil={2, 3}, mode={ 2, 1, 1, 0.01 } }
+	}
+	
+	presets.weapon.gang_member.is_shotgun_pump.FALLOFF = { 
+		{ r=300, acc={0.7, 0.9}, dmg_mul=5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
+		{ r=1000, acc={0.1, 0.6}, dmg_mul=2.5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
+		{ r=4000, acc={0.0, 0.15}, dmg_mul=0.5, recoil={2,4}, mode={ 1, 0, 0, 0 } }
+	}
+	
+	presets.weapon.gang_member.is_shotgun_mag.FALLOFF = { 
+		{ r=300, acc={0.7, 0.9}, dmg_mul=5, recoil={2,2}, mode={ 1, 1, 4, 6 } },
+		{ r=1000, acc={0.1, 0.6}, dmg_mul=2.5, recoil={2,2}, mode={ 1, 4, 4, 1 } },
+		{ r=4000, acc={0.0, 0.15}, dmg_mul=0.5, recoil={2,4}, mode={ 2, 1, 0, 0 } }
+	}
+	
+	presets.weapon.gang_member.is_lmg.FALLOFF = {
+		{ r=300, acc={0.6, 0.9}, dmg_mul=5, recoil={0.4, 0.7}, mode={ 0, 0, 0, 1 } },
+		{ r=2000, acc={0.5, 0.7}, dmg_mul=2.5, recoil={0.4, 7}, mode={ 0, 1, 2, 8 } },
+		{ r=10000, acc={0.1, 0.35}, dmg_mul=0.5, recoil={1, 1.2}, mode={ 4, 2, 1, 0 } }
+	}
 
 	presets.gang_member_damage.HEALTH_INIT = 100 + (50 * diff_i)
 	presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.1
@@ -792,6 +818,34 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 		end,
 	}
 
+	-- Speech prefix shit
+	local job = Global.level_data and Global.level_data.level_id
+	if job == "nightclub" or job == "short2_stage1" or job == "jolly" or job == "spa" then
+		self.gangster.speech_prefix_p1 = "rt"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	elseif job == "alex_2" then
+		self.gangster.speech_prefix_p1 = "ict"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	elseif job == "welcome_to_the_jungle_1" then
+		self.gangster.speech_prefix_p1 = "bik"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	else
+		self.gangster.speech_prefix_p1 = "lt"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	end
+	
+	-- No, they weren't supposed to sound like cops
+	self.mobster.speech_prefix_p1 = "rt"
+	self.mobster.speech_prefix_p2 = nil
+	self.mobster.speech_prefix_count = 2
+	self.biker.speech_prefix_p1 = "bik"
+	self.biker.speech_prefix_p2 = nil
+	self.biker.speech_prefix_count = 2
+
 	-- Security, Cops and Gangsters
 	-- surrender presets
 	self.security.surrender = self.presets.surrender.weak
@@ -880,6 +934,7 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.sniper.speech_prefix_p1 = self._unit_prefixes.cop
 	self.sniper.misses_first_player_shot = true
 	self.sniper.spawn_sound_event = "mga_deploy_snipers" -- deploy snipahs!!!
+	self.sniper.die_sound_event = "mga_death_scream" --sniper death noise
 
 	self.spooc.melee_weapon = "baton"
 	self.spooc.spooc_attack_use_smoke_chance = 0
@@ -888,9 +943,12 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.spooc.use_animation_on_fire_damage = true
 	self.spooc.spawn_sound_event_2 = "clk_c01x_plu" --*WOOOSH*
 
+	--lets try giving him flashbangs to use on the offensive, why not.
 	self.tank.melee_weapon = "weapon"
 	self.tank.damage.hurt_severity = self.presets.hurt_severities.dozer -- cool damage react thing
 	self.tank.ecm_vulnerability = 0
+	self.tank.throwable = "concussion"
+	self.tank.throwable_cooldown = 25
 	self.tank.damage.explosion_damage_mul = 0.1
 	self.tank.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance" -- bulldozah coming through!!!
 
@@ -1036,6 +1094,14 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.escort_sand.move_speed = self.presets.move_speed.escort_slow
 	self.spa_vip.move_speed = self.presets.move_speed.escort_normal
 	self.escort_undercover.move_speed = self.presets.move_speed.escort_slow
+
+	--pdth death noises
+	self.swat.die_sound_event = "shd_x02a_any_3p_01"
+	self.heavy_swat.die_sound_event = "bdz_x02a_any_3p"
+	self.fbi_swat.die_sound_event = "shd_x02a_any_3p_01"
+	self.fbi_heavy_swat.die_sound_event = "bdz_x02a_any_3p"
+	self.city_swat.die_sound_event = "shd_x02a_any_3p_01"
+	self.zeal_swat.die_sound_event = "shd_x02a_any_3p_01"
 
 	if self._unit_prefixes.heavy_swat == "l" then
 		self.zeal_swat.speech_prefix_p2 = "d"

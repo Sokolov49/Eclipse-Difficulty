@@ -834,6 +834,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 		},
 		swat_assault = {
 			"shield_cover",
+			"smoke_grenade",
+			"flash_grenade",
 		},
 		swat_shield = {
 			"shield",
@@ -841,6 +843,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 		fbi_rifle = {
 			"shield_cover",
 			"ranged_fire",
+			"smoke_grenade",
 		},
 		fbi_reserved = {
 			"ranged_fire",
@@ -848,6 +851,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "eclipse__init_enem
 		},
 		fbi_shotgun = {
 			"charge",
+			"flash_grenade",
 		},
 		fbi_special = {
 			"flash_grenade",

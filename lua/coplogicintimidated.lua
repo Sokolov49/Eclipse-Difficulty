@@ -75,3 +75,12 @@ function CopLogicIntimidated._update_enemy_detection(data, my_data)
 	data.brain:set_objective(nil)
 	CopLogicBase._exit(data.unit, "attack")
 end
+
+-- no pager on intimidation
+function CopLogicIntimidated._chk_begin_alarm_pager(data)
+	if managers.groupai:state():whisper_mode() and data.unit:unit_data().has_alarm_pager then
+		if data.unit:character_damage():health_ratio() < 1 then
+			data.brain:begin_alarm_pager()
+		end
+	end
+end
