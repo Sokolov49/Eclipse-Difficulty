@@ -702,30 +702,30 @@ function WeaponTweakData:_init_weapons()
 
 			if weap_data.kick then
 				if cat_map.assault_rifle then
-					weap_data.kick.standing = { 0.8, 1, -0.4, 0.4 }
+					weap_data.kick.standing = { 1.4, 1.6, -1.15, 1.15 }
 					weap_data.kick.single = {}
-					weap_data.kick.single.standing = { 1, 1.5, -0.2, 0.1 }
+					weap_data.kick.single.standing = { 1.4, 1.6, -1.15, 1.15 }
 
 				elseif cat_map.smg then
-					weap_data.kick.standing = { 0.6, 0.8, -0.6, 0.6 }
+					weap_data.kick.standing = { 1.1, 1.3, -0.95, 0.95 }
 					weap_data.kick.single = {}
-					weap_data.kick.single.standing = { 0.8, 1, -0.2, 0.1 }
+					weap_data.kick.single.standing = { 1.1, 1.3, -0.95, 0.95 }
 
 				elseif cat_map.lmg then
-					weap_data.kick.standing = { 0.4, 0.6, -0.8, 0.8 }
+					weap_data.kick.standing = { 0.8, 1.2, -1.1, 1.1 }
 					weap_data.kick.single = {}
-					weap_data.kick.single.standing = { 0.6, 0.8, -0.2, 0.1 }
+					weap_data.kick.single.standing = { 0.8, 1.2, -1.1, 1.1 }
 
 				elseif cat_map.minigun then
-					weap_data.kick.standing = { 0.2, 0.4, -0.4, 0.4 }
+					weap_data.kick.standing = { 0.5, 0.7, -0.6, 0.2 }
 
 				elseif cat_map.pistol  then
-					weap_data.kick.standing =  { 1, 1.5, -0.2, 0.1 }
+					weap_data.kick.standing =  { 1.55, 2.05, -0.75, 0.75 }
 					weap_data.kick.auto = {}
-					weap_data.kick.auto.standing = { 0.6, 0.8, -0.6, 0.6 }
+					weap_data.kick.auto.standing = { 1.55, 2.05, -0.75, 0.75 }
 
 				elseif cat_map.revolver or cat_map.handcannon then
-					weap_data.kick.standing = { 1.5, 2, -0.4, 0.3 }
+					weap_data.kick.standing = { 2, 2.5, -0.8, 0.8 }
 
 				elseif cat_map.shotgun or cat_map.grenade_launcher or cat_map.snp then
 					weap_data.kick.standing = { 2, 3, -0.5, 0.4 }

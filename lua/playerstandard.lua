@@ -558,6 +558,15 @@ function PlayerManager.carry_blocked_by_cooldown()
 	return false
 end
 
+function PlayerStandard:_get_interaction_speed()
+	local dt = managers.player:player_timer():delta_time()
+	local morale_boost_bonus = self._ext_movement:morale_boost()
+	if morale_boost_bonus then
+		dt = dt * morale_boost_bonus.move_speed_bonus
+	end
+	
+	return dt
+end
 
 -- Viewbob when in ADS
 function PlayerStandard:_get_walk_headbob()
