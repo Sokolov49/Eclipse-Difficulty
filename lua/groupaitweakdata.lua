@@ -1898,7 +1898,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 	self.smoke_grenade_timeout = { 40 / f / ((is_pro and 1.25) or 1), 50 / f / ((is_pro and 1.25) or 1) }
 	self.smoke_grenade_lifetime = 10 * f
 	self.cs_grenade_timeout = { 110 / f / ((is_pro and 1.25) or 1), 150 / f / ((is_pro and 1.25) or 1) }
-	self.cs_grenade_chance_times = { 120, 240 }
+	self.cs_grenade_chance_times = { 60, 180 }
 	self.cs_grenade_lifetime = 10 * f
 
 	if difficulty_index < 4 then

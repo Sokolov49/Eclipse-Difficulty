@@ -97,10 +97,13 @@ function CharacterTweakData:_presets(tweak_data, ...)
 		RELOAD_SPEED = 1,
 	})
 
-	-- have to give these new dmg_mul's a try before adding damage falloff to compensate for lack of perks
+	-- damage falloff
+	-- keep your distance to survive
 	presets.weapon.base.is_pistol.FALLOFF = {
 		{ dmg_mul = 3.5 * dmg_mul, r = 0, acc = { 0.3, 0.8 }, recoil = { 0.15, 0.3 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 3.5 * dmg_mul, r = 3000, acc = { 0.05, 0.1 }, recoil = { 0.3, 0.6 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 2.5 * dmg_mul, r = 500, acc = { 0.2, 0.65 }, recoil = { 0.2, 0.3 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 2 * dmg_mul, r = 1250, acc = { 0.2, 0.5 }, recoil = { 0.3, 0.45 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 1.5 * dmg_mul, r = 3000, acc = { 0.05, 0.1 }, recoil = { 0.3, 0.6 }, mode = { 1, 0, 0, 0 } },
 	}
 
 	presets.weapon.base.akimbo_pistol.melee_dmg = nil
@@ -108,15 +111,19 @@ function CharacterTweakData:_presets(tweak_data, ...)
 	presets.weapon.base.akimbo_pistol.melee_retry_delay = nil
 	presets.weapon.base.akimbo_pistol.FALLOFF = {
 		{ dmg_mul = 3.5 * dmg_mul, r = 0, acc = { 0.2, 0.6 }, recoil = { 0.1, 0.2 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 3.5 * dmg_mul, r = 3000, acc = { 0, 0.05 }, recoil = { 0.2, 0.4 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 2.5 * dmg_mul, r = 2500, acc = { 0.2, 0.4 }, recoil = { 0.2, 0.4 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 1.5 * dmg_mul, r = 4500, acc = { 0, 0.05 }, recoil = { 0.2, 0.4 }, mode = { 1, 0, 0, 0 } },
 	}
 
 	presets.weapon.base.is_revolver.RELOAD_SPEED = 0.9
 	presets.weapon.base.is_revolver.range = { close = 1000, optimal = 2000, far = 4000 }
 	presets.weapon.base.is_revolver.FALLOFF = {
 		{ dmg_mul = 12.5 * dmg_mul, r = 0, acc = { 0.4, 0.9 }, recoil = { 0.75, 1 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 12.5 * dmg_mul, r = 4000, acc = { 0.1, 0.3 }, recoil = { 1, 1.5 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 10 * dmg_mul, r = 1250, acc = { 0.25, 0.75 }, recoil = { 0.75, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 8 * dmg_mul, r = 2400, acc = { 0.25, 0.65 }, recoil = { 0.75, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 6 * dmg_mul, r = 3200, acc = { 0.1, 0.45 }, recoil = { 1, 1.5 }, mode = { 1, 0, 0, 0 } },
 	}
+
 
 	presets.weapon.base.is_sniper = deep_clone(presets.weapon.base.is_revolver)
 	presets.weapon.base.is_sniper.range = { close = 5000, optimal = 10000, far = 15000 }
@@ -131,7 +138,8 @@ function CharacterTweakData:_presets(tweak_data, ...)
 	presets.weapon.base.is_shotgun_pump.FALLOFF = {
 		{ dmg_mul = 12 * dmg_mul, r = 300, acc = { 0.8, 1 }, recoil = { 0.8, 1 }, mode = { 1, 0, 0, 0 } },
 		{ dmg_mul = 8 * dmg_mul, r = 1000, acc = { 0.7, 0.9 }, recoil = { 1, 1.4 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 2 * dmg_mul, r = 2000, acc = { 0.6, 0.8 }, recoil = { 1.2, 1.8 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 6 * dmg_mul, r = 2000, acc = { 0.6, 0.85 }, recoil = { 1.2, 1.8 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 4 * dmg_mul, r = 3000, acc = { 0.6, 0.85 }, recoil = { 1.2, 1.8 }, mode = { 1, 0, 0, 0 } },
 	}
 
 	presets.weapon.base.is_shotgun_mag = deep_clone(presets.weapon.base.is_shotgun_pump)
@@ -139,8 +147,8 @@ function CharacterTweakData:_presets(tweak_data, ...)
 	presets.weapon.base.is_shotgun_mag.autofire_rounds = { 1, 3 }
 	presets.weapon.base.is_shotgun_mag.FALLOFF = {
 		{ dmg_mul = 7.5 * dmg_mul, r = 300, acc = { 0.6, 0.9 }, recoil = { 0.4, 0.7 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 4 * dmg_mul, r = 1000, acc = { 0.5, 0.8 }, recoil = { 0.45, 0.8 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 1.5 * dmg_mul, r = 2000, acc = { 0.3, 0.6 }, recoil = { 1, 1.2 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 4 * dmg_mul, r = 1500, acc = { 0.5, 0.8 }, recoil = { 0.45, 0.8 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 1.5 * dmg_mul, r = 2500, acc = { 0.3, 0.6 }, recoil = { 1, 1.2 }, mode = { 1, 0, 0, 0 } },
 	}
 
 	presets.weapon.base.is_double_barrel = deep_clone(presets.weapon.base.is_shotgun_pump)
@@ -152,22 +160,28 @@ function CharacterTweakData:_presets(tweak_data, ...)
 	presets.weapon.base.is_rifle.autofire_rounds = { 1, 5 }
 	presets.weapon.base.is_rifle.FALLOFF = {
 		{ dmg_mul = 5.5 * dmg_mul, r = 0, acc = { 0.45, 0.7 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 5.5 * dmg_mul, r = 3000, acc = { 0.1, 0.25 }, recoil = { 1, 2 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 3.5 * dmg_mul, r = 650, acc = { 0.35, 0.65 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 2.5 * dmg_mul, r = 2000, acc = { 0.35, 0.6 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 2 * dmg_mul, r = 3200, acc = { 0.35, 0.5 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 1.25 * dmg_mul, r = 5000, acc = { 0.1, 0.25 }, recoil = { 1, 2 }, mode = { 1, 0, 0, 0 } },
 	}
 
 	presets.weapon.base.is_smg = deep_clone(presets.weapon.base.is_rifle)
 	presets.weapon.base.is_smg.autofire_rounds = { 3, 8 }
 	presets.weapon.base.is_smg.FALLOFF = {
 		{ dmg_mul = 5 * dmg_mul, r = 0, acc = { 0.35, 0.6 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 5 * dmg_mul, r = 3000, acc = { 0.05, 0.2 }, recoil = { 1, 2 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 3.5 * dmg_mul, r = 250, acc = { 0.35, 0.6 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 2.5 * dmg_mul, r = 1650, acc = { 0.35, 0.6 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 1.5 * dmg_mul, r = 3500, acc = { 0.05, 0.2 }, recoil = { 1, 2 }, mode = { 1, 0, 0, 0 } },
 	}
 
 	presets.weapon.base.is_lmg = deep_clone(presets.weapon.base.is_smg)
 	presets.weapon.base.is_lmg.autofire_rounds = { 15, 30 }
 	presets.weapon.base.is_lmg.FALLOFF = {
 		{ dmg_mul = 4.5 * dmg_mul, r = 0, acc = { 0.3, 0.7 }, recoil = { 0.7, 1.4 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 4.5 * dmg_mul, r = 1000, acc = { 0.2, 0.5 }, recoil = { 0.8, 1.6 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 4.5 * dmg_mul, r = 3000, acc = { 0, 0.1 }, recoil = { 1, 2 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 4 * dmg_mul, r = 1500, acc = { 0.2, 0.5 }, recoil = { 0.8, 1.6 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 3.5 * dmg_mul, r = 3000, acc = { 0, 0.1 }, recoil = { 1, 2 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 2 * dmg_mul, r = 5000, acc = { 0, 0.1 }, recoil = { 1, 2 }, mode = { 1, 0, 0, 0 } },
 	}
 
 	presets.weapon.base.mini = deep_clone(presets.weapon.base.is_lmg)

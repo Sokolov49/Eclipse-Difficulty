@@ -236,3 +236,7 @@ function PlayerManager:damage_reduction_skill_multiplier(...)
 
 	return dmg_reduction
 end
+
+--remove cable ties
+function PlayerManager:add_cable_ties()
+end

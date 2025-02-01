@@ -1,6 +1,5 @@
 local tmp_vec = Vector3()
 
--- Make flashbangs scale with look direction instead of a flat reduction at some certain angle
 Hooks:OverrideFunction(CoreEnvironmentControllerManager, "test_line_of_sight", function(self, test_pos, min_distance, dot_distance, max_distance)
 	local vp = managers.viewport:first_active_viewport()
 
@@ -29,7 +28,6 @@ Hooks:OverrideFunction(CoreEnvironmentControllerManager, "test_line_of_sight", f
 	return math.map_range_clamped(dis, min_distance, max_distance, 1, 0) * (dot_mul ^ dot_effect)
 end)
 
--- Tone down the red screen on health hits
 function CoreEnvironmentControllerManager:set_health_effect_value(health_effect_value)
 	self._health_effect_value = health_effect_value * 2
 end
