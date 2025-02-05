@@ -1,4 +1,5 @@
 local taser = scripted_enemy.taser
+local scripted_enemy = Eclipse.scripted_enemy
 
 local ambush_enemy = {
 		values = {
