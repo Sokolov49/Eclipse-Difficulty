@@ -1,5 +1,5 @@
 --make this a posthook thanks future me
-function InputTweakData:init(tweak_data)
+Hooks:PostHook( InputTweakData, "init", "input_init", function(self)
     self.gamepad = {
         aim_assist_move_speed = 200,
         aim_assist_move_th_min = 1.0,

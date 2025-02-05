@@ -278,10 +278,13 @@ function CharacterTweakData:_presets(tweak_data, ...)
 		aim_delay_tase = { 0, 0.25 },
 	})
 
-	presets.weapon.taser.is_rifle.autofire_rounds = { 1, 1 }
+	presets.weapon.taser.is_rifle.autofire_rounds = { 1, 5 }
 	presets.weapon.taser.is_rifle.FALLOFF = {
-		{ dmg_mul = 9 * dmg_mul, r = 0, acc = { 0.45, 0.7 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
-		{ dmg_mul = 9 * dmg_mul, r = 3000, acc = { 0.15, 0.3 }, recoil = { 1, 2 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 5.5 * dmg_mul, r = 0, acc = { 0.45, 0.7 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 3.5 * dmg_mul, r = 650, acc = { 0.35, 0.65 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 2.5 * dmg_mul, r = 2000, acc = { 0.35, 0.6 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 2 * dmg_mul, r = 3200, acc = { 0.35, 0.5 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 1.25 * dmg_mul, r = 5000, acc = { 0.1, 0.25 }, recoil = { 1, 2 }, mode = { 1, 0, 0, 0 } },
 	}
 
 	presets.weapon.medic = based_on(presets.weapon.base, {

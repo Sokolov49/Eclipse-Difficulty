@@ -10,7 +10,7 @@ return {
 	[("units/payday2/characters/ene_fbi_1/ene_fbi_1"):key()] = "mp5",
 	[("units/payday2/characters/ene_fbi_3/ene_fbi_3"):key()] = "r870",
 	[("units/payday2/characters/ene_medic_m4/ene_medic_m4"):key()] = "mp5",
-	[("units/payday2/characters/ene_spook_1/ene_spook_1"):key()] = "beretta92",
+	[("units/payday2/characters/ene_spook_1/ene_spook_1"):key()] = { "beretta92", "mp5_tactical" },
 	[("units/payday2/characters/ene_biker_3/ene_biker_3"):key()] = "mossberg",
 	[("units/pd2_dlc_born/characters/ene_biker_female_3/ene_biker_female_3"):key()] = "mossberg",
 	[("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"):key()] = "r870_tank",

@@ -1,3 +1,4 @@
+local is_eclipse = Eclipse.utils.is_eclipse()
 -- credit for these changes goes to ASS, thanks miki <3
 local mexicans = {
 	Idstring("units/payday2/characters/ene_gang_mexican_1/ene_gang_mexican_1"),
@@ -5,29 +6,19 @@ local mexicans = {
 	Idstring("units/payday2/characters/ene_gang_mexican_3/ene_gang_mexican_3"),
 	Idstring("units/payday2/characters/ene_gang_mexican_4/ene_gang_mexican_4"),
 }
-local difficulty = tweak_data:difficulty_to_index(Global.game_settings and Global.game_settings.difficulty or "normal")
-local cloaker = "units/payday2/characters/ene_spook_1/ene_spook_1"
-local chopper_amount = 1
 
-if difficulty == 6 then
-	chopper_amount = 2
-end	
+local cloaker_spawn = {
+	values = {
+		enemy = scripted_enemy.cloaker
+	},
+}
+
+local chopper_amount = is_eclipse and 2 or 1
 
 return {
 	--Replace Heavy SWATs that spawn from the chopper with cloakers
-	[101571] = {
-		values = {
-            enemy = cloaker
-		},
-		on_executed = {
-			{ id = 400001, delay = 0 }
-		}
-	},
-	[101572] = {
-		values = {
-            enemy = cloaker
-		}
-	},
+	[101571] = cloaker_spawn,
+	[101572] = cloaker_spawn,
 	--Loop helis
 	--remove the line+trigger the loop here
 	[100945] = {

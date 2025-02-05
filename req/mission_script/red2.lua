@@ -14,26 +14,100 @@ local bulldozer = scripted_enemy.bulldozer_1
 local vault_count = 4
 local vault_ambush_chance = 0.5
 
-local vault_ambush = bulldozer
-
-if math.random() < vault_ambush_chance then
-	vault_ambush = scripted_enemy.elite_bulldozer_2
-	vault_count = 2
-end
-
-local rappel_spawn = {
-	values = {
-		interval = 30
-	}
-}
-	
 local disabled = {
 	values = {
 		enabled = false
 	}
 }
 
+local vault_ambush_enemy = bulldozer
+
+if math.random() < vault_ambush_chance then
+	vault_ambush_enemy = scripted_enemy.elite_bulldozer_2
+	vault_count = 2
+end
+
+local vault_ambush = {
+	values = {
+		enemy = vault_ambush_enemy,
+	},
+}
+
+local bulldozer_spawn = {
+	values = {
+		enemy = bulldozer,
+	},
+}
+
+local cloaker_spawn = {
+	values = {
+		enemy = cloaker,
+	},
+}
+
+local elevator_spawn = {
+	values = {
+		interval = 15,
+	},
+	groups = {
+		tac_shield_wall = false,
+		tac_shield_wall_ranged = false,
+		tac_shield_wall_charge = false,
+		tac_bull_rush = false,
+	},
+}
+
+local skylight_spawn = {
+	values = {
+		interval = 20,
+	},
+}
+
+local office_spawn = {
+	values = {
+		interval = 30,
+	},
+	groups = {
+		tac_shield_wall = false,
+		tac_shield_wall_ranged = false,
+		tac_shield_wall_charge = false,
+		tac_bull_rush = false,
+	},
+}
+
+local vent_spawn = {
+	values = {
+		enabled = is_eclipse and true or false,
+		interval = 45,
+	},
+	groups = {
+		tac_shield_wall = false,
+		tac_shield_wall_ranged = false,
+		tac_shield_wall_charge = false,
+		tac_bull_rush = false,
+	},
+}
+
 return {
+	-- new reinforce
+	[101401] = {
+		reinforce = {
+			{
+				name = "lobby",
+				force = 3,
+				position = Vector3(-1800, 25, 0)
+			}
+		}
+	},
+	[101544] = {
+		reinforce = {
+			{
+				name = "matrix",
+				force = 2,
+				position = Vector3(1600, 1250, 0)
+			}
+		}
+	},
 	-- Disable forced manager flee objective
 	[100665] = disabled,
 	-- Disable the right vault path
@@ -53,7 +127,7 @@ return {
 	},
 	[103722] = { 
 		on_executed = {
-			{id = 105734, delay = 2.75}
+			{ id = 105734, delay = 2.75 }
 		}
 	},
 	[103723] = { 
@@ -76,40 +150,20 @@ return {
 			{ id = 105732, delay = 2.75 }
 		}
 	},
-	--enable vault hallway vent spawns on eclipse instead on all diffs
-	[105200] = {
-		values = {
-			enabled = is_eclipse and true or false
-		}
-	},
 	--always force cloaker and taser to spawn like in PDTH
 	[100875] = windows_swat,
 	[102245] = windows_swat,
 	[102271] = windows_swat,
 	[102276] = windows_swat,
 	-- replace SWAT with cloakers that spawn with taser to match with PDTH
-	[100617] = {
-		enemy = cloaker
-	},
-	[100618] = {
-		enemy = cloaker
-	},
+	[100617] = cloaker_spawn,
+	[100618] = cloaker_spawn,
 	-- vault ambush
-	[104132] = {
-		enemy = vault_ambush
-	},
-	[104170] = {
-		enemy = vault_ambush
-	},
-	[104131] = {
-		enemy = vault_ambush
-	},
-	[104169] = {
-		enemy = vault_ambush
-	},
-	[100763] = {
-		enemy = vault_ambush
-	},
+	[104132] = vault_ambush,
+	[104170] = vault_ambush,
+	[104131] = vault_ambush,
+	[104169] = vault_ambush,
+	[100763] = vault_ambush,
 	[104000] = {
 		chance = 15 * diff_i
 	},
@@ -121,11 +175,6 @@ return {
 	[103999] = disabled,
 	[103985] = disabled,
 	[104049] = disabled,
-	-- slow down a few repel spawnpoints
-	[105112] = rappel_spawn,
-	[106890] = rappel_spawn,
-	[103953] = rappel_spawn,
-
 	-- custom spawns
 	-- add point of no return and spawn lobby ambushes
 	[101660] = {
@@ -227,32 +276,31 @@ return {
 	-- make the rest of vanilla spawns turn into zeals on E/PJ
 	-- 2 shields at the bottom of the staircase
 	[103693] = {
-		enemy = shield
+		values = {
+			enemy = shield,
+		},
 	},
-	[103697] = {
-		enemy = bulldozer
-	},
+	[103697] = bulldozer_spawn,
 	-- door knock dozers
-	[103162] = {
-		enemy = bulldozer
-	},
-	[103163] = {
-		enemy = bulldozer
-	},
-	[103198] = {
-		enemy = bulldozer
-	},
-	[103231] = {
-		enemy = bulldozer
-	},
+	[103162] = bulldozer_spawn,
+	[103163] = bulldozer_spawn,
+	[103198] = bulldozer_spawn,
+	[103231] = bulldozer_spawn,
 	-- ambush cloakers
-	[103136] = {
-		enemy = bulldozer
-	},
-	[103143] = {
-		enemy = bulldozer
-	},
-	[103151] = {
-		enemy = bulldozer
-	},
+	[103136] = cloaker_spawn,
+	[103143] = cloaker_spawn,
+	[103151] = cloaker_spawn,
+	-- spawnpoint delays
+	[102154] = elevator_spawn,
+	[103109] = elevator_spawn,
+	[103135] = elevator_spawn,
+	[103129] = elevator_spawn,
+	[103121] = elevator_spawn,
+	[105112] = skylight_spawn,
+	[106890] = skylight_spawn,
+	[103953] = office_spawn,
+	[103081] = office_spawn,
+	[103011] = office_spawn,
+	[103689] = office_spawn,
+	[105200] = vent_spawn,
 }

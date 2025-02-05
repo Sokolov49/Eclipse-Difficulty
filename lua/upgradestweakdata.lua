@@ -213,6 +213,7 @@ function UpgradesTweakData:init(tweak_data)
 		[22] = {
 			name_id = "community_item",
 			upgrades = {
+				"smoke_screen_grenade",
 				"g22c",
 				"ksg",
 				"branding_iron",
