@@ -209,6 +209,7 @@
 					<post :hook_id="ammo_bag/ammobagbase"/>
 					<post :hook_id="ecm_jammer/ecmjammerbase"/>
 					<post :hook_id="first_aid_kit/firstaidkitbase"/>
+					<post :hook_id="grenade_crate/grenadecratebase"/>
 				</group>
 
 				<post :hook_id="civilians/civilianbase"/>
