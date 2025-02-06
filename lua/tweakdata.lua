@@ -277,22 +277,6 @@ tweak_data.projectiles.rocket_ray_frag = deep_clone(tweak_data.projectiles.launc
 tweak_data.projectiles.rocket_ray_frag.damage = 180
 tweak_data.projectiles.rocket_ray_frag.player_dmg_mul = 1 / 4
 
-tweak_data.projectiles.frag.no_cheat_count = true
-tweak_data.projectiles.concussion.no_cheat_count = true
-tweak_data.projectiles.dynamite.no_cheat_count = true
-tweak_data.projectiles.molotov.no_cheat_count = true
-tweak_data.projectiles.wpn_prj_four.no_cheat_count = true
-tweak_data.projectiles.wpn_prj_ace.no_cheat_count = true
-tweak_data.projectiles.wpn_prj_jav.no_cheat_count = true
-tweak_data.projectiles.wpn_prj_hur.no_cheat_count = true
-tweak_data.projectiles.wpn_prj_target.no_cheat_count = true
-tweak_data.projectiles.frag_com.no_cheat_count = true
-tweak_data.projectiles.fir_com.no_cheat_count = true
-tweak_data.projectiles.dada_com.no_cheat_count = true
-tweak_data.projectiles.wpn_gre_electric.no_cheat_count = true
-tweak_data.projectiles.poison_gas_grenade.no_cheat_count = true
-tweak_data.projectiles.sticky_grenade.no_cheat_count = true
-
 -- cop tear gas
 tweak_data.projectiles.cs_grenade_quick.damage_per_tick = 1.5
 tweak_data.projectiles.cs_grenade_quick.damage_tick_period = 0.25
