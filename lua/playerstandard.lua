@@ -379,31 +379,6 @@ function PlayerStandard:_check_action_primary_attack(t, input, params)
 	return new_action
 end
 
--- No more sixth sense
-Hooks:OverrideFunction(PlayerStandard, "_update_omniscience", function(self, ...)
-	return
-end)
-
--- Don't update sixth sense anymore and add sprint reload upgrade to shotguns
-Hooks:OverrideFunction(PlayerStandard, "update", function(self, t, dt)
-	PlayerMovementState.update(self, t, dt)
-	self:_calculate_standard_variables(t, dt)
-	self:_update_ground_ray()
-	self:_update_fwd_ray()
-	self:_update_check_actions(t, dt)
-
-	if self._menu_closed_fire_cooldown > 0 then
-		self._menu_closed_fire_cooldown = self._menu_closed_fire_cooldown - dt
-	end
-
-	self:_update_movement(t, dt)
-	self:_upd_nav_data()
-	managers.hud:_update_crosshair_offset(t, dt)
-	self:_upd_stance_switch_delay(t, dt)
-	self.RUN_AND_RELOAD = managers.player:has_category_upgrade("player", "run_and_reload")
-		or self._equipped_unit and self._equipped_unit:base():is_category("shotgun") and managers.player:has_category_upgrade("shotgun", "run_and_reload")
-end)
-
 -- Melee while running
 -- Code from melee overhaul
 Hooks:PostHook(PlayerStandard, "_start_action_running", "eclipse_start_action_running", function(self, t)
