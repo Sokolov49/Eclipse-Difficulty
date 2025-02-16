@@ -6,14 +6,9 @@ function UpgradesTweakData:init(tweak_data)
 	local difficulty = Global.game_settings and Global.game_settings.difficulty or "normal"
 	local difficulty_index = tweak_data:difficulty_to_index(difficulty)
 	
-	--moved all special weapons to be unlocked at level 80
-	--players will have to utilize other methods of taking out cops
-	--instead of being attached to an easily-replenishable grenade source
 	self.level_tree = {
 		[0] = {
 			upgrades = {
-				"frag_com",
-				"frag",
 				"wpn_dallas_mask",
 				"msr",
 				"corgi",
@@ -60,6 +55,7 @@ function UpgradesTweakData:init(tweak_data)
 			upgrades = {
 				"new_raging_bull",
 				"b92fs",
+				"smoke_screen_grenade",
 				"x_rage",
 				"m1911",
 				"vityaz"
@@ -84,6 +80,8 @@ function UpgradesTweakData:init(tweak_data)
 			name_id = "lvl_10",
 			upgrades = {
 				"rep_upgrade1",
+				"frag_com",
+				"frag",
 				"cutters",
 				"shawn"
 			}
@@ -206,6 +204,7 @@ function UpgradesTweakData:init(tweak_data)
 				"body_armor3",
 				"kampfmesser",
 				"buck",
+				"gre_m79",
 				"tecci",
 				"wing"
 			}
@@ -213,7 +212,6 @@ function UpgradesTweakData:init(tweak_data)
 		[22] = {
 			name_id = "community_item",
 			upgrades = {
-				"smoke_screen_grenade",
 				"g22c",
 				"ksg",
 				"branding_iron",
@@ -267,7 +265,6 @@ function UpgradesTweakData:init(tweak_data)
 				"x_breech",
 				"x_erma",
 				"concussion",
-				"fir_com",
 				"dada_com",
 				"dynamite",
 				"molotov",
@@ -314,7 +311,7 @@ function UpgradesTweakData:init(tweak_data)
 				"x_hs2000",
 				"qbu88",
 				"contender",
-				"awp"
+				"hunter"
 			}
 		},
 		[29] = {
@@ -358,6 +355,7 @@ function UpgradesTweakData:init(tweak_data)
 				"tec9",
 				"tiger",
 				"model70",
+				"m32",
 				"x_tec9"
 			}
 		},
@@ -485,7 +483,11 @@ function UpgradesTweakData:init(tweak_data)
 			name_id = "weapons",
 			upgrades = {
 				"great",
-				"siltstone"
+				"siltstone",
+				"long",
+				"ecp",
+				"frankish",
+				"plainsrider"
 			}
 		},
 		[47] = {
@@ -549,55 +551,49 @@ function UpgradesTweakData:init(tweak_data)
 		[61] = {
 			name_id = "weapons",
 			upgrades = {
-				"rambo"
+				"rambo",
+				"m134"
 			}
 		},
 		[65] = {
 			name_id = "weapons",
 			upgrades = {
-				"m95"
+				"m95",
+				"awp",
+				"slap"
 			}
 		},
 		[70] = {
 			name_id = "lvl_70",
 			upgrades = {
-				"rep_upgrade7"
+				"rep_upgrade7",
+				"system",
+				"flamethrower_mk2"
 			}
 		},
 		[71] = {
 			name_id = "weapons",
 			upgrades = {
 				"fireaxe",
+				"fir_com",
 				"mg42"
 			}
 		},
 		[75] = {
 			name_id = "weapons",
 			upgrades = {
-				"hk21"
+				"hk21",
+				"shuno"
 			}
 		},
 		[80] = {
 			name_id = "lvl_80",
 			upgrades = {
 				"rep_upgrade8",
-				"long",
-				"flamethrower_mk2",
-				"ecp",
-				"gre_m79",
-				"system",
-				"m134",
-				"rpg7",
-				"frankish",
-				"m32",
-				"shuno",
-				"plainsrider",
+				"china",
 				"hailstorm",
 				"arblast",
 				"arbiter",
-				"china",
-				"ray",
-				"slap",
 				"hunter",
 				"ms3gl"
 			}
@@ -605,7 +601,9 @@ function UpgradesTweakData:init(tweak_data)
 		[90] = {
 			name_id = "lvl_90",
 			upgrades = {
-				"rep_upgrade9"
+				"rep_upgrade9",
+				"ray",
+				"rpg7"
 			}
 		},
 		[100] = {
@@ -903,7 +901,7 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.sentry_gun.extra_ammo_multiplier = {1.5, 2.5}
 	self.values.sentry_gun.rot_speed_multiplier = {2.5}
 	self.values.trip_mine.fire_trap = {{ 0, 1 }, { 25, 1.5 }} --duration, range
-	self.values.trip_mine.quantity = {1, 4} --check this later
+	self.values.trip_mine.quantity = {3, 8} --check this later
 	self.values.player.deploy_interact_faster = {0.85}
 	self.values.shape_charge.quantity = {0, 0}
 	self.values.sentry_gun.spread_multiplier = {0.5}
