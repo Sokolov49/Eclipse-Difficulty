@@ -21,8 +21,15 @@ Hooks:PreHook( PlayerDamage, "damage_bullet", "ssa_damage_bullet", function(self
 		return
 	end
 
+	local has_tough_guy = managers.player:has_category_upgrade("player", "damage_shake_multiplier")
 	local shake_armor_multiplier = managers.player:body_armor_value("damage_shake") * (self:get_real_armor() > 0 and 1 or 2)
-	self._unit:camera()._damage_bullet_shake_multiplier = math.clamp(attack_data.damage, 0, 10) * shake_armor_multiplier
+	
+	if has_tough_guy then
+		self._unit:camera()._damage_bullet_shake_multiplier = ( math.clamp(attack_data.damage, 0, 10) * shake_armor_multiplier ) * managers.player:upgrade_value( "player", "damage_shake_multiplier", 1 )
+	else
+		self._unit:camera()._damage_bullet_shake_multiplier = ( math.clamp(attack_data.damage, 0, 10) * shake_armor_multiplier )
+	end
+	
 end)
 
 -- Friendly Fire

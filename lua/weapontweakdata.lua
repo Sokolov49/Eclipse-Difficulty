@@ -2494,7 +2494,7 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 
 	-- Basilisk
 	self.ms3gl.CLIP_AMMO_MAX = 3
-	self.ms3gl.AMMO_PICKUP = {0.05, 0.15}
+	self.ms3gl.AMMO_PICKUP = {0.05, 0.3}
 	self.ms3gl.stats.damage = 96
 	self.ms3gl.stats.spread = 19
 	self.ms3gl.stats.recoil = 21
@@ -2507,7 +2507,7 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	
 	-- Arbiter
 	self.arbiter.use_data.selection_index = 2
-	self.arbiter.AMMO_PICKUP = {0.05, 0.15}
+	self.arbiter.AMMO_PICKUP = {0.05, 0.3}
 	self.arbiter.CLIP_AMMO_MAX = 5
 	self.arbiter.stats.damage = 96
 	self.arbiter.stats.spread = 25
@@ -2518,7 +2518,7 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 
 	-- Piglet
 	self.m32.CLIP_AMMO_MAX = 6
-	self.m32.AMMO_PICKUP = {0.05, 0.15}
+	self.m32.AMMO_PICKUP = {0.05, 0.3}
 	self.m32.stats.damage = 120
 	self.m32.stats.spread = 21
 	self.m32.stats.recoil = 23
@@ -2530,7 +2530,7 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	-- China Puff
 	self.china.use_data.selection_index = 2
 	self.china.CLIP_AMMO_MAX = 3
-	self.china.AMMO_PICKUP = {0.05, 0.15}
+	self.china.AMMO_PICKUP = {0.05, 0.3}
 	self.china.stats.damage = 120
 	self.china.stats.spread = 23
 	self.china.stats.recoil = 23
@@ -2541,7 +2541,7 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	-- GL40
 	self.gre_m79.use_data.selection_index = 1
 	self.gre_m79.CLIP_AMMO_MAX = 1
-	self.gre_m79.AMMO_PICKUP = {0.05, 0.125}
+	self.gre_m79.AMMO_PICKUP = {0.05, 0.3}
 	self.gre_m79.stats.damage = 144
 	self.gre_m79.stats.spread = 25
 	self.gre_m79.stats.recoil = 25
@@ -2551,7 +2551,7 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 
 	-- Compact 40
 	self.slap.CLIP_AMMO_MAX = 1
-	self.slap.AMMO_PICKUP = {0.05, 0.2}
+	self.slap.AMMO_PICKUP = {0.05, 0.3}
 	self.slap.stats.damage = 144
 	self.slap.stats.spread = 21
 	self.slap.stats.recoil = 23

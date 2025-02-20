@@ -7,13 +7,13 @@ function WeaponFlashLight:init(unit)
 	self._a_flashlight_obj = self._unit:get_object(Idstring("a_flashlight"))
 	local is_haunted = self:is_haunted()
 	self._g_light = self._unit:get_object(Idstring("g_light"))
-	local texture = is_haunted and "units/lights/spot_light_projection_textures/spotprojection_21_flashlight_df" or "units/lights/spot_light_projection_textures/spotprojection_12_flashlight_df" --07_round, 12_flashlight
-	self._light = World:create_light("spot|specular|plane_projection", texture) --"spot|specular|plane_projection"
+	local texture = is_haunted and "units/lights/spot_light_projection_textures/spotprojection_21_flashlight_df" or "effects/particles/weapons/flashlight/e_gradient_radial2" --07_round, 12_flashlight
+	self._light = World:create_light("spot|specular|plane_projection", texture) --"spot|specular|plane_projection", texture
 	self._light_multiplier = is_haunted and 2 or 2
 	self._current_light_multiplier = self._light_multiplier
 
-	self._light:set_spot_angle_end(60) --math.clamp(80, 0, 160)
-	self._light:set_far_range(is_haunted and 10000 or 2000) --1000
+	self._light:set_spot_angle_end(45) --math.clamp(80, 0, 160) or 60
+	self._light:set_far_range(is_haunted and 10000 or 2000) --1000 or 2000
 	self._light:set_multiplier(self._current_light_multiplier)
 	self._light:link(self._a_flashlight_obj)
 	self._light:set_rotation(Rotation(self._a_flashlight_obj:rotation():z(), -self._a_flashlight_obj:rotation():x(), -self._a_flashlight_obj:rotation():y()))

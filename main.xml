@@ -24,6 +24,12 @@
 						<!-- Skill icons -->
 		<texture path="guis/textures/pd2/skilltree/op_icons_atlas" force="true"/>
 		
+						<!-- shotgun fx -->
+		<effect path="effects/payday2/particles/weapons/shotgun/resmod1"/>
+		<effect path="effects/payday2/particles/weapons/shotgun/sho_buck_muzzleflash"/>
+		<effect path="effects/payday2/particles/weapons/shotgun/resmod2"/>
+		<effect path="effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash"/>
+		
 						<!-- Lobby states -->
 		<animation path="anims/shared/special/criminal_idle_card1" force="true"/>
 		<animation path="anims/shared/special/criminal_idle_card2" force="true"/>

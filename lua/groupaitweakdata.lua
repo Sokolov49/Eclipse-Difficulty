@@ -655,7 +655,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "eclipse__init_unit_ca
 		access = access_type_all,
 	}
 
-	self.unit_categories.Elite_swat_3 = {
+	self.unit_categories.Elite_swat = {
 		unit_types = {
 			america = {
 				Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),
