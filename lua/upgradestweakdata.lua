@@ -847,7 +847,7 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.player.non_special_melee_multiplier = {1.5}
 	self.values.player.melee_damage_multiplier = {1.5}
 	self.values.player.increased_pickup_area = {1.30}
-	self.values.shotgun.damage_multiplier = {1.35}
+	self.values.shotgun.damage_multiplier = {1.15}
 	self.values.player.flashbang_multiplier = {0.75, 0.25}
 	self.values.player.damage_shake_multiplier = {0.5}
 	self.values.player.bleed_out_health_multiplier = {2}

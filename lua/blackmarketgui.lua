@@ -3452,3 +3452,38 @@ Hooks:PreHook(BlackMarketGui, "on_slot_selected", "shc_on_slot_selected", functi
 		end
 	end
 end)
+
+Hooks:PostHook(BlackMarketGui, "populate_melee_weapons", "weapon_arse", function(self)
+		if melee_weapon_id == "weapon" then
+			new_data.extra_bitmaps = {}
+			new_data.extra_bitmaps_shape = {}
+			local primary = managers.blackmarket:equipped_primary()
+			local primary_id = primary.weapon_id
+			guis_catalog = "guis/"
+			local bundle_folder = tweak_data.weapon[primary_id] and tweak_data.weapon[primary_id].texture_bundle_folder
+			if bundle_folder then
+				guis_catalog = guis_catalog .. "dlcs/" .. tostring(bundle_folder) .. "/"
+			end
+			table.insert(new_data.extra_bitmaps, guis_catalog .. "textures/pd2/blackmarket/icons/weapons/" .. tostring(primary_id))
+			table.insert(new_data.extra_bitmaps_shape, {
+				x = 0,
+				y = -0.1,
+				w = 0.75,
+				h = 0.75
+			})
+			local secondary = managers.blackmarket:equipped_secondary()
+			local secondary_id = secondary.weapon_id
+			guis_catalog = "guis/"
+			local bundle_folder = tweak_data.weapon[secondary_id] and tweak_data.weapon[secondary_id].texture_bundle_folder
+			if bundle_folder then
+				guis_catalog = guis_catalog .. "dlcs/" .. tostring(bundle_folder) .. "/"
+			end
+			table.insert(new_data.extra_bitmaps, guis_catalog .. "textures/pd2/blackmarket/icons/weapons/" .. tostring(secondary_id))
+			table.insert(new_data.extra_bitmaps_shape, {
+				x = 0,
+				y = 0.1,
+				w = 0.75,
+				h = 0.75
+			})
+		end
+end)

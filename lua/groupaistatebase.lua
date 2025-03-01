@@ -1,5 +1,43 @@
 local ffo_heists = Eclipse.ffo_heists
 
+-- Megaphone events must be appended to this table in order for them to be synced to clients
+GroupAIStateBase.MEGAPHONE_EVENTS = {
+	"mga_killed_civ_1st",
+	"mga_killed_civ_2nd",
+	"mga_hostage_assault_delay",
+	"mga_generic_c",
+	"mga_robbers_clever",
+	"mga_leave"
+}
+table.list_append(GroupAIStateBase.EVENT_SYNC, GroupAIStateBase.MEGAPHONE_EVENTS)
+
+function GroupAIStateBase:_post_megaphone_event(event)
+	local pos = tweak_data.levels[Global.level_data.level_id].megaphone_pos or Vector3(0, 0, 0)
+	local sound_source = SoundDevice:create_source("megaphone")
+
+	sound_source:set_position(pos)
+	sound_source:post_event(event)
+	
+	if self._is_server then
+		local event_id = self:get_sync_event_id(event)
+		if event_id then
+			managers.network:session():send_to_peers_synched("group_ai_event", event_id, 0)
+		else
+			log("[RESTORATION] GroupAIStateBase:_post_megaphone_event: Tried to sync an inexistent event ID: " .. tostring(event))
+		end
+	end
+end
+
+local sync_event_orig = GroupAIStateBase.sync_event
+function GroupAIStateBase:sync_event(event_id, ...)
+	local event_name = self.EVENT_SYNC[event_id]
+	if table.contains(self.MEGAPHONE_EVENTS, event_name) then
+		self:_post_megaphone_event(event_name)
+	elseif event_name ~= "cloaker_spawned" then
+		return sync_event_orig(self, event_id, ...)
+	end
+end
+
 --Peak scripting
 function GroupAIStateBase:_get_scripted_tier()
 	local diff_rounded = self._difficulty_value >= 1 and 1 or self._difficulty_value < 0.5 and 0 or 0.5
@@ -11,7 +49,17 @@ function GroupAIStateBase:_get_scripted_tier()
 end
 
 -- Set up needed variables
-Hooks:PostHook(GroupAIStateBase, "_calculate_difficulty_ratio", "eclipse_calculate_difficulty_ratio", function(self)
+local _calculate_difficulty_ratio = GroupAIStateBase._calculate_difficulty_ratio
+function GroupAIStateBase:_calculate_difficulty_ratio(...)
+	if self._hostage_killed_diff_add then
+		self._difficulty_value = math.min(self._difficulty_value + (self._hostage_killed_diff_add or 0), 1)
+		self._hostage_killed_diff_add = nil
+	else
+		self._difficulty_value = math.min(self._difficulty_value + (self._added_difficulty_value or 0), 1) -- addend difficulty
+	end
+
+	_calculate_difficulty_ratio(self, ...)
+
 	for name, script in pairs(managers.mission._scripts) do
 		for k, element in pairs(script._elements) do
 			if getmetatable(element) == ElementSpawnEnemyDummy then
@@ -27,7 +75,7 @@ Hooks:PostHook(GroupAIStateBase, "_calculate_difficulty_ratio", "eclipse_calcula
 			end
 		end
 	end
-end)
+end
 
 -- Scale gained drama with player count
 function GroupAIStateBase:criminal_hurt_drama(unit, attacker, dmg_percent)
@@ -135,6 +183,20 @@ function GroupAIStateBase:set_difficulty(value, ...)
 end
 
 Hooks:PostHook(GroupAIStateBase, "update", "sh_update", GroupAIStateBase._update_difficulty_value)
+
+function GroupAIStateBase:add_difficulty(value)
+	self._added_difficulty_value = (self._added_difficulty_value or 0) + value
+	self:_calculate_difficulty_ratio()
+end
+
+--Killing hostages in Pro Jobs increases diff
+local is_pro_job = Eclipse.utils.is_pro_job()
+Hooks:PostHook(GroupAIStateBase, "hostage_killed", "hits_hostage_killed", function (self)
+	if is_pro_job then
+		self._hostage_killed_diff_add = math.random(75, 100) / 1000
+		self:add_difficulty(self._hostage_killed_diff_add)
+	end
+end)
 
 -- Delay spawn points when enemies die close to them
 Hooks:PostHook(GroupAIStateBase, "on_enemy_unregistered", "sh_on_enemy_unregistered", function(self, unit)
@@ -337,13 +399,6 @@ Hooks:PostHook(GroupAIStateBase, "update", "eclipse_sentry_update", function(sel
 	end
 end)
 
--- Add chance for enemies to comment on squad member deaths
-Hooks:PostHook(GroupAIStateBase, "_remove_group_member", "sh__remove_group_member", function(self, group, u_key, is_casualty)
-	if is_casualty and math.random() < 0.2 then
-		self:_chk_say_group(group, "group_death")
-	end
-end)
-
 -- Set a minimum gunshot and bullet impact alert range in loud
 Hooks:PreHook(GroupAIStateBase, "propagate_alert", "sh_propagate_alert", function(self, alert_data)
 	if alert_data[1] == "bullet" and alert_data[3] and self:enemy_weapons_hot() then
@@ -456,4 +511,40 @@ function GroupAIStateBase:_upd_criminal_suspicion_progress(...)
 	end
 	
 	return _upd_criminal_suspicion_progress_original(self, ...)
+end
+
+--setup for host to set diff based on events
+--probably fine if clients run it, but better safe than sorry
+if Network:is_server() then
+	--increase diff by x amount for each hostage killed (only by players)
+	Hooks:PostHook(GroupAIStateBase, "hostage_killed", "res_hostage_killed", function(self, killer_unit)
+		--vanilla checks to make sure its a player
+		if not alive(killer_unit) then
+			return
+		end
+
+		if killer_unit:base() and killer_unit:base().thrower_unit then
+			killer_unit = killer_unit:base():thrower_unit()
+
+			if not alive(killer_unit) then
+				return
+			end
+		end
+
+		local key = killer_unit:key()
+		local criminal = self._criminals[key]
+		if not criminal then
+			return
+		end
+
+		if not self._hunt_mode and self._assault_number and self._assault_number >= 1 then
+			self._megaphone_hostages_killed = (self._megaphone_hostages_killed or 0) + 1 -- have to track separately to self._hostages_killed because some may be killed before going loud
+
+			if self._megaphone_hostages_killed == 1 then
+				self:_post_megaphone_event("mga_killed_civ_1st")
+			elseif self._megaphone_hostages_killed == 4 then
+				self:_post_megaphone_event("mga_killed_civ_2nd")
+			end
+		end
+	end)
 end

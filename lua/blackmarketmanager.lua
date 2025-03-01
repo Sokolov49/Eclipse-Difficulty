@@ -139,3 +139,19 @@ function BlackMarketManager:fire_rate_multiplier(name, categories, silencer, det
 
 	return self:_convert_add_to_mul(multiplier)
 end
+
+Hooks:PostHook(BlackMarketManager, "player_loadout_data", "weapon_ass", function(self, show_all_icons)
+	if melee_weapon then
+		local guis_catalog = "guis/"
+		local bundle_folder = tweak_data.blackmarket.melee_weapons[melee_weapon] and tweak_data.blackmarket.melee_weapons[melee_weapon].texture_bundle_folder
+		if bundle_folder then
+			guis_catalog = guis_catalog .. "dlcs/" .. tostring(bundle_folder) .. "/"
+		end
+		if melee_weapon == "weapon" then
+			melee_weapon_texture = nil
+		else
+			melee_weapon_texture = guis_catalog .. "textures/pd2/blackmarket/icons/melee_weapons/" .. tostring(melee_weapon)
+		end
+		melee_weapon_string = managers.localization:text(tweak_data.blackmarket.melee_weapons[melee_weapon].name_id)
+	end
+end)

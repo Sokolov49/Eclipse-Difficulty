@@ -7,9 +7,10 @@ function BaseInteractionExt:_get_timer()
 
 	local multiplier = 1
 
+	--[[ lol wtf is this
 	if self.tweak_data ~= "corpse_alarm_pager" then
 		multiplier = multiplier * managers.player:crew_ability_upgrade_value("crew_interact", 1)
-	end
+	end ]]--
 
 	if self._tweak_data.upgrade_timer_multiplier then
 		multiplier = multiplier * managers.player:upgrade_value(self._tweak_data.upgrade_timer_multiplier.category, self._tweak_data.upgrade_timer_multiplier.upgrade, 1)

@@ -475,7 +475,7 @@ Hooks:Add("LocalizationManagerPostInit", "OrPack_loc", function(...)
 		loading_op_gameplay_6 =						"Sprinting in stealth causes noise in a small radius around you, which can alert nearby guards and civilians. The noise can be heard through walls and some ceilings.",
 		loading_op_gameplay_7 =						"In stealth, intimidated civilians' markers disappear over time so you have to stay aware and stay in control. There are skills in the Mastermind tree to help you with hostage control.",
 		loading_op_gameplay_8 =						"You need a skill in the Technician tree in order to use your Trip Mines as Shaped Charges to open doors & safes.",
-		loading_op_gameplay_9 =						"In some cases purchasing the contract is not the best idea, since it may not pay off. That's why it is better to wait for the wanted contract to pop-up in Crime.NET.",
+		loading_op_gameplay_9 =						"Bulldozers are very resilient enemies towards fire and explosives, you have to aim for their weak faceplate to take them down.",
 		loading_op_gameplay_10 =					"Drills make noise which alert nearby bystanders in a 10m radius. The Technician has a skill to reduce it or make it silent completely.",
 		loading_op_gameplay_11 =					"Certain Perks can improve gameplay during stealth, like allowing you to lockpick or interact with some objects while in Casing Mode.",
 		loading_op_gameplay_12 =					"You can unlock Pocket ECM Jammers by getting a skill ECM Feddback ACED.",

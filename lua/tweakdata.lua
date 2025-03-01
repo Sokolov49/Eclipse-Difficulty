@@ -299,6 +299,7 @@ tweak_data.projectiles.rocket_ray_frag.player_dmg_mul = 1 / 4
 
 -- cop tear gas
 tweak_data.projectiles.cs_grenade_quick.damage_per_tick = 1.5
+tweak_data.projectiles.cs_grenade_quick.radius = 385
 
 -- FFO ponr
 tweak_data.point_of_no_returns.ffo = {

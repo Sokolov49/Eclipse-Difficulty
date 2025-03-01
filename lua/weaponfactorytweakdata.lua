@@ -1,43 +1,4 @@
 Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(self)	
-	self.parts.wpn_fps_lmg_o_empty = {
-		a_obj = "a_body",
-		type = "bonus",
-		name_id = "bm_wp_lmg_o_empty",
-		unit = "units/payday2/weapons/wpn_upg_dummy/wpn_upg_dummy",
-		third_unit = "units/payday2/weapons/wpn_upg_dummy/wpn_upg_dummy",
-		internal_part = true,
-		stats = {
-			value = 5,
-		},
-		forbids = {},
-		stance_mod = {
-			wpn_fps_lmg_rpk = {
-				translation = Vector3(0.4, 0.2, -0.2),
-				rotation = Rotation(0, 0, -1),
-			},
-			wpn_fps_lmg_hk21 = {
-				translation = Vector3(0.5, 0.1, -0.3),
-				rotation = Rotation(0, 0, -1),
-			},
-			wpn_fps_lmg_m249 = {
-				translation = Vector3(0.5, 0.1, -0.3),
-				rotation = Rotation(0, 0, -1),
-			},
-			wpn_fps_lmg_mg42 = {
-				translation = Vector3(0.5, 0.3, -0.2),
-				rotation = Rotation(0, 0, -1),
-			},
-			wpn_fps_lmg_par = {
-				translation = Vector3(0.4, 0, -0.2),
-				rotation = Rotation(0, 0, -1),
-			},
-			wpn_fps_lmg_m60 = {
-				translation = Vector3(0.5, 0.2, -0.1),
-				rotation = Rotation(0, 0, -1),
-			},
-		},
-	}
-
 	local stat_blacklist = {
 		"foregrip",
 		"extra",
@@ -135,93 +96,6 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(sel
 		end
 	end
 
-	local lmg_table = {
-		"wpn_fps_lmg_rpk",
-		"wpn_fps_lmg_hk21",
-		"wpn_fps_lmg_m249",
-		"wpn_fps_lmg_par",
-		"wpn_fps_lmg_mg42",
-		"wpn_fps_lmg_m60",
-	}
-
-	local sight_table = {
-		"wpn_fps_upg_o_specter",
-		"wpn_fps_upg_o_aimpoint",
-		"wpn_fps_upg_o_aimpoint_2",
-		"wpn_fps_upg_o_docter",
-		"wpn_fps_upg_o_eotech",
-		"wpn_fps_upg_o_t1micro",
-		"wpn_fps_upg_o_cmore",
-		"wpn_fps_upg_o_acog",
-		"wpn_fps_upg_o_cs",
-		"wpn_fps_upg_o_eotech_xps",
-		"wpn_fps_upg_o_reflex",
-		"wpn_fps_upg_o_rx01",
-		"wpn_fps_upg_o_rx30",
-		"wpn_fps_upg_o_spot",
-		"wpn_fps_upg_o_xpsg33_magnifier",
-		"wpn_fps_upg_o_bmg",
-		"wpn_fps_upg_o_uh",
-		"wpn_fps_upg_o_fc1",
-		"wpn_fps_upg_o_poe",
-		"wpn_fps_upg_o_hamr",
-		"wpn_fps_upg_o_atibal",
-	}
-
-	local lmg_stance_mod_map = {
-		["wpn_fps_lmg_rpk"] = { translation = Vector3(-0, -0, -3) },
-		["wpn_fps_lmg_hk21"] = { translation = Vector3(0, -0, -3.2) },
-		["wpn_fps_lmg_m249"] = { translation = Vector3(0, 0, -3.4) },
-		["wpn_fps_lmg_par"] = { translation = Vector3(0, 8, -3.2) },
-		["wpn_fps_lmg_mg42"] = { translation = Vector3(0, 8, -2.4) },
-		["wpn_fps_lmg_m60"] = { translation = Vector3(0.1, 8, 0) },
-	}
-
-	for index, weapon_id in ipairs(lmg_table) do
-		if not self[weapon_id].adds then
-			self[weapon_id].adds = {}
-		end
-		if not self[weapon_id].override then
-			self[weapon_id].override = {}
-		end
-	end
-
-	for index, weapon_id in ipairs(lmg_table) do
-		for index, sight_id in ipairs(sight_table) do
-			--Add sights to uses_parts
-			table.insert(self[weapon_id].uses_parts, sight_id)
-
-			--Set stance_mods
-			self.parts[sight_id].stance_mod[weapon_id] = lmg_stance_mod_map[weapon_id]
-
-			--Add a default part that forbids sights
-			table.insert(self[weapon_id].uses_parts, "wpn_fps_lmg_o_empty")
-			table.insert(self[weapon_id].default_blueprint, "wpn_fps_lmg_o_empty")
-		end
-	end
-
-	for index, sight_id in ipairs(sight_table) do
-		table.insert(self.parts.wpn_fps_lmg_o_empty.forbids, sight_id)
-
-		--Add sight mounts and rails
-		self.wpn_fps_lmg_rpk.adds[sight_id] = { "wpn_fps_ak_extra_ris" }
-		--self.wpn_fps_lmg_m249.override[sight_id] = { parent = "upper_reciever" }
-		self.wpn_fps_lmg_hk21.adds[sight_id] = { "wpn_fps_ass_g3_body_rail" }
-		self.wpn_fps_lmg_mg42.adds[sight_id] = { "wpn_fps_rpg7_sight_adapter" }
-		--self.wpn_fps_lmg_mg42.override[sight_id] = { parent = "upper_reciever" }
-		--self.wpn_fps_lmg_par.override[sight_id] = { parent = "upper_reciever" }
-		self.wpn_fps_lmg_m60.adds[sight_id] = { "wpn_fps_ass_groza_o_adapter" }
-		self.wpn_fps_lmg_m60.override[sight_id] = { forbids = { "wpn_fps_lmg_m60_sight_standard" } }
-		--self.wpn_fps_lmg_m60.override[sight_id] = { forbids = { "wpn_fps_lmg_m60_sight_standard" }, parent = "upper_reciever" }
-
-		--Add suport for the AK scope mount
-		table.insert(self.parts.wpn_fps_lmg_o_empty.forbids, "wpn_fps_upg_o_ak_scopemount")
-		table.insert(self.wpn_fps_lmg_rpk.uses_parts, "wpn_fps_upg_o_ak_scopemount")
-		self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount = {}
-		self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount.override = {}
-		self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount.override[sight_id] = { a_obj = "a_o_sm", stance_mod = { wpn_fps_lmg_rpk = { translation = Vector3(0, 0, -4.6) } } }
-	end
-
 	local slug_stance_muls = {
 		spread = {
 			standing = {
@@ -254,53 +128,53 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(sel
 		wpn_fps_upg_a_custom = {
 			very_heavy = { -- double barrels
 				stats = { damage = 26, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 			heavy = { -- shotguns like gsps and the trench gun
 				stats = { damage = 20, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 			medium = { -- raven, loco, reinfeld, etc
 				stats = { damage = 17, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 			light = { -- semi autos
 				stats = { damage = 13, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 			very_light = { -- full autos
 				stats = { damage = 10, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 			default = { -- for custom shotties
 				stats = { damage = 17, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 		},
 		wpn_fps_upg_a_custom_free = {
 			very_heavy = { -- double barrels
 				stats = { damage = 26, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 			heavy = { -- shotguns like gsps and the trench gun
 				stats = { damage = 20, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 			medium = { -- raven, loco, reinfeld, etc
 				stats = { damage = 17, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 			light = { -- semi autos
 				stats = { damage = 13, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 			very_light = { -- full autos
 				stats = { damage = 10, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 			default = { -- for custom shotties
 				stats = { damage = 17, total_ammo_mod = -6, recoil = -2 },
-				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1" },
+				custom_stats = { rays = 6, ammo_pickup_max_mul = 0.8, ammo_pickup_min_mul = 0.8, muzzleflash = "effects/payday2/particles/weapons/shotgun/resmod1", damage_near_mul = 0.8, damage_far_mul = 0.6 },
 			},
 		},
 		wpn_fps_upg_a_explosive = {
@@ -484,27 +358,27 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(sel
 		wpn_fps_upg_a_piercing = {
 			very_heavy = { -- double barrels
 				stats = { damage = -18, total_ammo_mod = -6, recoil = -3, spread = 2 },
-				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash" },
+				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash", damage_near_mul = 1, damage_far_mul = 1.1 },
 			},
 			heavy = { -- shotguns like gsps and the trench gun
 				stats = { damage = -14, total_ammo_mod = -6, recoil = -3, spread = 2 },
-				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash" },
+				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash", damage_near_mul = 1, damage_far_mul = 1.1 },
 			},
 			medium = { -- raven, loco, reinfeld, etc
 				stats = { damage = -12, total_ammo_mod = -6, recoil = -3, spread = 2 },
-				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash" },
+				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash", damage_near_mul = 1, damage_far_mul = 1.1 },
 			},
 			light = { -- semi autos
 				stats = { damage = -10, total_ammo_mod = -6, recoil = -3, spread = 2 },
-				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash" },
+				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash", damage_near_mul = 1, damage_far_mul = 1.1 },
 			},
 			very_light = { -- full autos
 				stats = { damage = -8, total_ammo_mod = -6, recoil = -3, spread = 2 },
-				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash" },
+				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash", damage_near_mul = 1, damage_far_mul = 1.1 },
 			},
 			default = { -- for custom shotties
 				stats = { damage = -12, total_ammo_mod = -6, recoil = -3, spread = 2 },
-				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash" },
+				custom_stats = { rays = 12, armor_piercing_add = 1, can_shoot_through_enemy = true, muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_fle_muzzleflash", damage_near_mul = 1, damage_far_mul = 1.1 },
 			},
 		},
 		wpn_fps_upg_a_dragons_breath = {
@@ -1829,40 +1703,6 @@ function WeaponFactoryTweakData:create_bonuses(tweak_data, weapon_skins)
 	self.parts.wpn_fps_upg_perk_stockpile.name_id = "bm_menu_perk_stockpile"
 	self.parts.wpn_fps_upg_perk_stockpile.desc_id = "bm_menu_perk_stockpile_desc"
 	self.parts.wpn_fps_upg_perk_stockpile.stats = { total_ammo_mod = 5, reload = -3 }
-
-	-- gunner
-	self.parts.wpn_fps_upg_perk_gunner = deep_clone(self.parts.wpn_fps_upg_perk_template)
-	self.parts.wpn_fps_upg_perk_gunner.name_id = "bm_menu_perk_gunner"
-	self.parts.wpn_fps_upg_perk_gunner.desc_id = "bm_menu_perk_gunner_desc"
-	self.parts.wpn_fps_upg_perk_gunner.custom_stats = {
-		stance_mul = {
-			spread = {
-				standing = {
-					hipfire = 1.5,
-					crouching = 0.75,
-					steelsight = 0.75,
-				},
-				moving = {
-					hipfire = 2,
-					crouching = 1,
-					steelsight = 1.5,
-				},
-			},
-			recoil = {
-				standing = {
-					hipfire = 1.25,
-					crouching = 0.75,
-					steelsight = 0.75,
-				},
-				moving = {
-					hipfire = 1.5,
-					crouching = 1,
-					steelsight = 1,
-				},
-			},
-		},
-	}
-	self.parts.wpn_fps_upg_perk_gunner.forbids = { "wpn_fps_lmg_o_empty" }
 
 	local uses_parts = {
 		wpn_fps_upg_perk_speedloader = { category = { "assault_rifle", "smg", "snp", "shotgun", "crossbow", "flamethrower", "pistol", "minigun", "akimbo", "lmg", "bow" } },

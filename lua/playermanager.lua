@@ -240,3 +240,51 @@ end
 --remove cable ties
 function PlayerManager:add_cable_ties()
 end
+
+--get rid of bot skills, just in case if the player had any beforehand
+function PlayerManager:health_skill_addend()
+	local addend = 0
+	
+	if table.contains(self._global.kit.equipment_slots, "thick_skin") then
+		addend = addend + self:upgrade_value("player", "thick_skin", 0)
+	end
+
+	return addend
+end
+
+function PlayerManager:body_armor_skill_addend(override_armor)
+	local addend = 0
+	addend = addend + self:upgrade_value("player", tostring(override_armor or managers.blackmarket:equipped_armor(true, true)) .. "_armor_addend", 0)
+
+	if self:has_category_upgrade("player", "armor_increase") then
+		local health_multiplier = self:health_skill_multiplier()
+		local max_health = (PlayerDamage._HEALTH_INIT + self:health_skill_addend()) * health_multiplier
+		addend = addend + max_health * self:upgrade_value("player", "armor_increase", 1)
+	end
+
+	return addend
+end
+
+function PlayerManager:stamina_addend()
+	local addend = 0
+
+	return addend
+end
+
+function PlayerManager:mod_movement_penalty(movement_penalty)
+	local skill_mods = self:upgrade_value("player", "passive_armor_movement_penalty_multiplier", 1)
+
+	if skill_mods < 1 and movement_penalty < 1 then
+		local penalty = 1 - movement_penalty
+		penalty = penalty * skill_mods
+		movement_penalty = 1 - penalty
+	end
+
+	return movement_penalty
+end
+
+function PlayerManager:fixed_health_regen(health_ratio)
+	local health_regen = 0
+
+	return health_regen
+end

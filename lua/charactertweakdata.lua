@@ -399,13 +399,46 @@ function CharacterTweakData:_presets(tweak_data, ...)
 		melee_retry_delay = nil_value,
 	})
 
-	for _, v in pairs(presets.weapon.gang_member) do
-		v.FALLOFF = {
-			{ dmg_mul = 6, r = 0, acc = { 0.5, 1 }, recoil = v.FALLOFF[1].recoil, mode = { 1, 0, 0, 0 } },
-			{ dmg_mul = 4.5, r = 1500, acc = { 0.25, 0.75 }, recoil = v.FALLOFF[1].recoil, mode = { 1, 0, 0, 0 } },
-			{ dmg_mul = 3, r = 3000, acc = { 0, 0.5 }, recoil = v.FALLOFF[1].recoil, mode = { 1, 0, 0, 0 } },
-		}
-	end
+	-- give bots normal weapon presets, laser aim hurts to look at
+	presets.weapon.gang_member.is_rifle.FALLOFF = {
+		{ r=300, acc={0.7, 0.9}, dmg_mul=5, recoil={0.25, 0.65}, mode={ 1, 0, 0, 0 } },
+		{ r=2500, acc={0.1, 0.6}, dmg_mul=2.5, recoil={0.25, 2}, mode={ 1, 0, 0, 0 } },
+		{ r=10000, acc={0, 0.15}, dmg_mul=0.5, recoil={2, 3}, mode={ 1, 0, 0, 0 } }
+	}
+	
+	presets.weapon.gang_member.is_shotgun_pump.FALLOFF = { 
+		{ r=300, acc={0.7, 0.9}, dmg_mul=5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
+		{ r=1350, acc={0.1, 0.6}, dmg_mul=2.5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
+		{ r=4000, acc={0.0, 0.15}, dmg_mul=0.5, recoil={2,4}, mode={ 1, 0, 0, 0 } }
+	}
+	
+	presets.weapon.gang_member.is_shotgun_mag.FALLOFF = { 
+		{ r=300, acc={0.7, 0.9}, dmg_mul=5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
+		{ r=1150, acc={0.1, 0.6}, dmg_mul=2.5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
+		{ r=4000, acc={0.0, 0.15}, dmg_mul=0.5, recoil={2,4}, mode={ 1, 0, 0, 0 } }
+	}
+	
+	presets.weapon.gang_member.is_lmg.FALLOFF = {
+		{ r=300, acc={0.6, 0.75}, dmg_mul=5, recoil={1, 2}, mode={ 1, 0, 0, 0 } },
+		{ r=2000, acc={0.5, 0.7}, dmg_mul=2.5, recoil={2, 5}, mode={ 1, 0, 0, 0 } },
+		{ r=10000, acc={0.1, 0.35}, dmg_mul=0.5, recoil={3, 7}, mode={ 1, 0, 0, 0 } }
+	}
+	
+	presets.weapon.gang_member.is_pistol.FALLOFF = {
+		{ dmg_mul = 5, r = 0, acc = { 0.3, 0.95 }, recoil = { 0.1, 0.2 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 3.5, r = 3000, acc = { 0.1, 0.6 }, recoil = { 0.2, 0.4 }, mode = { 1, 0, 0, 0 } },
+	}
+	
+	presets.weapon.gang_member.akimbo_pistol.FALLOFF = {
+		{ dmg_mul = 5, r = 0, acc = { 0.3, 0.85 }, recoil = { 0.1, 0.2 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul = 3.5, r = 3000, acc = { 0.1, 0.45 }, recoil = { 0.2, 0.4 }, mode = { 1, 0, 0, 0 } },
+	}
+	
+	presets.weapon.gang_member.is_smg.FALLOFF = {
+		{ dmg_mul = 5, r = 0, acc = { 0.4, 0.9 }, recoil = { 0.5, 1 }, mode = { 1, 0, 0, 0 } },
+		{ dmg_mul=3.5, r = 1150, acc={0.1, 0.6},  recoil={ 0.75 , 1.5 }, mode={ 1, 0, 0, 0 } },
+		{ dmg_mul = 1.5, r = 3000, acc = { 0.1, 0.2 }, recoil = { 1, 2 }, mode = { 1, 0, 0, 0 } },
+	}
 	
 	presets.weapon.gang_member.is_flamethrower.no_autofire_stop = true
 	presets.weapon.gang_member.is_lmg.no_autofire_stop = true
@@ -801,6 +834,22 @@ function CharacterTweakData:_presets(tweak_data, ...)
 		brown_point = { 8, 10 },
 	}
 	
+	-- lets try allowing bots to be suppressed
+	presets.suppression.gang_oppression = {
+		panic_chance_mul = 0,
+		duration = { 3, 5 },
+		react_point = { 5, 7 }, -- chance for low crouch and accuracy reduction
+		brown_point = { 400, 500 }, -- chance for character to abandon obj and take cover, might do issues for revive obj
+	}
+	
+	-- chains, jimmy and tony are either coked up, insane or have battle experience
+	presets.suppression.gang_oppression_tough = { 
+		panic_chance_mul = 0,
+		duration = { 1.5, 3 },
+		react_point = { 9, 15 },
+		brown_point = { 400, 500 }, 
+	}
+	
 	-- Enemy chatter
 	presets.enemy_chatter.cop.aggressive = true
 	presets.enemy_chatter.cop.go_go = true
@@ -814,8 +863,11 @@ function CharacterTweakData:_presets(tweak_data, ...)
 	presets.enemy_chatter.cop.group_death = true
 	presets.enemy_chatter.cop.idle = true
 	presets.enemy_chatter.cop.report = true
+	presets.enemy_chatter.cop.trip_mine = true
+	presets.enemy_chatter.cop.saw = true
 
 	presets.enemy_chatter.swat.push = true
+	presets.enemy_chatter.swat.stand_by = true
 	presets.enemy_chatter.swat.flank = true
 	presets.enemy_chatter.swat.flash_grenade = true
 	presets.enemy_chatter.swat.open_fire = true
@@ -824,6 +876,8 @@ function CharacterTweakData:_presets(tweak_data, ...)
 	presets.enemy_chatter.swat.get_hostages = true
 	presets.enemy_chatter.swat.get_loot = true
 	presets.enemy_chatter.swat.group_death = true
+	presets.enemy_chatter.swat.trip_mine = true
+	presets.enemy_chatter.swat.saw = true
 
 	presets.enemy_chatter.gangster = {
 		aggressive = true,
@@ -858,6 +912,34 @@ function CharacterTweakData:_presets(tweak_data, ...)
 end
 
 Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
+	-- Speech prefix shit
+	local job = Global.level_data and Global.level_data.level_id
+	if job == "nightclub" or job == "short2_stage1" or job == "jolly" or job == "spa" then
+		self.gangster.speech_prefix_p1 = "rt"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	elseif job == "alex_2" then
+		self.gangster.speech_prefix_p1 = "ict"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	elseif job == "welcome_to_the_jungle_1" then
+		self.gangster.speech_prefix_p1 = "bik"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	else
+		self.gangster.speech_prefix_p1 = "lt"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	end
+	
+	-- No, they weren't supposed to sound like cops
+	self.mobster.speech_prefix_p1 = "rt"
+	self.mobster.speech_prefix_p2 = nil
+	self.mobster.speech_prefix_count = 2
+	self.biker.speech_prefix_p1 = "bik"
+	self.biker.speech_prefix_p2 = nil
+	self.biker.speech_prefix_count = 2
+
 	self._prefix_data_p1 = {
 		cop = function()
 			return self._unit_prefixes.cop
@@ -881,6 +963,116 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 			return self._unit_prefixes.medic
 		end,
 	}
+	
+	self.spooc.spooc_sound_events = { detect_stop = "cloaker_presence_stop", detect = "cloaker_presence_loop" } -- cloakers are silent
+
+	-- the fact that sbz decided to automate these 10 years later is beyond me
+	self.russian.weapon.weapons_of_choice.primary = "wpn_fps_ass_akm_npc"
+	self.russian.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.spanish.dodge = self.presets.dodge.average
+	self.spanish.suppression = self.presets.suppression.gang_oppression
+	
+	self.german.weapon.weapons_of_choice.primary = "wpn_fps_smg_mp5_npc"
+	self.german.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.german.dodge = self.presets.dodge.average
+	self.german.suppression = self.presets.suppression.gang_oppression
+	
+	self.spanish.weapon.weapons_of_choice.primary = "wpn_fps_lmg_m249_npc"
+	self.spanish.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.spanish.dodge = self.presets.dodge.athletic
+	self.spanish.suppression = self.presets.suppression.gang_oppression_tough
+
+	self.american.weapon.weapons_of_choice.primary = "wpn_fps_ass_m14_npc"
+	self.american.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.american.dodge = self.presets.dodge.average
+	self.american.suppression = self.presets.suppression.gang_oppression
+
+	self.jowi.weapon.weapons_of_choice.primary = "wpn_fps_pis_x_usp_npc"
+	self.jowi.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.jowi.dodge = self.presets.dodge.athletic
+	self.jowi.suppression = self.presets.suppression.gang_oppression_tough
+
+	self.old_hoxton.weapon.weapons_of_choice.primary = "wpn_fps_sho_spas12_npc"
+	self.old_hoxton.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.old_hoxton.dodge = self.presets.dodge.athletic
+	self.old_hoxton.suppression = self.presets.suppression.gang_oppression_tough
+
+	self.female_1.weapon.weapons_of_choice.primary = "wpn_fps_ass_l85a2_npc"
+	self.female_1.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.female_1.dodge = self.presets.dodge.average
+	self.female_1.suppression = self.presets.suppression.gang_oppression
+
+	self.dragan.weapon.weapons_of_choice.primary = "wpn_fps_ass_g36_npc"
+	self.dragan.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.dragan.dodge = self.presets.dodge.athletic
+	self.dragan.suppression = self.presets.suppression.gang_oppression
+
+	self.jacket.weapon.weapons_of_choice.primary = "wpn_fps_ass_m16_npc"
+	self.jacket.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.jacket.dodge = self.presets.dodge.athletic
+	self.jacket.suppression = self.presets.suppression.gang_oppression_tough
+
+	self.bonnie.weapon.weapons_of_choice.primary = "wpn_fps_shot_b682_npc"
+	self.bonnie.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.bonnie.dodge = self.presets.dodge.poor
+	self.bonnie.suppression = self.presets.suppression.gang_oppression
+
+	self.sokol.weapon.weapons_of_choice.primary = "wpn_fps_ass_asval_npc"
+	self.sokol.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.sokol.dodge = self.presets.dodge.athletic
+	self.sokol.suppression = self.presets.suppression.gang_oppression
+
+	self.dragon.weapon.weapons_of_choice.primary = "wpn_fps_snp_wa2000_npc"
+	self.dragon.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.dragon.dodge = self.presets.dodge.athletic
+	self.dragon.suppression = self.presets.suppression.gang_oppression
+	
+	self.bodhi.weapon.weapons_of_choice.primary = "wpn_fps_snp_model70_npc"
+	self.bodhi.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.bodhi.dodge = self.presets.dodge.athletic
+	self.bodhi.suppression = self.presets.suppression.gang_oppression_tough
+	
+	self.jimmy.weapon.weapons_of_choice.primary = "wpn_fps_shot_saiga_npc"
+	self.jimmy.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.jimmy.dodge = self.presets.dodge.poor
+	self.jimmy.suppression = self.presets.suppression.gang_oppression_tough
+
+	self.sydney.weapon.weapons_of_choice.primary = "wpn_fps_ass_tecci_npc"
+	self.sydney.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.sydney.dodge = self.presets.dodge.average
+	self.sydney.suppression = self.presets.suppression.gang_oppression
+	
+	self.wild.weapon.weapons_of_choice.primary = "wpn_fps_sho_boot_npc"
+	self.wild.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.wild.dodge = self.presets.dodge.average
+	self.wild.suppression = self.presets.suppression.gang_oppression_tough
+	
+	self.chico.weapon.weapons_of_choice.primary = "wpn_fps_ass_contraband_npc"
+	self.chico.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.chico.dodge = self.presets.dodge.average
+	self.chico.suppression = self.presets.suppression.gang_oppression_tough
+	
+	self.max.weapon.weapons_of_choice.primary = "wpn_fps_ass_akm_gold_npc"
+	self.max.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.max.dodge = self.presets.dodge.average
+	self.max.suppression = self.presets.suppression.gang_oppression
+
+	self.joy.weapon.weapons_of_choice.primary = "wpn_fps_smg_shepheard_npc"
+	self.joy.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.joy.dodge = self.presets.dodge.average
+	self.joy.suppression = self.presets.suppression.gang_oppression
+
+	self.myh.weapon.weapons_of_choice.primary = "wpn_fps_ass_akm_npc"
+	self.myh.weapon.weapons_of_choice.secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	self.myh.dodge = self.presets.dodge.average
+	self.myh.suppression = self.presets.suppression.gang_oppression_tough
+
+	self.swat.die_sound_event = "shd_x02a_any_3p_01"
+	self.heavy_swat.die_sound_event = "bdz_x02a_any_3p"
+	self.fbi_swat.die_sound_event = "shd_x02a_any_3p_01"
+	self.fbi_heavy_swat.die_sound_event = "bdz_x02a_any_3p"
+	self.city_swat.die_sound_event = "shd_x02a_any_3p_01"
+	self.zeal_swat.die_sound_event = "shd_x02a_any_3p_01"
 
 	self.security.chatter = self.presets.enemy_chatter.security
 
@@ -927,28 +1119,33 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.swat.HEALTH_INIT = 20
 	self.swat.headshot_dmg_mul = 2 -- 100 head health
 	self.swat.speech_prefix_p2 = "n"
+	self.swat.explosion_damage_mul = 0.9
 	self.swat.surrender = self.presets.surrender.average
 	self.swat.suppression = self.presets.suppression.average
 
 	self.heavy_swat.HEALTH_INIT = 30
+	self.heavy_swat.explosion_damage_mul = 0.84
 	self.heavy_swat.headshot_dmg_mul = 1.875 -- 160 head health
 	self.heavy_swat.surrender = self.presets.surrender.average
 	self.heavy_swat.suppression = self.presets.suppression.average
 	self.heavy_swat.damage.hurt_severity = self.presets.hurt_severities.no_heavy_hurt
 
 	self.fbi_swat.HEALTH_INIT = 24
+	self.fbi_swat.explosion_damage_mul = 0.84
 	self.fbi_swat.headshot_dmg_mul = 2 -- 120 head health
 	self.fbi_swat.speech_prefix_p2 = "n"
 	self.fbi_swat.surrender = self.presets.surrender.average
 	self.fbi_swat.suppression = self.presets.suppression.average
 
 	self.fbi_heavy_swat.HEALTH_INIT = 36
+	self.fbi_heavy_swat.explosion_damage_mul = 0.75
 	self.fbi_heavy_swat.headshot_dmg_mul = 1.5 -- 240 head health
 	self.fbi_heavy_swat.surrender = self.presets.surrender.hard
 	self.fbi_heavy_swat.suppression = self.presets.suppression.hard
 	self.fbi_heavy_swat.damage.hurt_severity = self.presets.hurt_severities.no_heavy_hurt
 
 	self.city_swat.HEALTH_INIT = 28
+	self.city_swat.explosion_damage_mul = 0.84
 	self.city_swat.headshot_dmg_mul = 1.75 -- 160 head health
 	self.city_swat.speech_prefix_p2 = "n"
 	self.city_swat.surrender = self.presets.surrender.hard
@@ -956,6 +1153,7 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 
 	self.zeal_swat = deep_clone(self.city_swat)
 	self.zeal_swat.HEALTH_INIT = 32
+	self.zeal_swat.explosion_damage_mul = 0.84
 	self.zeal_swat.headshot_dmg_mul = 1.6 -- 200 head health
 	--self.zeal_swat.dodge = self.presets.dodge.ninja
 	self.zeal_swat.surrender = self.presets.surrender.very_hard
@@ -964,6 +1162,7 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 
 	self.zeal_heavy_swat = deep_clone(self.fbi_heavy_swat)
 	self.zeal_heavy_swat.HEALTH_INIT = 48
+	self.zeal_heavy_swat.explosion_damage_mul = 0.75
 	self.zeal_heavy_swat.headshot_dmg_mul = 1.5 -- 320 head health
 	self.zeal_heavy_swat.surrender = self.presets.surrender.very_hard
 	self.zeal_heavy_swat.suppression = self.presets.suppression.very_hard
@@ -1008,6 +1207,7 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.taser.HEALTH_INIT = 72
 	self.taser.headshot_dmg_mul = 2 -- 360 head health
 	self.taser.min_obj_interrupt_dis = 1000
+	self.taser.explosion_damage_mul = 0.85
 	self.taser.damage.hurt_severity = self.presets.hurt_severities.base
 	self.taser.spawn_sound_event = self._prefix_data_p1.taser() .. "_entrance" --tazeah coming through!!!
 
@@ -1023,7 +1223,7 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.tank.ecm_vulnerability = 0
 	self.tank.min_obj_interrupt_dis = 600
 	self.tank.damage.hurt_severity = self.presets.hurt_severities.only_light_hurt -- cool damage react thing
-	self.tank.damage.explosion_damage_mul = 0.25 -- its a bomb suit
+	self.tank.damage.explosion_damage_mul = 0.15 -- its a bomb suit
 	self.tank.move_speed.stand.run.cbt = self.tank.move_speed.stand.walk.cbt
 	self.tank.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance" -- bulldozah coming through!!!
 	self.tank.melee_weapon = "weapon"
@@ -1096,12 +1296,15 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.mobster_boss.HEALTH_INIT = 200
 	self.mobster_boss.headshot_dmg_mul = 2
 	self.mobster_boss.no_headshot_add_mul = true
+	self.mobster_boss.use_animation_on_fire_damage = false
 	self.mobster_boss.damage.hurt_severity = self.presets.hurt_severities.only_light_hurt
+	self.mobster_boss.die_sound_event = "l2n_burndeath"
 
 	self.chavez_boss.HEALTH_INIT = 200
 	self.chavez_boss.headshot_dmg_mul = 2
 	self.chavez_boss.no_headshot_add_mul = true
 	self.chavez_boss.damage.hurt_severity = self.presets.hurt_severities.only_light_hurt
+	self.chavez_boss.die_sound_event = "l2n_burndeath"
 
 	self.hector_boss.HEALTH_INIT = 300
 	self.hector_boss.headshot_dmg_mul = 2
@@ -1109,6 +1312,8 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.hector_boss.damage.hurt_severity = self.presets.hurt_severities.only_light_hurt
 	self.hector_boss.throwable = "frag"
 	self.hector_boss.throwable_cooldown = 15
+	self.hector_boss.use_animation_on_fire_damage = false
+	self.hector_boss.die_sound_event = "l2n_burndeath"
 
 	self.biker_boss.HEALTH_INIT = 300
 	self.biker_boss.headshot_dmg_mul = 2
@@ -1116,6 +1321,8 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.biker_boss.damage.hurt_severity = self.presets.hurt_severities.only_light_hurt
 	self.biker_boss.throwable = "concussion"
 	self.biker_boss.throwable_cooldown = 10
+	self.biker_boss.use_animation_on_fire_damage = false
+	self.biker_boss.die_sound_event = "cf2_burndeath"
 
 	self.drug_lord_boss.HEALTH_INIT = 300
 	self.drug_lord_boss.headshot_dmg_mul = 2
@@ -1124,6 +1331,7 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.drug_lord_boss.throwable = "launcher_m203"
 	self.drug_lord_boss.throwable_target_verified = true
 	self.drug_lord_boss.throwable_cooldown = 10
+	self.drug_lord_boss.use_animation_on_fire_damage = false
 
 	self.triad_boss.HEALTH_INIT = 300
 	self.triad_boss.player_health_scaling_mul = 1.5
@@ -1134,6 +1342,7 @@ Hooks:PostHook(CharacterTweakData, "init", "eclipse_init", function(self)
 	self.triad_boss.invulnerable_to_slotmask = nil
 	self.triad_boss.throwable_target_verified = false
 	self.triad_boss.throwable_cooldown = 20
+	self.triad_boss.use_animation_on_fire_damage = false
 
 	self.deep_boss.HEALTH_INIT = 400
 	self.deep_boss.headshot_dmg_mul = 2
@@ -1404,8 +1613,6 @@ function CharacterTweakData:_set_presets()
 	-- eclipse exclusive edits
 	if is_eclipse then
 		self:_multiply_all_speeds(1.1, 1.05)
-
-		self.spooc.spooc_sound_events = { detect_stop = "cloaker_presence_stop", detect = "cloaker_presence_loop" } -- cloakers are silent
 	end
 end
 

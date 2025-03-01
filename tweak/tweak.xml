@@ -5,11 +5,8 @@
 			<camera_shakes/>
 			<shake name="player_bullet_damage"/>
 		</search>
-		<target mode="append">
-			<shake name="player_bullet_damage_var1" spin="sin(t/2)/70" roll="sin(t)/100" tilt="sin(t/2)/50" frequency="10" amplitude="1.0" attack="0" sustain="0" decay="0.3"/>
-			<shake name="player_bullet_damage_var2" spin="-sin(t/2)/70" roll="sin(t)/100" tilt="sin(t/2)/50" frequency="10" amplitude="1.0" attack="0" sustain="0" decay="0.3"/>
-			<shake name="player_bullet_damage_var3" spin="sin(t/2)/70" roll="-sin(t)/100" tilt="sin(t/2)/50" frequency="10" amplitude="1.0" attack="0" sustain="0" decay="0.3"/>
-			<shake name="player_bullet_damage_var4" spin="-sin(t/2)/70" roll="-sin(t)/100" tilt="sin(t/2)/50" frequency="10" amplitude="1.0" attack="0" sustain="0" decay="0.3"/>
+		<target mode="replace">
+			<shake name="player_bullet_damage" spin="(rnd()-0.5) * 0.01" roll="0" tilt="0.1" frequency="1.0" amplitude="1.0" attack="0.01" sustain="0.0" decay="0.4"/>
 		</target>
 	</tweak>
 

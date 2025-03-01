@@ -27,6 +27,8 @@ function GroupAIStateBesiege:_begin_assault_task(...)
 		local assault_task = self._task_data.assault
 		local anticipation_duration = self:_get_anticipation_duration(self._tweak_data.assault.anticipation_duration, assault_task.was_first)
 		assault_task.phase_end_t = self._t + anticipation_duration
+		
+		self:_post_megaphone_event("mga_hostage_assault_delay")
 	end
 end
 
@@ -81,6 +83,7 @@ function GroupAIStateBesiege:_upd_assault_task(...)
 				if self._drama_data.amount < tweak_data.drama.assault_fade_end then
 					task_data.said_retreat = true
 
+					self:_post_megaphone_event("mga_robbers_clever")
 					self:_police_announce_retreat()
 				end
 			elseif task_data.phase_end_t < t and self._drama_data.amount < tweak_data.drama.assault_fade_end and self:_count_criminals_engaged_force(5) <= 4 then
@@ -95,6 +98,7 @@ function GroupAIStateBesiege:_upd_assault_task(...)
 			task_data.force_end = nil
 			local force_regroup = task_data.force_regroup
 			task_data.force_regroup = nil
+			self:_post_megaphone_event("mga_leave")
 
 			if self._draw_drama then
 				self._draw_drama.assault_hist[#self._draw_drama.assault_hist][2] = t
@@ -284,7 +288,9 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_task(phase, objective_type,
 					group.objective.moving_out = nil
 					group.in_place_t = self._t
 					group.objective.moving_in = nil
-					self:_voice_move_complete(group)
+					if group.objective.assigned_t then
+						self:_chk_say_group(group, "ready")
+					end
 				end
 			end
 
@@ -364,7 +370,7 @@ Hooks:OverrideFunction(GroupAIStateBesiege, "_set_assault_objective_to_group", f
 			})
 
 			if coarse_path then
-				self:_voice_deathguard_start(group)
+				self:_chk_say_group(group, "go_go")
 				self:_set_objective_to_enemy_group(group, {
 					distance = 800,
 					type = "assault_area",
@@ -515,9 +521,10 @@ Hooks:OverrideFunction(GroupAIStateBesiege, "_set_assault_objective_to_group", f
 				end
 
 				if phase_is_anticipation then
-					if self._hostage_headcount > 0 then
-						self:_chk_say_group(group, "hostage_delay")
-					end
+					local time_until_phase_end = self._task_data.assault.phase_end_t - self._t
+						if not group.said_standby and time_until_phase_end > 3 and in_place_duration > 1 then
+							group.said_standby = self:_chk_say_group(group, self._hostage_headcount > 0 and "hostage_delay" or "stand_by")
+						end
 					return
 				end
 
@@ -533,9 +540,14 @@ Hooks:OverrideFunction(GroupAIStateBesiege, "_set_assault_objective_to_group", f
 					if not group.ignore_grenade_check_t then
 						local push_delay = self:_get_difficulty_dependent_value(self._tweak_data.push_delay)
 						local delay = push_delay * (assault_area.hostages and 1.25 or 1)  * (tactics_map.charge and 0.5 or 1)
-						group.ignore_grenade_check_t = self._t + math.map_range_clamped(table.size(assault_area.criminal.units), 1, 4, delay, delay * 0.75)
+						local num_criminals = table.size(assault_area.criminal.units)
+						group.ignore_grenade_check_t = self._t + math.map_range_clamped(num_criminals, 1, 4, delay, delay * 0.75)
 						return
 					elseif group.ignore_grenade_check_t > self._t then
+						local time_until_push = math.min(group.ignore_grenade_check_t, self._task_data.assault.use_smoke_timer) - self._t
+							if not group.said_standby and time_until_push > 3 and in_place_duration > 1 then
+								group.said_standby = self:_chk_say_group(group, "stand_by")
+							end
 						return
 					end
 				end
@@ -724,17 +736,26 @@ function GroupAIStateBesiege:_chk_group_use_grenade(assault_area, group, detonat
 
 	if not grenade_user.unit:movement():chk_action_forbidden("action") then
 		if not grenade_user.char_tweak.no_grenade_anim then
-			local redirect = "throw_grenade"
+			local action = {
+				clamp_to_graph = true,
+				type = "act",
+				body_part = 1,
+				variant = "e_so_throw_grenade",
+				blocks = {
+					light_hurt = -1,
+					hurt = -1,
+					heavy_hurt = -1,
+					walk = -1,
+				}
+			}
 			
-			if grenade_user.unit:movement():play_redirect(redirect) then		
-				managers.network:session():send_to_peers_synched("play_distance_interact_redirect", grenade_user.unit, redirect)
-			end
+			grenade_user.unit:movement():action_request(action)
 		end
 	end
 
 	local timeout
 	if use_teargas then
-		self:detonate_cs_grenade(detonate_pos, mvec_cpy(grenade_user.m_pos), tweak_data.group_ai.cs_grenade_lifetime or 10)
+		self:detonate_cs_grenade(detonate_pos, mvec_cpy(grenade_user.m_pos), tweak_data.group_ai.cs_grenade_lifetime or 25)
 
 		timeout = tweak_data.group_ai.cs_grenade_timeout or tweak_data.group_ai.smoke_and_flash_grenade_timeout
 	else
@@ -1264,9 +1285,9 @@ end
 
 -- Make a generic group voice function instead of individual ones and make retiring groups play retreat lines
 function GroupAIStateBesiege:_chk_say_group(group, chatter_type)
-	for _, unit_data in pairs(group.units) do
-		if unit_data.char_tweak.chatter[chatter_type] and not unit_data.unit:brain():is_current_logic("intimidated") then
-			if self:chk_say_enemy_chatter(unit_data.unit, unit_data.m_pos, chatter_type) then
+	for _, u_data in pairs(group.units) do
+		if u_data.char_tweak.chatter[chatter_type] and not u_data.unit:brain():is_current_logic("intimidated") and not u_data.unit:character_damage():dead() then
+			if self:chk_say_enemy_chatter(u_data.unit, u_data.m_pos, chatter_type) then
 				return true
 			end
 		end

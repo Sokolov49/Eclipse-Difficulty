@@ -9,7 +9,7 @@ function TipsTweakData:init()
 		{cat_index = 6,		image = "tactics_stealth",			consoles = true, category = "op_gameplay"},
 		{cat_index = 7,		image = "general_hostages",			consoles = true, category = "op_gameplay"},
 		{cat_index = 8,		image = "weapon_tripmine",			consoles = true, category = "op_gameplay"},
-		{cat_index = 9,		image = "crimenet_heists",			consoles = true, category = "op_gameplay"},
+		{cat_index = 9,		image = "enemy_bulldozer",			consoles = true, category = "op_gameplay"},
 		{cat_index = 10,	image = "general_drill",			consoles = true, category = "op_gameplay"},
 		{cat_index = 11,	image = "tactics_casingmode",		consoles = true, category = "op_gameplay"},
 		{cat_index = 12,	image = "general_cameras",			consoles = true, category = "op_gameplay"},

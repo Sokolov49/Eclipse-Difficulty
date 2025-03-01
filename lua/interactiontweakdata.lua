@@ -17,12 +17,25 @@ Hooks:PostHook(InteractionTweakData, "init", "eclipse_init", function(self)
 		}
 	}
 	
-	self.shaped_sharge.requires_upgrade = {
-		category = "player",
-		upgrade = "trip_mine_shaped_charge"
+	self.shaped_sharge = {
+		icon = "equipment_c4",
+		text_id = "hud_int_equipment_shaped_charge",
+		contour = "interactable_icon",
+		required_deployable = "trip_mine",
+		deployable_consume = true,
+		blocked_hint = nil,
+		timer = 4,
+		sound_start = "bar_c4_apply",
+		sound_interupt = "bar_c4_apply_cancel",
+		sound_done = "bar_c4_apply_finished",
+		action_text_id = "hud_action_placing_shaped_charge",
+		slot = 1,
+		blocked_hint = "",
+		requires_upgrade = { category = "player", upgrade = "trip_mine_shaped_charge" },
 	}
-	self.shaped_sharge.slot = 1
-	self.shaped_sharge.blocked_hint = nil
+	self.shaped_charge_single = deep_clone(self.shaped_sharge)
+	self.shaped_charge_single.axis = "z"
+	
 	self.gage_assignment.timer = 0
 	
 	self.hostage_move.upgrade_timer_multiplier = {

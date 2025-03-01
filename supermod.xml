@@ -93,7 +93,7 @@
 				<post :hook_id="dottweakdata"/>
 				<post :hook_id="firetweakdata"/>
 				<post :hook_id="groupaitweakdata"/>
-				<post :hook_id="leveltweakdata"/>
+				<post :hook_id="levelstweakdata"/>
 				<post :hook_id="playertweakdata"/>
 				<post :hook_id="weapontweakdata"/>
 				<post :hook_id="upgradestweakdata"/>
@@ -126,7 +126,7 @@
 					<post :hook_id="states/playerstandard"/>
 					<post :hook_id="states/playertased"/>
 					<post :hook_id="states/playerdriving"/>
-					<post :hook_id="states/playerbleedout"/>
+					<!--<post :hook_id="states/playerbleedout"/>-->
 					<post :hook_id="states/playerbipod"/>
 					<post :hook_id="states/playercarry"/>
 				</group>
@@ -218,7 +218,11 @@
 				<post :hook_id="interactions/interactionext"/>
 
 				<group :hook_id="player_team/">
+					<post :hook_id="logics/teamailogicassault"/>
 					<post :hook_id="logics/teamailogicidle"/>
+					<post :hook_id="logics/teamailogictravel"/>
+					<post :hook_id="logics/teamailogicbase"/>
+					<post :hook_id="logics/teamailogicdisabled"/>
 					<post :hook_id="actions/lower_body/criminalactionwalk"/>
 					<post :hook_id="teamaidamage"/>
 					<post :hook_id="teamaimovement"/>

@@ -293,8 +293,8 @@ function WeaponTweakData:_init_weapons()
 				weap_data.stats.alert_size = 17
 				weap_data.total_ammo_mul = weap_data.total_ammo_mul or (1 / 8.6)
 				weap_data.pickup_mul = weap_data.pickup_mul or 0.1875
-				weap_data.damage_near = 2000
-				weap_data.damage_far = 3000
+				--weap_data.damage_near = 2000
+				--weap_data.damage_far = 3000
 				weap_data.rays = 8
 
 				weap_data.spread_multiplier = {
@@ -838,9 +838,52 @@ end
 Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_data)
 	self.tweak_data = tweak_data
 
+	self.r870.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash" --"effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.saiga.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.serbu.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.benelli.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.striker.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.ksg.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.spas12.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.m37.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.rota.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.basset.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.m1897.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.judge.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.huntsman.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.aa12.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.m37.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.m590.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.b682.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.coach.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.sko12.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.supernova.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+
+	self.benelli_npc.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.saiga_npc.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+
+	--self.glock_18c.reload_name_id = "packrat"
+
+	self.shuno.muzzleflash = "effects/payday2/particles/weapons/50cal_auto"
+	self.m60.muzzleflash = "effects/payday2/particles/weapons/50cal_auto"
+	self.rpg7.muzzleflash = "effects/payday2/particles/weapons/50cal_auto"
+	self.colt_1911.weapon_hold = "packrat"
+	self.b92fs.weapon_hold = "packrat"
+	self.glock_17.weapon_hold = "packrat"
+	self.glock_18c.weapon_hold = "packrat"
+	self.breech.weapon_hold = "packrat"
+	self.g26.weapon_hold = "packrat"
+	self.beer.weapon_hold = "packrat"
+	self.stech.weapon_hold = "packrat"
+	self.sparrow.weapon_hold = "packrat"
+	self.c96.weapon_hold = "packrat"
+	self.g22c.weapon_hold = "packrat"
+	self.ppk.weapon_hold = "packrat"
+	self.p226.weapon_hold = "packrat"
+
 	self.trip_mines = {
-		delay = 0.1,
-		damage = 800,
+		delay = 0.3, --0.1
+		damage = 100, --800
 		player_damage = 6,
 		damage_size = 300,
 		alert_radius = 5000
@@ -1902,6 +1945,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.saiga.stats.damage = 20
 	self.saiga.stats.spread = 11
 	self.saiga.stats.recoil = 9
+	self.saiga.damage_near = 650
+	self.saiga.damage_far = 1120
 	self.saiga.stats.concealment = 15
 	self.saiga.fire_mode_data.fire_rate = 60 / 350
 
@@ -1910,6 +1955,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.aa12.stats.damage = 20
 	self.aa12.stats.spread = 11
 	self.aa12.stats.recoil = 10
+	self.aa12.damage_near = 650
+	self.aa12.damage_far = 1120
 	self.aa12.stats.concealment = 12
 	self.aa12.fire_mode_data.fire_rate = 60 / 300
 
@@ -1919,6 +1966,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.basset.stats.spread = 9
 	self.basset.stats.recoil = 11
 	self.basset.stats.concealment = 22
+	self.basset.damage_near = 550
+	self.basset.damage_far = 1050
 	self.basset.fire_mode_data.fire_rate = 60 / 300
 
 	-- Street Sweeper
@@ -1926,6 +1975,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.striker.stats.damage = 25
 	self.striker.stats.spread = 11
 	self.striker.stats.recoil = 9
+	self.striker.damage_near = 550
+	self.striker.damage_far = 1050
 	self.striker.stats.concealment = 24
 	self.striker.fire_mode_data.fire_rate = 60 / 300
 
@@ -1934,6 +1985,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.benelli.stats.damage = 25
 	self.benelli.stats.spread = 13
 	self.benelli.stats.recoil = 7
+	self.benelli.damage_near = 650
+	self.benelli.damage_far = 1120
 	self.benelli.stats.concealment = 15
 	self.benelli.fire_mode_data.fire_rate = 60 / 240
 
@@ -1942,6 +1995,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.spas12.stats.damage = 25
 	self.spas12.stats.spread = 12
 	self.spas12.stats.recoil = 8
+	self.spas12.damage_near = 650
+	self.spas12.damage_far = 1120
 	self.spas12.stats.concealment = 16
 	self.spas12.fire_mode_data.fire_rate = 60 / 240
 
@@ -1950,6 +2005,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.rota.stats.damage = 25
 	self.rota.stats.spread = 15
 	self.rota.stats.recoil = 6
+	self.rota.damage_near = 550
+	self.rota.damage_far = 1050
 	self.rota.stats.concealment = 20
 	self.rota.fire_mode_data.fire_rate = 60 / 300
 
@@ -1960,6 +2017,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.ultima.stats.spread = 12
 	self.ultima.stats.recoil = 7
 	self.ultima.stats.concealment = 20
+	self.ultima.damage_near = 650
+	self.ultima.damage_far = 1120
 	self.ultima.fire_mode_data.fire_rate = 60 / 300
 	self.ultima.reload_speed_multiplier = 0.7
 
@@ -1969,6 +2028,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.sko12.stats.spread = 14
 	self.sko12.stats.recoil = 6
 	self.sko12.stats.concealment = 6
+	self.sko12.damage_near = 650
+	self.sko12.damage_far = 1120
 	self.sko12.fire_mode_data.fire_rate = 60 / 400
 	self.sko12.reload_speed_multiplier = 0.8
 	self.sko12.FIRE_MODE = "single"
@@ -1980,6 +2041,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.r870.stats.spread = 15
 	self.r870.stats.recoil = 6
 	self.r870.stats.concealment = 14
+	self.r870.damage_near = 650
+	self.r870.damage_far = 1120
 	self.r870.fire_mode_data.fire_rate = 60 / 120
 
 	-- Loco
@@ -1988,6 +2051,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.serbu.stats.spread = 11
 	self.serbu.stats.recoil = 5
 	self.serbu.stats.concealment = 24
+	self.serbu.damage_near = 500
+	self.serbu.damage_far = 1050
 	self.serbu.fire_mode_data.fire_rate = 60 / 120
 	self.serbu.fire_rate_multiplier = 150 / 120
 
@@ -1997,6 +2062,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.ksg.stats.spread = 13
 	self.ksg.stats.recoil = 7
 	self.ksg.stats.concealment = 22
+	self.ksg.damage_near = 600
+	self.ksg.damage_far = 1100
 	self.ksg.fire_mode_data.fire_rate = 60 / 120
 	self.ksg.fire_rate_multiplier = 90 / 120
 
@@ -2006,6 +2073,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.judge.stats.spread = 16
 	self.judge.stats.recoil = 3
 	self.judge.stats.concealment = 27
+	self.judge.damage_near = 400
+	self.judge.damage_far = 900
 	self.judge.fire_mode_data.fire_rate = 60 / 300
 	self.judge.reload_speed_multiplier = 0.8
 	self.judge.swap_speed_multiplier = 1.5
@@ -2015,6 +2084,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
     self.x_judge.animations.reload_name_id = "x_chinchilla"
 	self.x_judge.animations.second_gun_versions = self.x_judge.animations.second_gun_versions or {}
     self.x_judge.animations.second_gun_versions.reload = "reload"
+	self.x_judge.damage_near = 400
+	self.x_judge.damage_far = 900
 	self.x_judge.sounds.reload = {
 		wp_chinchilla_cylinder_out = "wp_rbull_drum_open",
 		wp_chinchilla_eject_shells = "wp_rbull_shells_out",
@@ -2028,6 +2099,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.m590.stats.spread = 15
 	self.m590.stats.recoil = 7
 	self.m590.stats.concealment = 16
+	self.m590.damage_near = 500
+	self.m590.damage_far = 1050
 	self.m590.fire_mode_data.fire_rate = 60 / 120
 	self.m590.fire_rate_multiplier = 135 / 120
 
@@ -2037,6 +2110,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.supernova.stats.spread = 17
 	self.supernova.stats.recoil = 7
 	self.supernova.stats.concealment = 15
+	self.supernova.damage_near = 650
+	self.supernova.damage_far = 1120
 	self.supernova.fire_mode_data.fire_rate = 60 / 90
 	self.supernova.fire_rate_multiplier = 105 / 90
 
@@ -2046,6 +2121,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.boot.stats.spread = 15
 	self.boot.stats.recoil = 5
 	self.boot.stats.concealment = 20
+	self.boot.damage_near = 650
+	self.boot.damage_far = 1120
 	self.boot.fire_mode_data.fire_rate = 60 / 65
 	self.boot.fire_rate_multiplier = 75 / 65
 
@@ -2055,6 +2132,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.m37.stats.spread = 17
 	self.m37.stats.recoil = 5
 	self.m37.stats.concealment = 17
+	self.m37.damage_near = 650
+	self.m37.damage_far = 1120
 	self.m37.fire_mode_data.fire_rate = 60 / 100
 	self.m37.fire_rate_multiplier = 90 / 100
 
@@ -2064,6 +2143,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.m1897.stats.spread = 18
 	self.m1897.stats.recoil = 4
 	self.m1897.stats.concealment = 16
+	self.m1897.damage_near = 650
+	self.m1897.damage_far = 1120
 	self.m1897.fire_mode_data.fire_rate = 60 / 100
 	self.m1897.fire_rate_multiplier = 90 / 100
 
@@ -2073,6 +2154,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.huntsman.stats.spread = 19
 	self.huntsman.stats.recoil = 4
 	self.huntsman.stats.concealment = 14
+	self.huntsman.damage_near = 750
+	self.huntsman.damage_far = 1450
 	self.huntsman.fire_mode_data.fire_rate = 60 / 500
 
 	-- Joceline
@@ -2081,6 +2164,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.b682.stats.spread = 19
 	self.b682.stats.recoil = 4
 	self.b682.stats.concealment = 14
+	self.b682.damage_near = 750
+	self.b682.damage_far = 1450
 	self.b682.fire_mode_data.fire_rate = 60 / 500
 
 	-- Claire
@@ -2089,6 +2174,8 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.coach.stats.spread = 17
 	self.coach.stats.recoil = 4
 	self.coach.stats.concealment = 15
+	self.coach.damage_near = 650
+	self.coach.damage_far = 1120
 	self.coach.fire_mode_data.fire_rate = 60 / 500
 
 	-- LMGs and Miniguns
@@ -2771,6 +2858,12 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init_npcweapons", function(self
 	self.svdsil_snp_npc.usage = "is_sniper"
 
 	self.flamethrower_npc.flame_max_range = 600
+	
+	-- turn these into primaries for bots
+	self.shepheard_crew.use_data.selection_index = 1
+	self.mp5_crew.use_data.selection_index = 1
+	self.cobray_crew.use_data.selection_index = 1
+	--self.cobray_crew.hold = "rifle"
 end)
 
 

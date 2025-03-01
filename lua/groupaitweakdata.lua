@@ -28,6 +28,8 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "sh__init_chatter_data", 
 	self.enemy_chatter.retreat.queue = "m01"
 	self.enemy_chatter.push = clone(self.enemy_chatter.go_go)
 	self.enemy_chatter.push.queue = "pus"
+	self.enemy_chatter.stand_by = clone(self.enemy_chatter.go_go)
+	self.enemy_chatter.stand_by.queue = "prm"
 	self.enemy_chatter.flank = clone(self.enemy_chatter.go_go)
 	self.enemy_chatter.flank.queue = "t01"
 	self.enemy_chatter.open_fire = clone(self.enemy_chatter.go_go)
@@ -47,13 +49,18 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "sh__init_chatter_data", 
 	self.enemy_chatter.hostage_delay.radius = radius_medium
 	self.enemy_chatter.group_death = clone(self.enemy_chatter.watch_background)
 	self.enemy_chatter.group_death.queue = "lk3a"
+	self.enemy_chatter.trip_mine = clone(self.enemy_chatter.contact)
+	self.enemy_chatter.trip_mine.queue = "ch1"
+	self.enemy_chatter.trip_mine.duration = duration_long
+	self.enemy_chatter.trip_mine.radius = radius_large
+	self.enemy_chatter.sentry_gun = clone(self.enemy_chatter.trip_mine)
 	self.enemy_chatter.sentry_gun = clone(self.enemy_chatter.contact)
 	self.enemy_chatter.sentry_gun.queue = "ch2"
-	self.enemy_chatter.sentry_gun.duration = duration_long
-	self.enemy_chatter.sentry_gun.radius = radius_large
 	self.enemy_chatter.jammer = clone(self.enemy_chatter.aggressive)
 	self.enemy_chatter.jammer.queue = "ch3"
 	self.enemy_chatter.jammer.radius = radius_medium
+	self.enemy_chatter.saw = clone(self.enemy_chatter.sentry_gun)
+	self.enemy_chatter.saw.queue = "ch4"
 
 	-- Stealth chatter
 	self.enemy_chatter.idle = clone(self.enemy_chatter.go_go)
@@ -86,7 +93,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "eclipse__init_unit_ca
 			shield = 2,
 			taser = 1,
 			tank = 1,
-			spooc = 0,
+			spooc = 1,
 			medic = 0,
 		}
 	elseif difficulty_index == 4 then
@@ -102,7 +109,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "eclipse__init_unit_ca
 			shield = 4,
 			taser = 2,
 			tank = 1,
-			spooc = 2,
+			spooc = 3,
 			medic = 3,
 		}
 	elseif difficulty_index == 6 then
@@ -110,7 +117,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "eclipse__init_unit_ca
 			shield = 5,
 			taser = 3,
 			tank = 2,
-			spooc = 3,
+			spooc = 4,
 			medic = 4,
 		}
 	end

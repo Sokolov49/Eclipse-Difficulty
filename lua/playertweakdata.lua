@@ -95,7 +95,7 @@ end)
 -- Game too hard for single player appparently????
 function PlayerTweakData:_set_singleplayer() end
 
---[[lmg steelsights
+--lmg steelsights
 local default_init_hk21 = PlayerTweakData._init_hk21
 function PlayerTweakData:_init_hk21()
     default_init_hk21(self)
@@ -166,4 +166,4 @@ Hooks:PostHook(PlayerTweakData, "_init_m60", "PostHook_PlayerTweakData_init_m60"
 	local pivot_head_rotation = Rotation(0, 0, 0)
 	self.stances.m60.steelsight.shoulders.translation = pivot_head_translation - pivot_shoulder_translation:rotate_with(pivot_shoulder_rotation:inverse()):rotate_with(pivot_head_rotation)
 	self.stances.m60.steelsight.shoulders.rotation = pivot_head_rotation * pivot_shoulder_rotation:inverse()
-end)]]--
+end)

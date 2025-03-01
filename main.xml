@@ -6,6 +6,8 @@
 		<!-- leftover muzzleflash effect but without smoke -->
 		<effect path="effects/payday2/particles/weapons/shotgun/sho_muzzleflash"/>
 		
+		<stream path="soundbanks/streamed/regular_sfx/414027436" force="true"/>
+		
 		<texture path="guis/textures/pd2/risklevel_blackscreen" force="true"/>
 		<texture path="guis/textures/pd2/risklevel_deathwish_easywish_blackscreen" force="true"/>
 		<texture path="guis/textures/pd2/risklevel_deathwish_sm_blackscreen" force="true"/>
