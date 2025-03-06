@@ -28,7 +28,7 @@ function FPCameraPlayerBase:_vertical_recoil_kick(t, dt)
 
 	local r_value = 0
 	if self._recoil_kick.current and self._episilon < self._recoil_kick.accumulated - self._recoil_kick.current then
-		local n = math.step(self._recoil_kick.current, self._recoil_kick.accumulated, 50 * dt)
+		local n = math.lerp(self._recoil_kick.current, self._recoil_kick.accumulated, math.min(1, 50 * dt))
 		r_value = n - self._recoil_kick.current
 		self._recoil_kick.current = n
 	elseif self._recoil_wait then
@@ -38,7 +38,7 @@ function FPCameraPlayerBase:_vertical_recoil_kick(t, dt)
 		end
 	elseif self._recoil_kick.to_reduce then
 		self._recoil_kick.current = nil
-		local n = math.lerp(self._recoil_kick.to_reduce, 0, 3 * dt)
+		local n = math.lerp(self._recoil_kick.to_reduce, 0, math.min(1, 3 * dt))
 		r_value = -(self._recoil_kick.to_reduce - n)
 		self._recoil_kick.to_reduce = n
 
@@ -57,7 +57,7 @@ function FPCameraPlayerBase:_horizonatal_recoil_kick(t, dt)
 
 	local r_value = 0
 	if self._recoil_kick.h.current and self._episilon < math.abs(self._recoil_kick.h.accumulated - self._recoil_kick.h.current) then
-		local n = math.step(self._recoil_kick.h.current, self._recoil_kick.h.accumulated, 50 * dt)
+		local n = math.lerp(self._recoil_kick.h.current, self._recoil_kick.h.accumulated, math.min(1, 50 * dt))
 		r_value = n - self._recoil_kick.h.current
 		self._recoil_kick.h.current = n
 	elseif self._recoil_wait then
@@ -67,7 +67,7 @@ function FPCameraPlayerBase:_horizonatal_recoil_kick(t, dt)
 		end
 	elseif self._recoil_kick.h.to_reduce then
 		self._recoil_kick.h.current = nil
-		local n = math.lerp(self._recoil_kick.h.to_reduce, 0, 2 * dt)
+		local n = math.lerp(self._recoil_kick.h.to_reduce, 0, math.min(1, 2 * dt))
 		r_value = -(self._recoil_kick.h.to_reduce - n)
 		self._recoil_kick.h.to_reduce = n
 
@@ -83,7 +83,7 @@ local bezier_values = {
 	0,
 	0.4,
 	1,
-	1
+	1,
 }
 --Improved ADS animations from Restoration Mod
 Hooks:PostHook(FPCameraPlayerBase, "_update_stance", "eclipse_update_stance", function(self, t, dt)
@@ -95,11 +95,14 @@ Hooks:PostHook(FPCameraPlayerBase, "_update_stance", "eclipse_update_stance", fu
 		local is_akimbo = equipped_weapon and equipped_weapon:base() and equipped_weapon:base().AKIMBO
 		local ignore_transition_styles = equipped_weapon and equipped_weapon:base() and equipped_weapon:base():weapon_tweak_data().ign_ts
 		local in_full_steelsight = self._parent_movement_ext._current_state._state_data.in_full_steelsight
+
 		if trans_data.duration < elapsed_t then
 			mvector3.set(self._shoulder_stance.translation, trans_data.end_translation)
+
 			self._shoulder_stance.rotation = trans_data.end_rotation
 			self._shoulder_stance.transition = nil
 			local in_steelsight = self._parent_movement_ext._current_state:in_steelsight()
+
 			if in_steelsight and not self._steelsight_swap_state then
 				self:_set_steelsight_swap_state(true)
 			elseif not in_steelsight and self._steelsight_swap_state then
@@ -116,14 +119,18 @@ Hooks:PostHook(FPCameraPlayerBase, "_update_stance", "eclipse_update_stance", fu
 				end
 			end
 			local absolute_progress = nil
+
 			if in_steelsight or self._shoulder_stance.was_in_steelsight then
 				self._shoulder_stance.was_in_steelsight = true
 				absolute_progress = (1 - trans_data.absolute_progress) * progress_smooth + trans_data.absolute_progress
 			else
 				absolute_progress = trans_data.absolute_progress * (1 - progress_smooth)
 			end
+
 			mvector3.lerp(self._shoulder_stance.translation, trans_data.start_translation, trans_data.end_translation, progress_smooth)
+
 			self._shoulder_stance.rotation = trans_data.start_rotation:slerp(trans_data.end_rotation, progress_smooth)
+
 			if not is_akimbo and not ignore_transition_styles then
 				if player_state and player_state ~= "bipod" and trans_data.absolute_progress and not self._steelsight_swap_state then
 					local prog = (1 - absolute_progress) * (dt * 100)
@@ -134,8 +141,8 @@ Hooks:PostHook(FPCameraPlayerBase, "_update_stance", "eclipse_update_stance", fu
 						trans_data.start_translation = trans_data.start_translation + Vector3(1 * prog, 0.5 * prog, 1 * prog)
 						trans_data.start_rotation = trans_data.start_rotation * Rotation(0 * prog, 0 * prog, 2.5 * prog)
 					elseif in_steelsight and in_full_steelsight ~= true then
-							trans_data.start_translation = trans_data.start_translation + Vector3(0.5 * prog, 0.5 * prog, -0.2 * prog)
-							trans_data.start_rotation = trans_data.start_rotation * Rotation(0 * prog, 0 * prog, 1.25 * prog)
+						trans_data.start_translation = trans_data.start_translation + Vector3(0.5 * prog, 0.5 * prog, -0.2 * prog)
+						trans_data.start_rotation = trans_data.start_rotation * Rotation(0 * prog, 0 * prog, 1.25 * prog)
 					end
 				end
 			end
@@ -168,6 +175,7 @@ function FPCameraPlayerBase:pattern_recoil_kick(pattern, persist_pattern, recoil
 	-- If the player hasn't shot in 1/3rd of second reset the recoil pattern
 	if self._recoil_recovery_t <= 0 then
 		self._pattern_index = 1
+		self._persist_pattern_index = 1
 	end
 	self._recoil_recovery_t = recoil_recovery
 	-- Stability affects spray patterns
@@ -187,10 +195,11 @@ function FPCameraPlayerBase:pattern_recoil_kick(pattern, persist_pattern, recoil
 		end
 		-- Reverse horizontal spray after a threshold
 		-- Add a cushion in case the recoil gets stuck too far in one direction
-		if math.abs(self._recoil_kick.h.accumulated) >= 7 and self._h_recoil_cushion == 0 then
+		---Does not work well with current spray patterns, deprecated for now
+		--[[ if math.abs(self._recoil_kick.h.accumulated) >= 7 and self._h_recoil_cushion == 0 then
 			self._h_recoil_cushion = 3
 			self._persist_pattern_back = -self._persist_pattern_back
-		end
+		end ]]
 		local v = math.lerp(persist_pattern[self._persist_pattern_index].up * recoil_multiplier, persist_pattern[self._persist_pattern_index].down * recoil_multiplier, math.random())
 		self._recoil_kick.accumulated = (self._recoil_kick.accumulated or 0) + v
 

@@ -52,12 +52,15 @@ Hooks:PreHook(CopLogicBase, "on_new_objective", "sh_on_new_objective", function(
 			end
 		end
 
-		local best_u_key
+		local best_u_key, best_is_shield
 		local least_followers = math.huge
 		for u_key, follower_data in pairs(followers) do
-			if follower_data.amount < least_followers and (not data.tactics.shield_cover or follower_data.is_shield) then
-				best_u_key = u_key
-				least_followers = follower_data.amount
+			if follower_data.is_shield or not data.tactics.shield_cover or data.tactics.unit_cover and not best_is_shield then
+				if follower_data.amount < least_followers or data.tactics.shield_cover and follower_data.is_shield and not best_is_shield then
+					best_u_key = u_key
+					best_is_shield = follower_data.is_shield
+					least_followers = follower_data.amount
+				end
 			end
 		end
 
@@ -319,7 +322,7 @@ end
 local _upd_attention_obj_detection_original = CopLogicBase._upd_attention_obj_detection
 function CopLogicBase._upd_attention_obj_detection(...)
 	local delay = _upd_attention_obj_detection_original(...)
-	return math.min(0.25, delay)
+	return math.min(0.5, delay)
 end
 
 -- Fix incorrect checks and improve surrender conditions
@@ -451,6 +454,12 @@ function CopLogicBase._evaluate_reason_to_surrender(data, my_data, aggressor_uni
 				hold_chance = hold_chance * (1 - pants_down_surrender)
 			end
 		end,
+
+		not_assault = function(not_assault_surrender)
+			if not managers.groupai:state():get_assault_mode() then
+				hold_chance = hold_chance * (1 - not_assault_surrender)
+			end
+		end,
 	}
 
 	for reason, reason_data in pairs(surrender_tweak.reasons) do
@@ -522,7 +531,7 @@ Hooks:PostHook(CopLogicBase, "death_clbk", "sh_death_clbk", function(data, damag
 		managers.groupai:state():_chk_say_group(data.group, "trip_mine")
 	elseif weapon_base and weapon_base.is_category and weapon_base:is_category("saw") and math.random() < 0.75 then
 		managers.groupai:state():_chk_say_group(data.group, "saw")
-	elseif math.random() < 0.25 then
+	elseif math.random() < 0.15 then
 		managers.groupai:state():_chk_say_group(data.group, "group_death")
 	end
 end)

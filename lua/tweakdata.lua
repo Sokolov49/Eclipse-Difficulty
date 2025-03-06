@@ -1,3 +1,7 @@
+local function diff_lerp(value_1, value_2)
+	return Eclipse.utils.diff_lerp(value_1, value_2)
+end
+
 tweak_data.hate_multipler = 1.5
 tweak_data.bullet_hit_alert_radius = 300
 tweak_data.footstep_alert_radius = 450
@@ -32,6 +36,7 @@ tweak_data.drill_investigate_zone_multipler = 1.25 							-- чем больше
         Color("ff62462B")
     }
 
+
 -- lock dw / ds
 tweak_data.difficulty_level_locks = {
 	0,
@@ -63,13 +68,19 @@ tweak_data.experience_manager.alive_humans_multiplier = {
 	1,
 }
 
+-- the Medic's heal cooldown scales
+tweak_data.medic.cooldown = diff_lerp(5, 3)
+
+tweak_data.projectiles.cs_grenade_quick.damage_per_tick = 3
+tweak_data.projectiles.cs_grenade_quick.damage_tick_period = 0.25
+
 local function create_explosive_arrow(base_arrow)
 	local explosive_arrow = deep_clone(base_arrow)
 	local damage = explosive_arrow.damage
 	explosive_arrow.bullet_class = "InstantExplosiveBulletBase"
 	explosive_arrow.damage = damage * 1.5
 	explosive_arrow.remove_on_impact = true
-	
+
 	return explosive_arrow
 end
 
@@ -78,7 +89,7 @@ local function create_poison_arrow(base_arrow)
 	local damage = poison_arrow.damage
 	poison_arrow.bullet_class = "PoisonBulletBase"
 	poison_arrow.damage = damage * 0.25
-	
+
 	return poison_arrow
 end
 
@@ -87,10 +98,10 @@ local function create_incendiary_grenade(base_grenade, class)
 	local damage = incendiary_grenade.damage
 	incendiary_grenade.dot_data_name = "proj_launcher_incendiary_" .. class
 	incendiary_grenade.burn_duration = math.max(1, damage / 12)
-	incendiary_grenade.damage = 0
+	incendiary_grenade.damage = base_grenade.damage * 0.5
 	incendiary_grenade.burn_tick_period = 0.25
 	incendiary_grenade.effect_name = "effects/payday2/particles/explosions/grenade_incendiary_explosion"
-	
+
 	return incendiary_grenade
 end
 
@@ -115,13 +126,13 @@ local function create_poison_grenade(base_grenade, class)
 	poison_grenade.poison_gas_fade_time = poison_grenade.poison_gas_duration * 0.2
 	poison_grenade.poison_gas_tick_time = 0.5
 	poison_grenade.projectile_trail = true
-	
+
 	return poison_grenade
 end
 
 -- Arrows
 tweak_data.projectiles.bow_arrow = {
-	damage = 48,
+	damage = 32,
 	launch_speed = 2500,
 	adjust_z = 0,
 	mass_look_up_modifier = 1,
@@ -129,16 +140,16 @@ tweak_data.projectiles.bow_arrow = {
 }
 
 tweak_data.projectiles.west_arrow = deep_clone(tweak_data.projectiles.bow_arrow)
-tweak_data.projectiles.west_arrow.damage = 48
+tweak_data.projectiles.west_arrow.damage = 32
 tweak_data.projectiles.west_arrow.name_id = "bm_west_arrow"
 
 tweak_data.projectiles.long_arrow = deep_clone(tweak_data.projectiles.bow_arrow)
-tweak_data.projectiles.long_arrow.damage = 72
+tweak_data.projectiles.long_arrow.damage = 48
 tweak_data.projectiles.long_arrow.launch_speed = 3500
 tweak_data.projectiles.long_arrow.adjust_z = -30
 
 tweak_data.projectiles.elastic_arrow = deep_clone(tweak_data.projectiles.bow_arrow)
-tweak_data.projectiles.elastic_arrow.damage = 72
+tweak_data.projectiles.elastic_arrow.damage = 48
 tweak_data.projectiles.elastic_arrow.launch_speed = 3500
 tweak_data.projectiles.elastic_arrow.adjust_z = -130
 
@@ -148,75 +159,112 @@ tweak_data.projectiles.long_arrow_exp = create_explosive_arrow(tweak_data.projec
 tweak_data.projectiles.elastic_arrow_exp = create_explosive_arrow(tweak_data.projectiles.elastic_arrow)
 
 tweak_data.projectiles.bow_arrow_poison = create_poison_arrow(tweak_data.projectiles.bow_arrow)
-tweak_data.projectiles.west_arrow_poison = create_poison_arrow(tweak_data.projectiles.west_arrow)
-tweak_data.projectiles.long_arrow_poison = create_poison_arrow(tweak_data.projectiles.long_arrow)
+tweak_data.projectiles.bow_poison_arrow = create_poison_arrow(tweak_data.projectiles.west_arrow)
+tweak_data.projectiles.long_poison_arrow = create_poison_arrow(tweak_data.projectiles.long_arrow)
 tweak_data.projectiles.elastic_arrow_poison = create_poison_arrow(tweak_data.projectiles.elastic_arrow)
 
 tweak_data.projectiles.crossbow_arrow = {
-	damage = 36,
+	damage = 24,
 	launch_speed = 2500,
 	adjust_z = 0,
 	mass_look_up_modifier = 1,
 	push_at_body_index = 0,
 }
 
-tweak_data.projectiles.hunter_arrow = deep_clone(tweak_data.projectiles.crossbow_arrow)
-tweak_data.projectiles.hunter_arrow.damage = 24
-tweak_data.projectiles.hunter_arrow.launch_speed = 2000
-
 tweak_data.projectiles.ecp_arrow = deep_clone(tweak_data.projectiles.crossbow_arrow)
 tweak_data.projectiles.ecp_arrow.damage = 24
 
 tweak_data.projectiles.frankish_arrow = deep_clone(tweak_data.projectiles.crossbow_arrow)
-tweak_data.projectiles.frankish_arrow.damage = 36
+tweak_data.projectiles.frankish_arrow.damage = 32
 
 tweak_data.projectiles.arblast_arrow = deep_clone(tweak_data.projectiles.crossbow_arrow)
-tweak_data.projectiles.arblast_arrow.damage = 72
+tweak_data.projectiles.arblast_arrow.damage = 48
 tweak_data.projectiles.arblast_arrow.launch_speed = 3500
 
 tweak_data.projectiles.crossbow_arrow_exp = create_explosive_arrow(tweak_data.projectiles.crossbow_arrow)
-tweak_data.projectiles.hunter_arrow_exp = create_explosive_arrow(tweak_data.projectiles.hunter_arrow)
 tweak_data.projectiles.ecp_arrow_exp = create_explosive_arrow(tweak_data.projectiles.ecp_arrow)
 tweak_data.projectiles.frankish_arrow_exp = create_explosive_arrow(tweak_data.projectiles.frankish_arrow)
 tweak_data.projectiles.arblast_arrow_exp = create_explosive_arrow(tweak_data.projectiles.arblast_arrow)
 
-tweak_data.projectiles.crossbow_arrow_poison = create_poison_arrow(tweak_data.projectiles.crossbow_arrow)
-tweak_data.projectiles.hunter_arrow_poison = create_poison_arrow(tweak_data.projectiles.hunter_arrow)
+tweak_data.projectiles.crossbow_poison_arrow = create_poison_arrow(tweak_data.projectiles.crossbow_arrow)
 tweak_data.projectiles.ecp_arrow_poison = create_poison_arrow(tweak_data.projectiles.ecp_arrow)
-tweak_data.projectiles.frankish_arrow_poison = create_poison_arrow(tweak_data.projectiles.frankish_arrow)
-tweak_data.projectiles.arblast_arrow_poison = create_poison_arrow(tweak_data.projectiles.arblast_arrow)
+tweak_data.projectiles.frankish_poison_arrow = create_poison_arrow(tweak_data.projectiles.frankish_arrow)
+tweak_data.projectiles.arblast_poison_arrow = create_poison_arrow(tweak_data.projectiles.arblast_arrow)
 
 tweak_data.projectiles.frag = {
-	damage = 96,
-	curve_pow = 2,
-	player_damage = 1,
-	player_dmg_mul = 1 / 4,
-	range = 450,
+	damage = 30, --96
+	curve_pow = 1.2, --2
+	player_damage = 10, --1
+	--player_dmg_mul = 1 / 4,
+	range = 1000, --450
 	name_id = "bm_grenade_frag",
+}
+
+self.projectiles.dada_com = {
+	damage = 42,
+	curve_pow = 1.2,
+	player_damage = 10,
+	range = 750,
+	name_id = "bm_grenade_dada_com",
+	sound_event = "mtl_explosion"
+}
+
+self.projectiles.dynamite = {
+	damage = 96,
+	curve_pow = 0.8,
+	player_damage = 10,
+	range = 1250,
+	name_id = "bm_grenade_frag",
+	effect_name = "effects/payday2/particles/explosions/dynamite_explosion"
 }
 
 tweak_data.projectiles.frag_com = deep_clone(tweak_data.projectiles.frag)
 tweak_data.projectiles.frag_com.name_id = "bm_grenade_frag_com"
 
-tweak_data.projectiles.dada_com = deep_clone(tweak_data.projectiles.frag)
-tweak_data.projectiles.dada_com.name_id = "bm_grenade_dada_com"
-tweak_data.projectiles.dada_com.sound_event = "mtl_explosion"
-
-tweak_data.projectiles.dynamite = deep_clone(tweak_data.projectiles.frag)
-tweak_data.projectiles.dynamite.name_id = "bm_grenade_frag"
-tweak_data.projectiles.dynamite.effect_name = "effects/payday2/particles/explosions/dynamite_explosion"
-
 tweak_data.projectiles.launcher_frag = {
-	damage = 72,
+	damage = 34, --72
 	launch_speed = 1500,
-	curve_pow = 2,
-	player_damage = 1,
+	curve_pow = 1.2,
+	player_damage = 8,
 	player_dmg_mul = 1 / 6,
 	range = 450,
 	init_timer = 2.5,
 	mass_look_up_modifier = 1,
 	sound_event = "gl_explode",
 	name_id = "bm_launcher_frag",
+}
+
+tweak_data.projectiles.molotov = {
+	damage = 3,
+	player_damage = 2,
+	fire_dot_data = {
+		dot_trigger_chance = 35,
+		dot_damage = 2,
+		dot_length = 3,
+		dot_trigger_max_distance = 3000,
+		dot_tick_period = 0.5
+	},
+	range = 75,
+	burn_duration = 20,
+	burn_tick_period = 0.5,
+	sound_event = "molotov_impact",
+	sound_event_impact_duration = 4,
+	name_id = "bm_grenade_molotov",
+	alert_radius = 1500,
+	fire_alert_radius = 1500
+}
+
+tweak_data.projectiles.sticky_grenade = {
+		damage = 42,
+		curve_pow = 0.1,
+		player_damage = 10,
+		range = 750,
+		launch_speed = 500,
+		in_air_timer = 10,
+		detonate_timer = 2.5,
+		sweep_radius = 25,
+		name_id = "bm_sticky_grenade",
+		sounds = {}
 }
 
 tweak_data.projectiles.launcher_incendiary = create_incendiary_grenade(tweak_data.projectiles.launcher_frag, "heavy")
@@ -282,7 +330,7 @@ tweak_data.projectiles.launcher_poison_ms3gl = create_poison_grenade(tweak_data.
 tweak_data.projectiles.launcher_rocket = {
 	damage = 1600,
 	launch_speed = 3000,
-	curve_pow = 2,
+	curve_pow = 1.2,
 	player_damage = 1,
 	player_dmg_mul = 1 / 20,
 	range = 600,
@@ -325,16 +373,10 @@ end
 for _, projectile in pairs(tweak_data.projectiles) do
 	-- More noticeable explosive damage dropoff to encourage accurate shooting
 	if projectile.curve_pow then
-		projectile.curve_pow = 2
+		projectile.curve_pow = 1
 	end
 
 	if projectile.player_damage and projectile.damage then
 		projectile.player_damage = projectile.damage * (projectile.player_dmg_mul or 0.25)
-	end
-	
-	if projectile.range then
-		if projectile.range >= 50 then
-			projectile.range = projectile.range * 2
-		end
 	end
 end

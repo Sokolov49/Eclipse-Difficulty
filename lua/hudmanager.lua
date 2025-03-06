@@ -12,6 +12,7 @@ function HUDManager:on_ff_confirmed()
 	self._hud_hit_confirm:on_ff_confirmed()
 end
 
+
 --change name labels to a more readable format
 	function HUDManager:_add_name_label(data)
 		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_FULLSCREEN_PD2)
@@ -175,9 +176,11 @@ end
 function HUDManager:temp_show_carry_bag( carry_id, value )
 	self._hud_temp:show_carry_bag( carry_id, value )
 	self._sound_source:post_event( "Play_bag_generic_pickup" )
+	self._sound_source:post_event( "Play_bag_generic_pickup" )
 end
 
 function HUDManager:temp_hide_carry_bag()
 	self._hud_temp:hide_carry_bag()
+	self._sound_source:post_event( "Play_bag_generic_throw" )
 	self._sound_source:post_event( "Play_bag_generic_throw" )
 end

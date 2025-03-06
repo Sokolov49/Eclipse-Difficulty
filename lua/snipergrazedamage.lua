@@ -8,7 +8,7 @@ function SniperGrazeDamage:on_weapon_fired(weapon_unit, result)
 		return
 	end
 
-	local upgrade_value = managers.player:upgrade_value("snp", "graze_damage")
+	local upgrade_value = managers.player:upgrade_value("snp", "charged_shot")
 	local sentry_mask = managers.slot:get_mask("sentry_gun")
 	local ally_mask = managers.slot:get_mask("all_criminals")
 	local enemy_mask = managers.slot:get_mask("enemies")
@@ -21,7 +21,7 @@ function SniperGrazeDamage:on_weapon_fired(weapon_unit, result)
 
 		local result = hit.damage_result
 		local attack_data = result and result.attack_data
-		if attack_data and attack_data.headshot and result.type == "death" and not is_turret and not is_ally then
+		if attack_data and attack_data.headshot and not is_turret and not is_ally then
 			local multiplier = upgrade_value.damage_factor
 			hit_enemies[hit.unit:key()] = {
 				unit = hit.unit,
@@ -39,7 +39,7 @@ function SniperGrazeDamage:on_weapon_fired(weapon_unit, result)
 			if not hit_enemies[unit:key()] then
 				local hit_pos = Vector3()
 				mvector3.set(hit_pos, unit:movement():m_head_pos())
-				local percentage = 1 - math.min(1, math.max(0, (mvector3.distance(hit.position, hit_pos) - 100) / radius))
+				local percentage = 1 - math.min(1, math.max(0, (mvector3.distance(hit.position, hit_pos) - 250) / radius))
 				if World:raycast("ray", hit.position, hit_pos, "slot_mask", geometry_mask) then
 					percentage = percentage - 0.5
 				end

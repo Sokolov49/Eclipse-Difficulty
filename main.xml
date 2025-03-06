@@ -3,6 +3,7 @@
 		<!-- perk decks -->
 		<texture path="guis/textures/pd2/specialization/icons_atlas"/>
 		
+		
 		<!-- leftover muzzleflash effect but without smoke -->
 		<effect path="effects/payday2/particles/weapons/shotgun/sho_muzzleflash"/>
 		

@@ -205,6 +205,7 @@ function PlayerStandard:_check_action_primary_attack(t, input, params)
 
 						dmg_mul = dmg_mul * managers.player:temporary_upgrade_value("temporary", "berserker_damage_multiplier", 1)
 						dmg_mul = dmg_mul * managers.player:get_property("trigger_happy", 1)
+						dmg_mul = dmg_mul * (1 + managers.player:get_property("snp_consecutive_headshots_mul", 0))
 					end
 
 					local fired = nil
@@ -241,6 +242,12 @@ function PlayerStandard:_check_action_primary_attack(t, input, params)
 					if fired then
 						if not params or not params.no_rumble then
 							managers.rumble:play("weapon_fire")
+						end
+
+						if self._sniper_shot_is_charged then
+							self._state_data.snp_shot_charge_t = nil
+							self._sniper_shot_is_charged = false
+							managers.player:charged_shot_allowed(self._sniper_shot_is_charged)
 						end
 
 						local weap_tweak_data = weap_base.weapon_tweak_data and weap_base:weapon_tweak_data() or tweak_data.weapon[weap_base:get_name_id()]
@@ -955,3 +962,31 @@ Hooks:PostHook(PlayerStandard, "set_running", "set_running_hos", set_hos)
 
 
 --this code is 'supposedly' better at restoring the old ADS animations than my old code
+
+function PlayerStandard:_update_network_jump(pos, is_exit)
+	local mover = self._unit:mover()
+
+	if self._is_jumping and (is_exit or not mover or mover:standing() and mover:velocity().z < 0 or mover:gravity().z == 0) then
+		if not self._is_jump_middle_passed then
+			self._is_jump_middle_passed = true
+		end
+
+		self._is_jumping = nil
+	elseif self._send_jump_vec and not is_exit then
+		if self._is_jumping and type(self._gnd_ray) ~= "boolean" then
+			self._ext_network:send("action_walk_nav_point", self._gnd_ray and self._gnd_ray.position)
+		end
+
+		self._ext_network:send("action_jump", pos or self._pos, self._send_jump_vec)
+
+		-- Record the jumping last jump velocity used for jumpthrows
+		self._last_sent_jump_vec = self._send_jump_vec
+		self._send_jump_vec = nil
+		self._is_jumping = true
+		self._is_jump_middle_passed = nil
+
+		mvector3.set(self._last_sent_pos, pos or self._pos)
+	elseif self._is_jumping and not self._is_jump_middle_passed and mover and mover:velocity().z < 0 then
+		self._is_jump_middle_passed = true
+	end
+end

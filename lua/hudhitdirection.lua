@@ -8,10 +8,11 @@ function HUDHitDirection:_get_indicator_color(damage_type, t)
 		end
 	end
 
+	--piss yellow Color(0.99, 0.86, 0.23)
 	if damage_type == HUDHitDirection.DAMAGE_TYPES.HEALTH then
 		return Color(1, t, t)
 	elseif damage_type == HUDHitDirection.DAMAGE_TYPES.ARMOUR then
-		return Color(0.99, 0.86, 0.23) --Color(t, 1, 1)
+		return Color(1, t, t) --Color(t, 1, 1)
 	elseif damage_type == HUDHitDirection.DAMAGE_TYPES.VEHICLE then
 		return Color(1, 0.8, t)
 	end

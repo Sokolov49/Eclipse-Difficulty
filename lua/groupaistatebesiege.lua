@@ -13,6 +13,7 @@ local tmp_vec2 = Vector3()
 GroupAIStateBesiege.set_area_min_police_force_original = GroupAIStateBesiege.set_area_min_police_force
 function GroupAIStateBesiege:set_area_min_police_force(id, force, ...)
 	force = force and math.max(force, 2)
+
 	return self:set_area_min_police_force_original(id, force, ...)
 end
 
@@ -27,8 +28,6 @@ function GroupAIStateBesiege:_begin_assault_task(...)
 		local assault_task = self._task_data.assault
 		local anticipation_duration = self:_get_anticipation_duration(self._tweak_data.assault.anticipation_duration, assault_task.was_first)
 		assault_task.phase_end_t = self._t + anticipation_duration
-		
-		self:_post_megaphone_event("mga_hostage_assault_delay")
 	end
 end
 
@@ -83,7 +82,6 @@ function GroupAIStateBesiege:_upd_assault_task(...)
 				if self._drama_data.amount < tweak_data.drama.assault_fade_end then
 					task_data.said_retreat = true
 
-					self:_post_megaphone_event("mga_robbers_clever")
 					self:_police_announce_retreat()
 				end
 			elseif task_data.phase_end_t < t and self._drama_data.amount < tweak_data.drama.assault_fade_end and self:_count_criminals_engaged_force(5) <= 4 then
@@ -98,7 +96,6 @@ function GroupAIStateBesiege:_upd_assault_task(...)
 			task_data.force_end = nil
 			local force_regroup = task_data.force_regroup
 			task_data.force_regroup = nil
-			self:_post_megaphone_event("mga_leave")
 
 			if self._draw_drama then
 				self._draw_drama.assault_hist[#self._draw_drama.assault_hist][2] = t
@@ -306,6 +303,7 @@ function GroupAIStateBesiege:get_all_needed_doors()
 	local nav_manager = managers.navigation
 	local all_doors = nav_manager._room_doors
 	local all_nav_segs = nav_manager._nav_segments
+
 	local reinforce_doors = {}
 	for nav_seg_id, nav_seg_data in pairs(all_nav_segs) do
 		if not managers.groupai:state():is_nav_seg_safe(nav_seg_id) then
@@ -320,6 +318,7 @@ function GroupAIStateBesiege:get_all_needed_doors()
 			end
 		end
 	end
+
 	return reinforce_doors
 end
 
@@ -387,38 +386,38 @@ Hooks:OverrideFunction(GroupAIStateBesiege, "_set_assault_objective_to_group", f
 		end
 	end
 
-   if tactics_map.door_ambush then
-        local needed_doors = self:get_all_needed_doors()
-        if needed_doors[current_objective.door_id] then
-            return
-        end
+	if tactics_map.door_ambush then
+		local needed_doors = self:get_all_needed_doors()
+		if needed_doors[current_objective.door_id] then
+			return
+		end
 
-        for door_id, door_data in pairs(needed_doors) do
-            local assigned_group = self._groups[door_data.assigned_group_id]
-            if not assigned_group or not assigned_group.objective or not assigned_group.objective.door_id then
-                local coarse_path = managers.navigation:search_coarse({
-                    id = "GroupAI_deathguard",
-                    from_tracker = group_leader_u_data.tracker,
-                    to_seg = managers.navigation:get_nav_seg_from_pos(door_data.center),
-                    access_pos = self._get_group_acces_mask(group)
-                })
+		for door_id, door_data in pairs(needed_doors) do
+			local assigned_group = self._groups[door_data.assigned_group_id]
+			if not assigned_group or not assigned_group.objective or not assigned_group.objective.door_id then
+				local coarse_path = managers.navigation:search_coarse({
+					id = "GroupAI_deathguard",
+					from_tracker = group_leader_u_data.tracker,
+					to_seg = managers.navigation:get_nav_seg_from_pos(door_data.center),
+					access_pos = self._get_group_acces_mask(group),
+				})
 
-                if coarse_path then
-                    door_data.assigned_group_id = group.id
-                    self:_set_objective_to_enemy_group(group, {
-                        type = "defend_area",
-                        attitude = "engage",
-                        pose = "stand",
-                        door_id = door_id,
-                        pos = door_data.center,
-                        moving_in = true,
-                        area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
-                        coarse_path = coarse_path
-                    })
-                    return
-                end
-            end
-        end
+				if coarse_path then
+					door_data.assigned_group_id = group.id
+					self:_set_objective_to_enemy_group(group, {
+						type = "defend_area",
+						attitude = "engage",
+						pose = "stand",
+						door_id = door_id,
+						pos = door_data.center,
+						moving_in = true,
+						area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
+						coarse_path = coarse_path,
+					})
+					return
+				end
+			end
+		end
 	end
 
 	if current_objective.open_fire then
@@ -522,9 +521,9 @@ Hooks:OverrideFunction(GroupAIStateBesiege, "_set_assault_objective_to_group", f
 
 				if phase_is_anticipation then
 					local time_until_phase_end = self._task_data.assault.phase_end_t - self._t
-						if not group.said_standby and time_until_phase_end > 3 and in_place_duration > 1 then
-							group.said_standby = self:_chk_say_group(group, self._hostage_headcount > 0 and "hostage_delay" or "stand_by")
-						end
+					if not group.said_standby and time_until_phase_end > 3 and in_place_duration > 1 then
+						group.said_standby = self:_chk_say_group(group, self._hostage_headcount > 0 and "hostage_delay" or "stand_by")
+					end
 					return
 				end
 
@@ -539,15 +538,15 @@ Hooks:OverrideFunction(GroupAIStateBesiege, "_set_assault_objective_to_group", f
 				if not self:_chk_group_use_grenade(assault_area, group, detonate_pos) then
 					if not group.ignore_grenade_check_t then
 						local push_delay = self:_get_difficulty_dependent_value(self._tweak_data.push_delay)
-						local delay = push_delay * (assault_area.hostages and 1.25 or 1)  * (tactics_map.charge and 0.5 or 1)
+						local delay = push_delay * (assault_area.hostages and 1.25 or 1) * (tactics_map.charge and 0.5 or 1)
 						local num_criminals = table.size(assault_area.criminal.units)
 						group.ignore_grenade_check_t = self._t + math.map_range_clamped(num_criminals, 1, 4, delay, delay * 0.75)
 						return
 					elseif group.ignore_grenade_check_t > self._t then
 						local time_until_push = math.min(group.ignore_grenade_check_t, self._task_data.assault.use_smoke_timer) - self._t
-							if not group.said_standby and time_until_push > 3 and in_place_duration > 1 then
-								group.said_standby = self:_chk_say_group(group, "stand_by")
-							end
+						if not group.said_standby and time_until_push > 3 and in_place_duration > 1 then
+							group.said_standby = self:_chk_say_group(group, "stand_by")
+						end
 						return
 					end
 				end
@@ -713,7 +712,7 @@ function GroupAIStateBesiege:_chk_group_use_grenade(assault_area, group, detonat
 	-- If players camp a specific area for too long, turn a smoke grenade into a teargas grenade instead
 	local use_teargas
 	if grenade_type == "smoke_grenade" and not assault_area.hostages and assault_area.criminal_entered_t and table.size(assault_area.neighbours) <= 2 then
-		local teargas_chance_times = tweak_data.group_ai.cs_grenade_chance_times or { 45, 120 }
+		local teargas_chance_times = tweak_data.group_ai.cs_grenade_chance_times or { 45, 90 }
 		local teargas_chance = math.map_range(self._t - assault_area.criminal_entered_t, teargas_chance_times[1], teargas_chance_times[2], 0, 1)
 		if math.random() < teargas_chance then
 			local teargas_pos = managers.navigation:find_random_position_in_segment(assault_area.pos_nav_seg)
@@ -746,9 +745,9 @@ function GroupAIStateBesiege:_chk_group_use_grenade(assault_area, group, detonat
 					hurt = -1,
 					heavy_hurt = -1,
 					walk = -1,
-				}
+				},
 			}
-			
+
 			grenade_user.unit:movement():action_request(action)
 		end
 	end
@@ -1125,18 +1124,23 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 	local function check_special_limit_reached(unit)
 		local category = tweak_data.group_ai.unit_categories[unit]
 		local special_type = category and category.special_type
+
 		return special_type and managers.job:current_spawn_limit(special_type) <= self:_get_special_unit_type_count(special_type)
 	end
+
 	for _, enemy in pairs(spawn_group_desc.spawn) do
 		if enemy.random_tactics then
 			enemy.tactics = table.random(enemy.random_tactics)
 		end
+
 		if enemy.random_unit then
 			enemy.unit = table.random(enemy.random_unit)
+
 			if check_special_limit_reached(enemy.unit) then
 				for _, unit in pairs(enemy.random_unit) do
 					if unit ~= enemy.unit and not check_special_limit_reached(unit) then
 						enemy.unit = unit
+
 						break
 					end
 				end
@@ -1216,12 +1220,14 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 		i = 1
 		repeat
 			rand_entry = valid_unit_types[i]
+
 			roll = roll - (rand_entry.freq_by_diff and self:_get_difficulty_dependent_value(rand_entry.freq_by_diff) or rand_entry.freq)
 			i = i + 1
 		until roll <= 0
 
 		local cat_data = unit_categories[rand_entry.unit]
 		local special_type = cat_data and not cat_data.is_captain and cat_data.special_type
+
 		if special_type and managers.job:current_spawn_limit(special_type) <= self:_get_special_unit_type_count(special_type) then
 			table.remove(valid_unit_types, i - 1)
 			total_weight = total_weight - (rand_entry.freq_by_diff and self:_get_difficulty_dependent_value(rand_entry.freq_by_diff) or rand_entry.freq)
@@ -1232,7 +1238,7 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 
 	local group = self:_create_group({
 		size = group_size,
-		type = spawn_group_type
+		type = spawn_group_type,
 	})
 
 	group.objective = grp_objective
@@ -1406,7 +1412,7 @@ Hooks:OverrideFunction(GroupAIStateBesiege, "_set_reenforce_objective_to_group",
 			return
 		elseif not self:_chk_group_use_grenade(target_area, group) then
 			local push_delay = self:_get_difficulty_dependent_value(self._tweak_data.push_delay)
-			
+
 			if not group.in_place_t or self._t - group.in_place_t < push_delay * 0.5 then
 				return
 			end
@@ -1536,7 +1542,7 @@ Hooks:OverrideFunction(GroupAIStateBesiege, "_set_recon_objective_to_group", fun
 			return
 		elseif not self:_chk_group_use_grenade(target_area, group) then
 			local push_delay = self:_get_difficulty_dependent_value(self._tweak_data.push_delay)
-			
+
 			if not group.in_place_t or self._t - group.in_place_t < push_delay * 0.5 then
 				return
 			end

@@ -65,6 +65,7 @@ function PlayerTweakData:_set_easy_wish()
 end
 
 Hooks:PostHook(PlayerTweakData, "init", "eclipse__init", function(self)
+	self.damage.ARMOR_BREAK_MIN_DAMAGE_INTERVAL = 0.15
 	self.damage.respawn_time_penalty = 0
 	self.damage.BLEED_OUT_HEALTH_INIT = 23
 	-- self.damage.REGENERATE_TIME = 4.5
@@ -90,6 +91,10 @@ Hooks:PostHook(PlayerTweakData, "init", "eclipse__init", function(self)
 	
 	-- breathing in ads
 	self.stances.default.steelsight.shakers.breathing.amplitude = 0.095
+	self.movement_state.standard.movement.speed.STANDARD_MAX = 300 --300, vanilla = 350
+	self.movement_state.standard.movement.speed.RUNNING_MAX = self.movement_state.standard.movement.speed.STANDARD_MAX * 1.5 --450, vanilla = 575
+	self.movement_state.standard.movement.speed.CROUCHING_MAX = self.movement_state.standard.movement.speed.STANDARD_MAX * 0.8 --240, vanilla = 225
+	self.movement_state.standard.movement.speed.STEELSIGHT_MAX = self.movement_state.standard.movement.speed.STANDARD_MAX * 0.6 --180, vanilla = 185
 end)
 
 -- Game too hard for single player appparently????

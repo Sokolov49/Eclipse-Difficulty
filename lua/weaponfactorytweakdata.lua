@@ -1,4 +1,43 @@
-Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(self)	
+Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(self)
+	self.parts.wpn_fps_lmg_o_empty = {
+		a_obj = "a_body",
+		type = "bonus",
+		name_id = "bm_wp_lmg_o_empty",
+		unit = "units/payday2/weapons/wpn_upg_dummy/wpn_upg_dummy",
+		third_unit = "units/payday2/weapons/wpn_upg_dummy/wpn_upg_dummy",
+		internal_part = true,
+		stats = {
+			value = 5,
+		},
+		forbids = {},
+		stance_mod = {
+			wpn_fps_lmg_rpk = {
+				translation = Vector3(0.4, 0.2, -0.2),
+				rotation = Rotation(0, 0, -1),
+			},
+			wpn_fps_lmg_hk21 = {
+				translation = Vector3(0.5, 0.1, -0.3),
+				rotation = Rotation(0, 0, -1),
+			},
+			wpn_fps_lmg_m249 = {
+				translation = Vector3(0.5, 0.1, -0.3),
+				rotation = Rotation(0, 0, -1),
+			},
+			wpn_fps_lmg_mg42 = {
+				translation = Vector3(0.5, 0.3, -0.2),
+				rotation = Rotation(0, 0, -1),
+			},
+			wpn_fps_lmg_par = {
+				translation = Vector3(0.4, 0, -0.2),
+				rotation = Rotation(0, 0, -1),
+			},
+			wpn_fps_lmg_m60 = {
+				translation = Vector3(0.5, 0.2, -0.1),
+				rotation = Rotation(0, 0, -1),
+			},
+		},
+	}
+
 	local stat_blacklist = {
 		"foregrip",
 		"extra",
@@ -29,7 +68,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(sel
 		if not part.custom_stats then
 			part.custom_stats = {}
 		end
-		
+
 		if table.contains(stat_blacklist, part.type) and not is_second_sight then
 			part.stats = {}
 			part.custom_stats = {}
@@ -94,6 +133,93 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(sel
 				part.custom_stats = {}
 			end
 		end
+	end
+
+	local lmg_table = {
+		"wpn_fps_lmg_rpk",
+		"wpn_fps_lmg_hk21",
+		"wpn_fps_lmg_m249",
+		"wpn_fps_lmg_par",
+		"wpn_fps_lmg_mg42",
+		"wpn_fps_lmg_m60",
+	}
+
+	local sight_table = {
+		"wpn_fps_upg_o_specter",
+		"wpn_fps_upg_o_aimpoint",
+		"wpn_fps_upg_o_aimpoint_2",
+		"wpn_fps_upg_o_docter",
+		"wpn_fps_upg_o_eotech",
+		"wpn_fps_upg_o_t1micro",
+		"wpn_fps_upg_o_cmore",
+		"wpn_fps_upg_o_acog",
+		"wpn_fps_upg_o_cs",
+		"wpn_fps_upg_o_eotech_xps",
+		"wpn_fps_upg_o_reflex",
+		"wpn_fps_upg_o_rx01",
+		"wpn_fps_upg_o_rx30",
+		"wpn_fps_upg_o_spot",
+		"wpn_fps_upg_o_xpsg33_magnifier",
+		"wpn_fps_upg_o_bmg",
+		"wpn_fps_upg_o_uh",
+		"wpn_fps_upg_o_fc1",
+		"wpn_fps_upg_o_poe",
+		"wpn_fps_upg_o_hamr",
+		"wpn_fps_upg_o_atibal",
+	}
+
+	local lmg_stance_mod_map = {
+		["wpn_fps_lmg_rpk"] = { translation = Vector3(-0, -0, -3) },
+		["wpn_fps_lmg_hk21"] = { translation = Vector3(0, -0, -3.2) },
+		["wpn_fps_lmg_m249"] = { translation = Vector3(0, 0, -3.4) },
+		["wpn_fps_lmg_par"] = { translation = Vector3(0, 8, -3.2) },
+		["wpn_fps_lmg_mg42"] = { translation = Vector3(0, 8, -2.4) },
+		["wpn_fps_lmg_m60"] = { translation = Vector3(0.1, 8, 0) },
+	}
+
+	for index, weapon_id in ipairs(lmg_table) do
+		if not self[weapon_id].adds then
+			self[weapon_id].adds = {}
+		end
+		if not self[weapon_id].override then
+			self[weapon_id].override = {}
+		end
+	end
+
+	for index, weapon_id in ipairs(lmg_table) do
+		for index, sight_id in ipairs(sight_table) do
+			--Add sights to uses_parts
+			table.insert(self[weapon_id].uses_parts, sight_id)
+
+			--Set stance_mods
+			self.parts[sight_id].stance_mod[weapon_id] = lmg_stance_mod_map[weapon_id]
+
+			--Add a default part that forbids sights
+			table.insert(self[weapon_id].uses_parts, "wpn_fps_lmg_o_empty")
+			table.insert(self[weapon_id].default_blueprint, "wpn_fps_lmg_o_empty")
+		end
+	end
+
+	for index, sight_id in ipairs(sight_table) do
+		table.insert(self.parts.wpn_fps_lmg_o_empty.forbids, sight_id)
+
+		--Add sight mounts and rails
+		self.wpn_fps_lmg_rpk.adds[sight_id] = { "wpn_fps_ak_extra_ris" }
+		--self.wpn_fps_lmg_m249.override[sight_id] = { parent = "upper_reciever" }
+		self.wpn_fps_lmg_hk21.adds[sight_id] = { "wpn_fps_ass_g3_body_rail" }
+		self.wpn_fps_lmg_mg42.adds[sight_id] = { "wpn_fps_rpg7_sight_adapter" }
+		--self.wpn_fps_lmg_mg42.override[sight_id] = { parent = "upper_reciever" }
+		--self.wpn_fps_lmg_par.override[sight_id] = { parent = "upper_reciever" }
+		self.wpn_fps_lmg_m60.adds[sight_id] = { "wpn_fps_ass_groza_o_adapter" }
+		self.wpn_fps_lmg_m60.override[sight_id] = { forbids = { "wpn_fps_lmg_m60_sight_standard" } }
+		--self.wpn_fps_lmg_m60.override[sight_id] = { forbids = { "wpn_fps_lmg_m60_sight_standard" }, parent = "upper_reciever" }
+
+		--Add suport for the AK scope mount
+		table.insert(self.parts.wpn_fps_lmg_o_empty.forbids, "wpn_fps_upg_o_ak_scopemount")
+		table.insert(self.wpn_fps_lmg_rpk.uses_parts, "wpn_fps_upg_o_ak_scopemount")
+		self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount = {}
+		self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount.override = {}
+		self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount.override[sight_id] = { a_obj = "a_o_sm", stance_mod = { wpn_fps_lmg_rpk = { translation = Vector3(0, 0, -4.6) } } }
 	end
 
 	local slug_stance_muls = {
@@ -813,7 +939,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(sel
 	self.parts.wpn_fps_pis_usp_m_big.stats.recoil = 0
 
 	self.parts.wpn_fps_pis_ppk_b_long.stats.spread = 1
-	self.parts.wpn_fps_pis_ppk_b_long.stats.recoil = -1
+	self.parts.wpn_fps_pis_ppk_b_long.stats.concealment = -1
 
 	self.parts.wpn_fps_pis_p226_b_long.stats.spread = 2
 	self.parts.wpn_fps_pis_p226_b_long.stats.concealment = -2
@@ -827,11 +953,11 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(sel
 	self.parts.wpn_fps_pis_c96_s_solid.stats.concealment = -3
 
 	self.parts.wpn_fps_pis_c96_m_extended.stats.extra_ammo = 5
-	
+
 	self.parts.wpn_fps_pis_g26_m_mag_33rnd = deep_clone(self.parts.wpn_fps_pis_g18c_m_mag_33rnd)
 	self.parts.wpn_fps_pis_g26_m_mag_33rnd.stats.extra_ammo = 0
 	self.parts.wpn_fps_pis_g26_m_mag_33rnd.custom_stats = { ammo_offset = 23 }
-		
+
 	self.parts.wpn_fps_pis_g26_m_contour.stats.recoil = 0
 
 	self.parts.wpn_fps_pis_hs2000_sl_custom.stats.spread = -1
@@ -995,7 +1121,6 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(sel
 
 	self.parts.wpn_fps_shot_r870_body_rack.stats.concealment = -2
 	self.parts.wpn_fps_shot_r870_body_rack.custom_stats.reload_speed_multiplier = 1.2
-
 
 	self.parts.wpn_fps_shot_shorty_m_extended_short.stats.extra_ammo = 0
 	self.parts.wpn_fps_shot_shorty_m_extended_short.custom_stats = { ammo_offset = 1 }
@@ -1185,7 +1310,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(sel
 	self.parts.wpn_fps_hailstorm_conversion.stats.recoil = 2
 	self.parts.wpn_fps_hailstorm_conversion.stats.concealment = 0
 	self.parts.wpn_fps_hailstorm_conversion.custom_stats = { fire_rate_multiplier = 1500 / 2000 }
-	
+
 	-- Conversion kits and various barrels, family based modifications --
 
 	local dmr_stance_muls = {
@@ -1583,8 +1708,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "eclipse_init_mods", function(sel
 	table.delete(self.wpn_fps_pis_g26.uses_parts, "wpn_fps_pis_g18c_m_mag_33rnd")
 	table.delete(self.wpn_fps_jowi.uses_parts, "wpn_fps_pis_g18c_m_mag_33rnd")
 	table.insert(self.wpn_fps_pis_g26.uses_parts, "wpn_fps_pis_g26_m_mag_33rnd")
-	table.insert(self.wpn_fps_jowi.uses_parts, "wpn_fps_pis_g26_m_mag_33rnd")	
-	
+	table.insert(self.wpn_fps_jowi.uses_parts, "wpn_fps_pis_g26_m_mag_33rnd")
+
 	table.delete(self.wpn_fps_ass_contraband.uses_parts, "wpn_fps_sho_sko12_body_grip")
 	table.delete(self.wpn_fps_ass_m16.uses_parts, "wpn_fps_uupg_fg_radian")
 
@@ -1601,13 +1726,13 @@ function WeaponFactoryTweakData:_balance_magazines(tweak_data)
 		local factory_id = data.factory_id
 
 		local akimbo_mappings = tweak_data.weapon:get_akimbo_mappings()
-		
+
 		local weapon_tweak = tweak_data.weapon[weapon_id]
 		local is_akimbo = weapon_tweak and table.contains(weapon_tweak.categories, "akimbo")
-		
+
 		local shotgun_reload = weapon_tweak and weapon_tweak.use_shotgun_reload or weapon_tweak and weapon_tweak.timers and weapon_tweak.timers.shotgun_reload_shell or nil
 		local mag_capacity = weapon_tweak and weapon_tweak.CLIP_AMMO_MAX / (is_akimbo and 2 or 1)
-		
+
 		for id, part in pairs(self.parts) do
 			if self[factory_id] and table.contains(self[factory_id].uses_parts, id) then
 				if part.stats then
@@ -1621,7 +1746,7 @@ function WeaponFactoryTweakData:_balance_magazines(tweak_data)
 							local capacity_increase = (mod_mag_capacity / mag_capacity) * 100
 							reload_speed_stat = 1 - math.clamp(math.round((capacity_increase / 10) * 0.05, 0.01), -0.25, 0.25)
 							concealment_stat = -math.clamp(math.round(capacity_increase / 25), -6, 6)
-							
+
 							part.stats.concealment = concealment_stat
 							part.custom_stats.reload_speed_multiplier = shotgun_reload and 1 or reload_speed_stat
 						end
@@ -1703,6 +1828,40 @@ function WeaponFactoryTweakData:create_bonuses(tweak_data, weapon_skins)
 	self.parts.wpn_fps_upg_perk_stockpile.name_id = "bm_menu_perk_stockpile"
 	self.parts.wpn_fps_upg_perk_stockpile.desc_id = "bm_menu_perk_stockpile_desc"
 	self.parts.wpn_fps_upg_perk_stockpile.stats = { total_ammo_mod = 5, reload = -3 }
+
+	-- gunner
+	self.parts.wpn_fps_upg_perk_gunner = deep_clone(self.parts.wpn_fps_upg_perk_template)
+	self.parts.wpn_fps_upg_perk_gunner.name_id = "bm_menu_perk_gunner"
+	self.parts.wpn_fps_upg_perk_gunner.desc_id = "bm_menu_perk_gunner_desc"
+	self.parts.wpn_fps_upg_perk_gunner.custom_stats = {
+		stance_mul = {
+			spread = {
+				standing = {
+					hipfire = 1.5,
+					crouching = 0.75,
+					steelsight = 0.75,
+				},
+				moving = {
+					hipfire = 2,
+					crouching = 1,
+					steelsight = 1.5,
+				},
+			},
+			recoil = {
+				standing = {
+					hipfire = 1.25,
+					crouching = 0.75,
+					steelsight = 0.75,
+				},
+				moving = {
+					hipfire = 1.5,
+					crouching = 1,
+					steelsight = 1,
+				},
+			},
+		},
+	}
+	self.parts.wpn_fps_upg_perk_gunner.forbids = { "wpn_fps_lmg_o_empty" }
 
 	local uses_parts = {
 		wpn_fps_upg_perk_speedloader = { category = { "assault_rifle", "smg", "snp", "shotgun", "crossbow", "flamethrower", "pistol", "minigun", "akimbo", "lmg", "bow" } },
