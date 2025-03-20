@@ -755,16 +755,16 @@ function UpgradesTweakData:init(tweak_data)
 	self.weapon_movement_penalty.heavy = 0.75
 	
 	self.values.player.body_armor.dodge = {0.1, 0.05, 0.03, -0.03, -0.1, -0.3, -0.5}
-	self.values.player.body_armor.armor = {0, 1, 2, 3, 5, 7, 16} --0, 1, 2, 3, 5, 7, 16
+	self.values.player.body_armor.armor = {0, 1, 2, 3, 5, 7, 16}
 	
 	-- Movement speed nerfs
 	self.values.player.body_armor.movement = {
 		0.85,
-		0.8,
+		0.825,
 		0.75,
 		0.7,
-		0.6,
-		0.55,
+		0.625,
+		0.575,
 		0.5,
 	}
 	self.values.player.body_armor.stamina = {
@@ -910,7 +910,7 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.player.critical_hit_chance = {0.30}
 	self.values.player.armor_multiplier = {1.5}
 
-	self.values.player.run_speed_multiplier = {1.25} --1.1
+	self.values.player.run_speed_multiplier = {1.1}
 	self.values.player.run_dodge_chance = {0.25}
 	self.values.player.walk_speed_multiplier = {1.1}
 	self.values.player.crouch_speed_multiplier = {1.1}

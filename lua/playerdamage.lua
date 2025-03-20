@@ -1,12 +1,3 @@
--- Armor regen time depends on the armor you're wearing
-function PlayerDamage:set_regenerate_timer_to_max()
-	local mul = managers.player:body_armor_regen_multiplier(alive(self._unit) and self._unit:movement():current_state()._moving, self:health_ratio())
-	self._regenerate_timer = managers.player:body_armor_value("regen_timer") * mul
-	self._regenerate_timer = self._regenerate_timer * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
-	self._regenerate_speed = self._regenerate_speed or 1
-	self._current_state = self._update_regenerate_timer
-end
-
 -- uppers cooldown
 PlayerDamage._UPPERS_COOLDOWN = 120
 
@@ -34,62 +25,37 @@ Hooks:PreHook( PlayerDamage, "damage_bullet", "ssa_damage_bullet", function(self
 	local shake_armor_multiplier = managers.player:body_armor_value("damage_shake") * (self:get_real_armor() > 0 and 1 or 2)
 	
 	if has_tough_guy then
-		self._unit:camera()._damage_bullet_shake_multiplier = ( math.clamp(attack_data.damage, 0, 16) * shake_armor_multiplier ) * managers.player:upgrade_value( "player", "damage_shake_multiplier", 1 )
+		self._unit:camera()._damage_bullet_shake_multiplier = ( math.clamp(attack_data.damage, 0, 10) * shake_armor_multiplier ) * managers.player:upgrade_value( "player", "damage_shake_multiplier", 1 )
 	else
-		self._unit:camera()._damage_bullet_shake_multiplier = ( math.clamp(attack_data.damage, 0, 16) * shake_armor_multiplier )
+		self._unit:camera()._damage_bullet_shake_multiplier = ( math.clamp(attack_data.damage, 0, 10) * shake_armor_multiplier )
 	end
 	
 end)
 
---Tear gas damage slowly scales when the player is exposed to it
-local damage_killzone_original = PlayerDamage.damage_killzone
-function PlayerDamage:damage_killzone(attack_data, ...)
-	if attack_data.variant ~= "teargas" then
-		return damage_killzone_original(self, attack_data, ...)
+-- Friendly Fire
+function PlayerDamage:is_friendly_fire(unit)
+	local attacker_mov_ext = alive(unit) and unit:movement()
+
+	if not attacker_mov_ext or not attacker_mov_ext.team or not attacker_mov_ext.friendly_fire then
+		return false
 	end
 
-	local damage_info = {
-		result = {
-			variant = "killzone",
-			type = "hurt",
-		},
-	}
+	local my_team = self._unit:movement():team()
+	local attacker_team = attacker_mov_ext:team()
 
-	if self._god_mode or self._invulnerable or self._mission_damage_blockers.invulnerable then
-		self:_call_listeners(damage_info)
-		return
-	elseif self:incapacitated() or self._unit:movement():current_state().immortal then
-		self._last_teargas_hit_t = nil
-		return
+	if attacker_team ~= my_team and attacker_mov_ext:friendly_fire() then
+		return false
 	end
-
-	local t = managers.player:player_timer():time()
-	if not self._last_teargas_hit_t or self._last_teargas_hit_t + 5 < t then
-		self._teargas_damage_ramp = -0.1
-	else
-		self._teargas_damage_ramp = math.min(self._teargas_damage_ramp + 0.1, 1)
+	local pro_job_enabled = Global.game_settings and Global.game_settings.one_down
+	local attacked_by_foe = attacker_team and my_team and my_team.foes[attacker_team.id]
+	local friendly_fire_mutator_active = managers.mutators:modify_value("PlayerDamage:FriendlyFire", friendly_fire_mutator_active) == false
+	if not attacked_by_foe then
+		if pro_job_enabled or friendly_fire_mutator_active then
+			return false
+		end
+		return true
 	end
-
-	self._last_teargas_hit_t = t
-
-	self._unit:sound():play("player_hit")
-
-	self:_hit_direction(attack_data.col_ray.origin, attack_data.col_ray.ray)
-
-	if self._bleed_out then
-		return
-	end
-
-	attack_data.damage = managers.player:modify_value("damage_taken", attack_data.damage, attack_data) * self._teargas_damage_ramp
-
-	self._unit:movement():subtract_stamina(10 * self._teargas_damage_ramp)
-
-	self:mutator_update_attack_data(attack_data)
-	self:_check_chico_heal(attack_data)
-
-	self:_calc_health_damage(attack_data)
-
-	self:_call_listeners(damage_info)
+	return false
 end
 
 -- Armor Breaking GP / Panic
@@ -464,31 +430,6 @@ function PlayerDamage:update_downed(t, dt)
 		managers.environment_controller:set_downed_value(self._downed_progression + 37) -- self._downed_progression + 50 should be ok
 		SoundDevice:set_rtpc("downed_state_progression", self._downed_progression + 37)
 		return self._downed_timer <= 0
-	end
-	return false
-end
-
--- Friendly Fire
-function PlayerDamage:is_friendly_fire(unit)
-	local attacker_mov_ext = alive(unit) and unit:movement()
-
-	if not attacker_mov_ext or not attacker_mov_ext.team or not attacker_mov_ext.friendly_fire then
-		return false
-	end
-
-	local my_team = self._unit:movement():team()
-	local attacker_team = attacker_mov_ext:team()
-
-	if attacker_team ~= my_team and attacker_mov_ext:friendly_fire() then
-		return false
-	end
-	local attacked_by_foe = attacker_team and my_team and my_team.foes[attacker_team.id]
-	local friendly_fire_mutator_active = managers.mutators:modify_value("PlayerDamage:FriendlyFire", friendly_fire_mutator_active) == false
-	if not attacked_by_foe then
-		if is_pro_job or friendly_fire_mutator_active then
-			return false
-		end
-		return true
 	end
 	return false
 end

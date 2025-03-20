@@ -30,8 +30,6 @@ Hooks:PostHook(NewRaycastWeaponBase, "_update_stats_values", "eclipse_update_sta
 		end
 	end
 
-	self._steelsight_move_speed_mul = weapon_tweak.steelsight_move_speed_mul or 0.6
-
 	self._steelsight_time = weapon_tweak.steelsight_time or 0.3
 
 	self._sprint_exit_time = weapon_tweak.sprint_exit_time or 0.4
@@ -42,11 +40,13 @@ Hooks:PostHook(NewRaycastWeaponBase, "_update_stats_values", "eclipse_update_sta
 
 	self._fire_rate_multiplier = weapon_tweak.fire_rate_multiplier or 1
 
-	self._steelsight_speed_multiplier = weapon_tweak.steelsight_speed_multiplier or 1
-
 	self._reload_speed_multiplier = weapon_tweak.reload_speed_multiplier or 1
 
 	self._exit_run_speed_multiplier = weapon_tweak.exit_run_speed_multiplier or 1
+
+	self._falloff_range_multiplier = weapon_tweak.falloff_range_multiplier or 1
+
+	self._penetration_dmg_mul = weapon_tweak.penetration_damage_mul or {}
 
 	self._standing_hipfire_recoil_mul = (weapon_tweak.recoil_multiplier and weapon_tweak.recoil_multiplier.standing and weapon_tweak.recoil_multiplier.standing.hipfire) or 1
 	self._standing_crouching_recoil_mul = (weapon_tweak.recoil_multiplier and weapon_tweak.recoil_multiplier.standing and weapon_tweak.recoil_multiplier.standing.crouching) or 1
@@ -64,17 +64,11 @@ Hooks:PostHook(NewRaycastWeaponBase, "_update_stats_values", "eclipse_update_sta
 	self._moving_crouching_spread_mul = (weapon_tweak.spread_multiplier and weapon_tweak.spread_multiplier.moving and weapon_tweak.spread_multiplier.moving.crouching) or 1
 	self._moving_steelsight_spread_mul = (weapon_tweak.spread_multiplier and weapon_tweak.spread_multiplier.moving and weapon_tweak.spread_multiplier.moving.steelsight) or 1
 
-	for part_id, stats in pairs(custom_stats) do
-		if stats.steelsight_move_speed_mul then
-			self._steelsight_move_speed_mul = stats.steelsight_move_speed_mul
-		end
+	self._in_air_spread_mul = weapon_tweak.in_air_spread_multiplier or 1
 
+	for part_id, stats in pairs(custom_stats) do
 		if stats.swap_speed_multiplier then
 			self._swap_speed_multiplier = self._swap_speed_multiplier * stats.swap_speed_multiplier
-		end
-
-		if stats.steelsight_speed_multiplier then
-			self._steelsight_speed_multiplier = self._steelsight_speed_multiplier * stats.steelsight_speed_multiplier
 		end
 
 		if stats.fire_rate_multiplier then
@@ -89,34 +83,12 @@ Hooks:PostHook(NewRaycastWeaponBase, "_update_stats_values", "eclipse_update_sta
 			self._exit_run_speed_multiplier = self._exit_run_speed_multiplier * stats.exit_run_speed_multiplier
 		end
 
-		if stats.total_ammo_multiplier then
-			self._total_ammo_multiplier = self._total_ammo_multiplier * stats.total_ammo_multiplier
+		if stats.falloff_range_multiplier then
+			self._falloff_range_multiplier = self._falloff_range_multiplier * stats.falloff_range_multiplier
 		end
 
-		local stats_stance_mul = stats.stance_mul
-
-		if stats_stance_mul then
-			if stats.stance_mul.recoil then
-				if stats_stance_mul.recoil.standing then
-					self._standing_hipfire_recoil_mul = stats_stance_mul.recoil.standing.hipfire
-					self._standing_crouching_recoil_mul = stats_stance_mul.recoil.standing.crouching
-					self._standing_steelsight_recoil_mul = stats_stance_mul.recoil.standing.steelsight
-				elseif stats_stance_mul.recoil.moving then
-					self._moving_hipfire_recoil_mul = stats_stance_mul.recoil.moving.hipfire
-					self._moving_crouching_recoil_mul = stats_stance_mul.recoil.moving.crouching
-					self._moving_steelsight_recoil_mul = stats_stance_mul.recoil.moving.steelsight
-				end
-			elseif stats.stance_mul.spread then
-				if stats_stance_mul.spread.standing then
-					self._standing_hipfire_spread_mul = stats_stance_mul.spread.standing.hipfire
-					self._standing_crouching_spread_mul = stats_stance_mul.spread.standing.crouching
-					self._standing_steelsight_spread_mul = stats_stance_mul.spread.standing.steelsight
-				elseif stats_stance_mul.spread.moving then
-					self._moving_hipfire_spread_mul = stats_stance_mul.spread.moving.hipfire
-					self._moving_crouching_spread_mul = stats_stance_mul.spread.moving.crouching
-					self._moving_steelsight_spread_mul = stats_stance_mul.spread.moving.steelsight
-				end
-			end
+		if stats.total_ammo_multiplier then
+			self._total_ammo_multiplier = self._total_ammo_multiplier * stats.total_ammo_multiplier
 		end
 	end
 end)
@@ -138,8 +110,56 @@ function NewRaycastWeaponBase:get_add_head_shot_mul()
 	return nil
 end
 
-function NewRaycastWeaponBase:steelsight_move_speed_multiplier()
-	return self._steelsight_move_speed_mul
+function NewRaycastWeaponBase:reload_speed_multiplier()
+	if self._current_reload_speed_multiplier then
+		return self._current_reload_speed_multiplier
+	end
+
+	local multiplier = 1
+
+	for _, category in ipairs(self:weapon_tweak_data().categories) do
+		multiplier = multiplier + 1 - managers.player:upgrade_value(category, "reload_speed_multiplier", 1)
+
+		if category == "shotgun" then -- shotgun reload speed stuff
+			if self._use_shotgun_reload then
+				multiplier = multiplier + 1 - managers.player:upgrade_value("shotgun", "pump_reload_speed", 1)
+			else
+				multiplier = multiplier + 1 - managers.player:upgrade_value("shotgun", "mag_reload_speed", 1)
+			end
+		end
+	end
+
+	multiplier = multiplier + 1 - managers.player:upgrade_value("weapon", "passive_reload_speed_multiplier", 1)
+	multiplier = multiplier + 1 - managers.player:upgrade_value(self._name_id, "reload_speed_multiplier", 1)
+
+	if self._setup and alive(self._setup.user_unit) and self._setup.user_unit:movement() then
+		local morale_boost_bonus = self._setup.user_unit:movement():morale_boost()
+
+		if morale_boost_bonus then
+			multiplier = multiplier + 1 - morale_boost_bonus.reload_speed_bonus
+		end
+
+		if self._setup.user_unit:movement():next_reload_speed_multiplier() then
+			multiplier = multiplier + 1 - self._setup.user_unit:movement():next_reload_speed_multiplier()
+		end
+	end
+
+	if managers.player:has_activate_temporary_upgrade("temporary", "reload_weapon_faster") then
+		multiplier = multiplier + 1 - managers.player:temporary_upgrade_value("temporary", "reload_weapon_faster", 1)
+	end
+
+	if managers.player:has_activate_temporary_upgrade("temporary", "single_shot_fast_reload") then
+		multiplier = multiplier + 1 - managers.player:temporary_upgrade_value("temporary", "single_shot_fast_reload", 1)
+	end
+
+	multiplier = multiplier + 1 - managers.player:get_property("shock_and_awe_reload_multiplier", 1)
+	multiplier = multiplier + 1 - managers.player:get_temporary_property("bloodthirst_reload_speed", 1)
+	--multiplier = multiplier + 1 - managers.player:upgrade_value("team", "crew_faster_reload", 1)
+	multiplier = self:_convert_add_to_mul(multiplier)
+	multiplier = multiplier * self:reload_speed_stat()
+	multiplier = managers.modifiers:modify_value("WeaponBase:GetReloadSpeedMultiplier", multiplier)
+
+	return multiplier
 end
 
 function NewRaycastWeaponBase:fire(...)
@@ -242,8 +262,6 @@ function NewRaycastWeaponBase:recoil_multiplier()
 	if is_moving then
 		for _, category in ipairs(categories) do
 			multiplier = multiplier * managers.player:upgrade_value(category, "moving_recoil_multiplier", 1)
-
-			multiplier = multiplier * managers.player:upgrade_value("weapon", "moving_recoil_penalty_reduction", 1)
 		end
 	else
 		for _, category in ipairs(categories) do
@@ -288,6 +306,7 @@ function NewRaycastWeaponBase:spread_multiplier()
 		is_moving = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state and user_unit:movement()._current_state._moving
 		is_crouching = alive(user_unit) and user_unit:movement() and user_unit:movement():crouching()
 		in_steelsight = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state and user_unit:movement()._current_state:in_steelsight()
+		in_air = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state and user_unit:movement()._current_state:in_air()
 	end
 
 	local weapon_tweak = self:weapon_tweak_data()
@@ -387,91 +406,40 @@ function NewRaycastWeaponBase:fire_rate_multiplier()
 	return multiplier
 end
 
-function NewRaycastWeaponBase:reload_speed_multiplier()
-	if self._current_reload_speed_multiplier then
-		return self._current_reload_speed_multiplier
-	end
-
+function NewRaycastWeaponBase:falloff_range_multiplier()
+	local primary_category = self:weapon_tweak_data().categories and self:weapon_tweak_data().categories[1]
+	local current_state = user_unit and user_unit:movement() and user_unit:movement()._current_state
 	local multiplier = 1
 
-	multiplier = multiplier + 1 - self._reload_speed_multiplier
+	multiplier = multiplier * self._falloff_range_multiplier
 
-	for _, category in ipairs(self:weapon_tweak_data().categories) do
-		multiplier = multiplier + 1 - managers.player:upgrade_value(category, "reload_speed_multiplier", 1)
+	local weapon_tweak = self:weapon_tweak_data()
 
-		if category == "shotgun" then -- shotgun reload speed stuff
-			if self._use_shotgun_reload then
-				multiplier = multiplier + 1 - managers.player:upgrade_value("shotgun", "pump_reload_speed_mul", 1)
-			else
-				multiplier = multiplier + 1 - managers.player:upgrade_value("shotgun", "mag_reload_speed_mul", 1)
+	local fire_modes = weapon_tweak.fire_mode_data and weapon_tweak.fire_mode_data.toggable
+
+	if fire_modes then
+		for _, fire_mode in ipairs(fire_modes) do
+			if self:fire_mode() == fire_mode then
+				multiplier = multiplier * (weapon_tweak.fire_mode_mul and weapon_tweak.fire_mode_mul[fire_mode].falloff_range or 1)
 			end
 		end
 	end
 
-	multiplier = multiplier + 1 - managers.player:upgrade_value("weapon", "passive_reload_speed_multiplier", 1)
-	multiplier = multiplier + 1 - managers.player:upgrade_value(self._name_id, "reload_speed_multiplier", 1)
-
-	if self._setup and alive(self._setup.user_unit) and self._setup.user_unit:movement() then
-		local morale_boost_bonus = self._setup.user_unit:movement():morale_boost()
-
-		if morale_boost_bonus then
-			multiplier = multiplier + 1 - morale_boost_bonus.reload_speed_bonus
-		end
-
-		if self._setup.user_unit:movement():next_reload_speed_multiplier() then
-			multiplier = multiplier + 1 - self._setup.user_unit:movement():next_reload_speed_multiplier()
-		end
+	if self._alt_fire_active and self._alt_fire_data then
+		multiplier = multiplier * (self._alt_fire_data.falloff_range_mul or 1)
 	end
 
-	if managers.player:has_activate_temporary_upgrade("temporary", "reload_weapon_faster") then
-		multiplier = multiplier + 1 - managers.player:temporary_upgrade_value("temporary", "reload_weapon_faster", 1)
+	if managers.player:current_state() and managers.player:current_state() == "bipod" then
+		multiplier = multiplier * managers.player:upgrade_value(primary_category, "bipod_range_mul", 1)
+
+		multiplier = multiplier * (weapon_tweak.stance_range_mul and weapon_tweak.stance_range_mul.bipod or 1)
+	elseif current_state and current_state:in_steelsight() then
+		multiplier = multiplier * (weapon_tweak.stance_range_mul and weapon_tweak.stance_range_mul.steelsight or 1)
 	end
 
-	if managers.player:has_activate_temporary_upgrade("temporary", "single_shot_fast_reload") then
-		multiplier = multiplier + 1 - managers.player:temporary_upgrade_value("temporary", "single_shot_fast_reload", 1)
+	if current_state and current_state:in_steelsight() then
+		multiplier = multiplier * managers.player:upgrade_value(primary_category, "steelsight_range_mul", 1)
 	end
-
-	multiplier = multiplier + 1 - managers.player:get_property("shock_and_awe_reload_multiplier", 1)
-	multiplier = multiplier + 1 - managers.player:get_temporary_property("bloodthirst_reload_speed", 1)
-	multiplier = multiplier + 1 - managers.player:upgrade_value("team", "crew_faster_reload", 1)
-
-	multiplier = self:_convert_add_to_mul(multiplier)
-	multiplier = multiplier * self:reload_speed_stat()
-
-	multiplier = managers.modifiers:modify_value("WeaponBase:GetReloadSpeedMultiplier", multiplier)
-
-	return multiplier
-end
-
-function NewRaycastWeaponBase:enter_steelsight_speed_multiplier()
-	local weapon_tweak = self:weapon_tweak_data()
-	local categories = weapon_tweak.categories
-
-	local steelsight_time = (tweak_data.player.TRANSITION_DURATION or 0.23) / self._steelsight_time
-
-	local multiplier = 1
-
-	multiplier = multiplier + 1 - self._steelsight_speed_multiplier
-
-	for _, category in ipairs(categories) do
-		multiplier = multiplier + 1 - managers.player:upgrade_value(category, "enter_steelsight_speed_multiplier", 1)
-	end
-
-	multiplier = multiplier + 1 - managers.player:temporary_upgrade_value("temporary", "combat_medic_enter_steelsight_speed_multiplier", 1)
-	multiplier = multiplier + 1 - managers.player:upgrade_value(self._name_id, "enter_steelsight_speed_multiplier", 1)
-	multiplier = multiplier + 1 - managers.player:upgrade_value("weapon", "enter_steelsight_speed_multiplier", 1)
-
-	if self._silencer then
-		multiplier = multiplier + 1 - managers.player:upgrade_value("weapon", "silencer_enter_steelsight_speed_multiplier", 1)
-
-		for _, category in ipairs(categories) do
-			multiplier = multiplier + 1 - managers.player:upgrade_value(category, "silencer_enter_steelsight_speed_multiplier", 1)
-		end
-	end
-
-	multiplier = self:_convert_add_to_mul(multiplier)
-
-	multiplier = multiplier * steelsight_time
 
 	return multiplier
 end
@@ -500,78 +468,103 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 	return self:_convert_add_to_mul(mul)
 end
 
+function NewRaycastWeaponBase:enter_steelsight_speed_multiplier()
+	local weapon_tweak = self:weapon_tweak_data()
+	local categories = weapon_tweak.categories
+
+	local multiplier = (tweak_data.player.TRANSITION_DURATION or 0.23) / self._steelsight_time
+
+	for _, category in ipairs(categories) do
+		multiplier = multiplier * managers.player:upgrade_value(category, "enter_steelsight_speed_multiplier", 1)
+	end
+
+	multiplier = multiplier * managers.player:temporary_upgrade_value("temporary", "combat_medic_enter_steelsight_speed_multiplier", 1)
+	multiplier = multiplier * managers.player:upgrade_value("weapon", "enter_steelsight_speed_multiplier", 1)
+
+	if self._silencer then
+		multiplier = multiplier * managers.player:upgrade_value("weapon", "silencer_enter_steelsight_speed_multiplier", 1)
+
+		for _, category in ipairs(categories) do
+			multiplier = multiplier * managers.player:upgrade_value(category, "silencer_enter_steelsight_speed_multiplier", 1)
+		end
+	end
+
+	return multiplier
+end
+
 Hooks:PreHook(NewRaycastWeaponBase, "_fire_raycast", "eclipse_fire_raycast", function(self)
-	self._enemy_penetrations = nil
 	self._hit_through_enemy = nil
-	self._hit_through_wall = nil
-	self._hit_through_shield = nil
 end)
 
-Hooks:PostHook(NewRaycastWeaponBase, "get_damage_falloff", "eclipse_get_damage_falloff", function(self, damage, hit)
-	local multiplier = 1
+function NewRaycastWeaponBase:get_damage_falloff(damage, col_ray, user_unit)
+	local damage_mul = 1
 
 	local weapon_tweak = self:weapon_tweak_data()
-	local penetration_dmg_mul = weapon_tweak.penetration_damage_mul
 
-	self._hit_through_enemy = self._hit_through_enemy or hit.unit:in_slot(self.enemy_mask)
-	self._hit_through_wall = self._hit_through_wall or hit.unit:in_slot(self.wall_mask)
-	self._hit_through_shield = self._hit_through_shield or hit.unit:in_slot(self.shield_mask)
-
-	if self._hit_through_enemy then
-		self._enemy_penetrations = (self._enemy_penetrations or 0) + 1
-
-		if self._enemy_penetrations > 1 then
-			local pen_mult = (penetration_dmg_mul and penetration_dmg_mul.enemy or 1) ^ math.max(1, self._enemy_penetrations - 1)
-
-			multiplier = multiplier * pen_mult
-		end
+	if col_ray.unit and col_ray.unit:in_slot(self.shield_mask) then
+		damage_mul = damage_mul * (self._penetration_dmg_mul and self._penetration_dmg_mul.shield or 1)
+	elseif col_ray.unit and col_ray.unit:in_slot(self.wall_mask) then
+		damage_mul = damage_mul * (self._penetration_dmg_mul and self._penetration_dmg_mul.wall or 1)
 	end
 
-	multiplier = multiplier * (self._hit_through_wall and penetration_dmg_mul and penetration_dmg_mul.wall or 1)
-	multiplier = multiplier * (self._hit_through_shield and penetration_dmg_mul and penetration_dmg_mul.shield or 1)
-
-	return Hooks:GetReturn() * multiplier
-end)
-
--- percentage clip ammo increase upgrade
-function NewRaycastWeaponBase:calculate_ammo_max_per_clip()
-	local added = 0
-	local weapon_tweak_data = self:weapon_tweak_data()
-
-	if self:is_category("shotgun") and tweak_data.weapon[self._name_id].has_magazine then
-		added = managers.player:upgrade_value("shotgun", "magazine_capacity_inc", 0)
-
-		if self:is_category("akimbo") then
-			added = added * 2
+	if col_ray.unit and col_ray.unit:in_slot(self.enemy_mask) then
+		if self._hit_through_enemy then
+			damage_mul = damage_mul * (self._penetration_dmg_mul and self._penetration_dmg_mul.enemy or 1)
 		end
-	elseif self:is_category("pistol") and not self:is_category("revolver") and managers.player:has_category_upgrade("pistol", "magazine_capacity_inc") then
-		added = managers.player:upgrade_value("pistol", "magazine_capacity_inc", 0)
 
-		if self:is_category("akimbo") then
-			added = added * 2
-		end
-	elseif self:is_category("smg", "assault_rifle", "lmg") then
-		added = managers.player:upgrade_value("player", "automatic_mag_increase", 0)
-
-		if self:is_category("akimbo") then
-			added = added * 2
-		end
+		self._hit_through_enemy = true
 	end
 
-	local ammo = tweak_data.weapon[self._name_id].CLIP_AMMO_MAX + added
-	ammo = ammo + managers.player:upgrade_value(self._name_id, "clip_ammo_increase")
-
-	if not self:upgrade_blocked("weapon", "clip_ammo_increase") then
-		ammo = math.ceil(ammo * managers.player:upgrade_value("weapon", "clip_ammo_increase", 1))
+	if self._optimal_distance + self._optimal_range == 0 then
+		return damage * damage_mul
 	end
 
-	for _, category in ipairs(tweak_data.weapon[self._name_id].categories) do
-		if not self:upgrade_blocked(category, "clip_ammo_increase") then
-			ammo = ammo + managers.player:upgrade_value(category, "clip_ammo_increase", 0)
+	local distance = col_ray.distance or mvector3.distance(col_ray.unit:position(), user_unit:position())
+	local near_dist = self._optimal_distance - self._near_falloff
+	local optimal_start = self._optimal_distance
+	local optimal_end = self._optimal_distance + self._optimal_range
+	local far_dist = optimal_end + self._far_falloff
+	local near_mul = self._near_multiplier
+	local optimal_mul = 1
+	local far_mul = self._far_multiplier
+	local multiplier = self:falloff_range_multiplier()
+
+	optimal_end = optimal_end * multiplier
+	far_dist = far_dist * multiplier
+
+	if distance < self._optimal_distance then
+		if self._near_falloff > 0 then
+			damage_mul = math.map_range_clamped(distance, near_dist, optimal_start, near_mul, optimal_mul)
+		else
+			damage_mul = near_mul
 		end
+	elseif distance < optimal_end then
+		damage_mul = optimal_mul
+	elseif self._far_falloff > 0 then
+		damage_mul = math.map_range_clamped(distance, optimal_end, far_dist, optimal_mul, far_mul)
+	else
+		damage_mul = far_mul
 	end
 
-	ammo = ammo + (self._extra_ammo or 0)
+	return damage * damage_mul
+end
 
-	return ammo
+--Hitmarker size now scales linearly based on distance to make falloff more readable
+function NewRaycastWeaponBase:is_weak_hit(distance, user_unit)
+	if not distance or not user_unit or self._optimal_distance + self._optimal_range == 0 then
+		return 1
+	end
+
+	local multiplier = self:falloff_range_multiplier()
+
+	local optimal_end = (self._optimal_distance + self._optimal_range) * multiplier
+	local far_dist = self._far_falloff * multiplier
+
+	local scale_mul = 0
+
+	local f = math.clamp(math.max(0, (distance - optimal_end)) / far_dist, 0, 1)
+
+	scale_mul = math.lerp(1, 0.5, f)
+
+	return scale_mul
 end

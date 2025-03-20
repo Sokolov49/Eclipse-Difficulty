@@ -34,7 +34,7 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 
 			self._unit:character_damage():change_health(-spooc_kick_damage)
 
-			local effect = "melee_hit_spooc_var" .. math.random(1, 2)
+			local effect = "melee_hit_spooc_var" .. math.random(1, 4)
 
 			self._unit:camera():play_shaker(effect, 1)
 		else

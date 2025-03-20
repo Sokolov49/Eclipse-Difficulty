@@ -2,8 +2,6 @@
 StatisticsManager.special_unit_ids = {
 	"shield",
 	"fbi_shield",
-	"city_shield",
-	"city_shield_break",
 	"spooc",
 	"tank",
 	"tank_elite",
@@ -11,7 +9,8 @@ StatisticsManager.special_unit_ids = {
 	"taser",
 	"medic",
 	"sniper",
-	"marksman",
+	"phalanx_minion",
+	"phalanx_minion_break",
 	"phalanx_vip",
 	"heavy_swat_sniper",
 	"zeal_shield",
@@ -23,7 +22,6 @@ StatisticsManager.special_unit_ids = {
 	"mobster_boss",
 	"hector_boss",
 	"hector_boss_no_armor",
-	"fbi_boss",
 	"tank_medic",
 	"tank_mini",
 	"marshal_marksman",
@@ -39,48 +37,6 @@ StatisticsManager.special_unit_ids = {
 local old_stats = StatisticsManager.init
 function StatisticsManager:init()
 	old_stats(self)
-	self._defaults.killed.fbi_boss = {
-		count = 0,
-		head_shots = 0,
-		melee = 0,
-		explosion = 0,
-		tied = 0,
-	}
-	self._defaults.killed.cobra = {
-		count = 0,
-		head_shots = 0,
-		melee = 0,
-		explosion = 0,
-		tied = 0,
-	}
-	self._defaults.killed.murky = {
-		count = 0,
-		head_shots = 0,
-		melee = 0,
-		explosion = 0,
-		tied = 0,
-	}
-	self._defaults.killed.fbi_shield = {
-		count = 0,
-		head_shots = 0,
-		melee = 0,
-		explosion = 0,
-		tied = 0,
-	}
-	self._defaults.killed.marksman = {
-		count = 0,
-		head_shots = 0,
-		melee = 0,
-		explosion = 0,
-		tied = 0,
-	}
-	self._defaults.killed.city_shield = {
-		count = 0,
-		head_shots = 0,
-		melee = 0,
-		explosion = 0,
-		tied = 0,
-	}
 	self._defaults.killed.tank_elite = {
 		count = 0,
 		head_shots = 0,

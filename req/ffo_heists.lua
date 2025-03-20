@@ -1,5 +1,4 @@
----@module Full-Force-Onslaught Heists
-local M = {
+return {
 	hox_1 = true,
 	hox_2 = true,
 	red2 = true, -- fwb
@@ -25,5 +24,3 @@ local M = {
 	man = true, -- ucovr
 	glace = true, -- gridge
 }
-
-return M

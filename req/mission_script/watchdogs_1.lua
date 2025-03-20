@@ -1,5 +1,4 @@
 local scripted_enemy = Eclipse.scripted_enemy
-local preferred = Eclipse.preferred
 local is_eclipse = Eclipse.utils.is_eclipse()
 
 local bulldozer = scripted_enemy.bulldozer_1
@@ -27,13 +26,13 @@ return {
 	-- delay police response
 	[100327] = {
 		on_executed = {
-			{ id = 100768, delay = 30 },
-		},
+			{ id = 100768, delay = 30 }
+		}
 	},
-	[101291] = van_enemy1,
-	[101298] = van_enemy1,
-	[101292] = van_enemy2,
-	[101299] = van_enemy2,
+	[101291] = van_enemy_01,
+	[101298] = van_enemy_01,
+	[101292] = van_enemy_02,
+	[101299] = van_enemy_02,
 	-- spawnpoint delays
 	[100767] = flank_spawn,
 	[100760] = flank_spawn,
@@ -41,12 +40,19 @@ return {
 		values = {
 			interval = 30,
 		},
-		groups = preferred.no_bulldozers,
+		groups = {
+			tac_bull_rush = false,
+		},
 	},
 	[101687] = {
 		values = {
 			interval = 40,
 		},
-		groups = preferred.no_cops_agents_shields_bulldozers,
+		groups = {
+			tac_shield_wall = false,
+			tac_shield_wall_ranged = false,
+			tac_shield_wall_charge = false,
+			tac_bull_rush = false,
+		},
 	},
 }

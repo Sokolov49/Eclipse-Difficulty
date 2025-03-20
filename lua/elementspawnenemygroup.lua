@@ -42,10 +42,6 @@ ElementSpawnEnemyGroup.group_mapping = {
 		"FBI_reinforce_swats",
 		"Elite_assault_swats",
 		"Elite_reinforce_swats",
-		"Elite_assault_sniper",
-		"Zeal_assault_swats",
-		"Zeal_assault_heavies",
-		"Zeal_reinforce_swats",
 	},
 	tac_shield_wall = {
 		"CS_assault_shield",

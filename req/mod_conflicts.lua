@@ -1,5 +1,4 @@
----@module Mod Conflicts
-local M = {
+return table.list_to_set({
 	"Assault Tweaks Standalone Lite",
 	"Assault Tweaks Standalone",
 	"Full Speed Swarm",
@@ -42,7 +41,4 @@ local M = {
 	"Colourblind Flashbang - GREEN",
 	"Colourblind Flashbang - YELLOW",
 	"More Weapon Stats",
-	"Viewmodel Recoil (No Camera Recoil)",
-}
-
-return table.list_to_set(M)
+})

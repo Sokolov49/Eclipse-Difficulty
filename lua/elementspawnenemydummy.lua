@@ -8,51 +8,27 @@ end
 -- Map to correct incorrect faction spawns
 ElementSpawnEnemyDummy.faction_mapping = {
 	CS = {
-		swat_1 = {
-			"units/payday2/characters/ene_swat_1/ene_swat_1",
-			"units/payday2/characters/ene_swat_3/ene_swat_3",
-		},
+		swat_1 = "units/payday2/characters/ene_swat_1/ene_swat_1",
 		swat_2 = "units/payday2/characters/ene_swat_2/ene_swat_2",
+		swat_3 = "units/payday2/characters/ene_swat_1/ene_swat_1",
 		heavy_1 = "units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1",
 		heavy_2 = "units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870",
 		shield = "units/payday2/characters/ene_shield_2/ene_shield_2",
 		sniper = "units/payday2/characters/ene_sniper_1/ene_sniper_1",
 	},
 	FBI = {
-		swat_1 = {
-			"units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1",
-			"units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3",
-		},
+		swat_1 = "units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1",
 		swat_2 = "units/payday2/characters/ene_fbi_swat_2/ene_fbi_swat_2",
+		swat_3 = "units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1",
 		heavy_1 = "units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1",
 		heavy_2 = "units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870",
 		shield = "units/payday2/characters/ene_shield_1/ene_shield_1",
 		sniper = "units/payday2/characters/ene_sniper_2/ene_sniper_2",
-		bulldozer = {
-			"units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1",
-			"units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2",
-		},
-		elite_bulldozer = {
-			"units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1",
-			"units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2",
-		},
 	},
 	Elite = {
-		swat_1 = {
-			"units/payday2/characters/ene_city_swat_1/ene_city_swat_1",
-			"units/payday2/characters/ene_city_swat_3/ene_city_swat_3",
-		},
+		swat_1 = "units/payday2/characters/ene_city_swat_1/ene_city_swat_1",
 		swat_2 = "units/payday2/characters/ene_city_swat_2/ene_city_swat_2",
-		bulldozer = {
-			"units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1",
-			"units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2",
-			"units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3",
-			"units/pd2_dlc_drm/characters/ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic",
-		},
-		elite_bulldozer = {
-			"units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3",
-			"units/pd2_dlc_drm/characters/ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic",
-		},
+		swat_3 = "units/payday2/characters/ene_city_swat_3/ene_city_swat_3",
 	},
 	Zeal = {
 		swat_1 = "units/pd2_dlc_gitgud/characters/ene_zeal_swat/ene_zeal_swat",
@@ -68,15 +44,15 @@ ElementSpawnEnemyDummy.faction_mapping = {
 }
 
 ElementSpawnEnemyDummy.enemy_mapping = {
-	[("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"):key()] = "bulldozer",
-	[("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"):key()] = "bulldozer",
-	[("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"):key()] = "elite_bulldozer",
+	[("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"):key()] = "bulldozer_1",
+	[("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"):key()] = "bulldozer_2",
+	[("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"):key()] = "elite_bulldozer_2",
 	[("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36"):key()] = "heavy_1",
 	[("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870"):key()] = "heavy_2",
 	[("units/payday2/characters/ene_city_shield/ene_city_shield"):key()] = "shield",
 	[("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"):key()] = "swat_1",
 	[("units/payday2/characters/ene_city_swat_2/ene_city_swat_2"):key()] = "swat_2",
-	[("units/payday2/characters/ene_city_swat_3/ene_city_swat_3"):key()] = "swat_1",
+	[("units/payday2/characters/ene_city_swat_3/ene_city_swat_3"):key()] = "swat_3",
 	[("units/payday2/characters/ene_city_swat_r870/ene_city_swat_r870"):key()] = "swat_2",
 	[("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"):key()] = "heavy_1",
 	[("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870"):key()] = "heavy_2",
@@ -96,23 +72,23 @@ ElementSpawnEnemyDummy.enemy_mapping = {
 	[("units/payday2/characters/ene_spook_1/ene_spook_1"):key()] = "cloaker",
 	[("units/pd2_dlc_usm1/characters/ene_male_marshal_marksman_1/ene_male_marshal_marksman_1"):key()] = "swat_1",
 	[("units/pd2_dlc_usm2/characters/ene_male_marshal_shield_1/ene_male_marshal_shield_1"):key()] = "shield",
-	[("units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic"):key()] = "bulldozer",
-	[("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_r870/ene_akan_fbi_tank_r870"):key()] = "bulldozer",
-	[("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_saiga/ene_akan_fbi_tank_saiga"):key()] = "bulldozer",
-	[("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_rpk_lmg/ene_akan_fbi_tank_rpk_lmg"):key()] = "elite_bulldozer",
-	[("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_1/ene_bulldozer_hvh_1"):key()] = "bulldozer",
-	[("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_2/ene_bulldozer_hvh_2"):key()] = "bulldozer",
-	[("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_3/ene_bulldozer_hvh_3"):key()] = "elite_bulldozer",
-	[("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"):key()] = "elite_bulldozer",
-	[("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"):key()] = "elite_bulldozer",
-	[("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"):key()] = "bulldozer",
-	[("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"):key()] = "bulldozer",
-	[("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic"):key()] = "bulldozer",
-	[("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_swat_dozer_policia_federale_r870"):key()] = "bulldozer",
-	[("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/ene_swat_dozer_policia_federale_saiga"):key()] = "bulldozer",
-	[("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249"):key()] = "elite_bulldozer",
-	[("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun"):key()] = "elite_bulldozer",
-	[("units/pd2_dlc_bex/characters/ene_swat_dozer_medic_policia_federale/ene_swat_dozer_medic_policia_federale"):key()] = "bulldozer",
+	[("units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic"):key()] = "bulldozer_1",
+	[("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_r870/ene_akan_fbi_tank_r870"):key()] = "bulldozer_1",
+	[("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_saiga/ene_akan_fbi_tank_saiga"):key()] = "bulldozer_2",
+	[("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_rpk_lmg/ene_akan_fbi_tank_rpk_lmg"):key()] = "elite_bulldozer_2",
+	[("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_1/ene_bulldozer_hvh_1"):key()] = "bulldozer_1",
+	[("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_2/ene_bulldozer_hvh_2"):key()] = "bulldozer_1",
+	[("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_3/ene_bulldozer_hvh_3"):key()] = "elite_bulldozer_2",
+	[("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"):key()] = "elite_bulldozer_1",
+	[("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"):key()] = "elite_bulldozer_2",
+	[("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"):key()] = "bulldozer_1",
+	[("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"):key()] = "bulldozer_1",
+	[("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic"):key()] = "bulldozer_1",
+	[("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_swat_dozer_policia_federale_r870"):key()] = "bulldozer_1",
+	[("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/ene_swat_dozer_policia_federale_saiga"):key()] = "bulldozer_2",
+	[("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249"):key()] = "elite_bulldozer_2",
+	[("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun"):key()] = "elite_bulldozer_1",
+	[("units/pd2_dlc_bex/characters/ene_swat_dozer_medic_policia_federale/ene_swat_dozer_medic_policia_federale"):key()] = "bulldozer_1",
 	[("units/pd2_dlc_mad/characters/ene_akan_cs_shield_c45/ene_akan_cs_shield_c45"):key()] = "shield",
 	[("units/pd2_dlc_mad/characters/ene_akan_fbi_shield_sr2_smg/ene_akan_fbi_shield_sr2_smg"):key()] = "shield",
 	[("units/pd2_dlc_mad/characters/ene_akan_fbi_shield_dw_sr2_smg/ene_akan_fbi_shield_dw_sr2_smg"):key()] = "shield",
@@ -161,7 +137,7 @@ end)
 --
 
 Hooks:PreHook(ElementSpawnEnemyDummy, "produce", "sh_produce", function(self, params)
-	if not (params and params.name) and self._enemy_table then
+	if not params and self._enemy_table then
 		self._enemy_name = Idstring(table.random(self._enemy_table))
 	end
 end)

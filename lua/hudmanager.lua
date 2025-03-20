@@ -12,7 +12,6 @@ function HUDManager:on_ff_confirmed()
 	self._hud_hit_confirm:on_ff_confirmed()
 end
 
-
 --change name labels to a more readable format
 	function HUDManager:_add_name_label(data)
 		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_FULLSCREEN_PD2)

@@ -1,26 +1,37 @@
-local preferred = Eclipse.preferred
 local side_building1 = {
 	values = {
-		interval = 15,
-	},
+		interval = 15
+	}
 }
 local side_building2 = {
 	values = {
-		interval = 15,
+		interval = 15
 	},
-	groups = preferred.no_cops_agents_shields,
+	groups = {
+		tac_shield_wall = false,
+		tac_shield_wall_ranged = false,
+		tac_shield_wall_charge = false,
+	},
 }
 local side_building3 = {
 	values = {
-		interval = 25,
+		interval = 25
 	},
-	groups = preferred.no_cops_agents_shields,
+	groups = {
+		tac_shield_wall = false,
+		tac_shield_wall_ranged = false,
+		tac_shield_wall_charge = false,
+	},
 }
 local upper_floor = {
 	values = {
-		interval = 20,
+		interval = 20
 	},
-	groups = preferred.no_shields,
+	groups = {
+		tac_shield_wall = false,
+		tac_shield_wall_ranged = false,
+		tac_shield_wall_charge = false,
+	},
 }
 local atrium_spawn = {
 	values = {
@@ -29,19 +40,24 @@ local atrium_spawn = {
 }
 local archives_spawn = {
 	values = {
-		interval = 45,
+		interval = 45
 	},
-	groups = preferred.no_cops_agents_shields_bulldozers,
+	groups = {
+		tac_shield_wall = false,
+		tac_shield_wall_ranged = false,
+		tac_shield_wall_charge = false,
+		tac_bull_rush = false,
+	},
 }
 return {
 	-- add ponr state
 	[102221] = {
-		set_ponr_state = true,
+		set_ponr_state = true
 	},
 	[101871] = {
 		values = {
-			enabled = false,
-		},
+			enabled = false
+		}
 	},
 	[101890] = {
 		values = {
@@ -50,16 +66,16 @@ return {
 				{ delay = 0, id = 102016 },
 				{ delay = 0, id = 102218 },
 				{ delay = 0, id = 101374 },
-				{ delay = 0, id = 102239 },
+				{ delay = 0, id = 102239  },
 				{ delay = 12, id = 102354 },
 				{ delay = 0, id = 100087 },
-			},
-		},
+			}
+		}
 	},
 	-- spawnpoint delays
 	[101662] = side_building1,
 	[100140] = side_building1,
-	[101672] = side_building2,
+	[101672] = side_building2
 	[101677] = side_building2,
 	[100139] = side_building2,
 	[100007] = side_building3,
@@ -73,8 +89,13 @@ return {
 	[101682] = archives_spawn,
 	[101688] = {
 		values = {
-			interval = 25,
+			interval = 25
 		},
-		groups = preferred.no_cops_agents_shields_bulldozers,
-	},
+		groups = {
+			tac_shield_wall = false,
+			tac_shield_wall_ranged = false,
+			tac_shield_wall_charge = false,
+			tac_bull_rush = false,
+		},
+	}
 }

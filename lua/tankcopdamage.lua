@@ -2,7 +2,6 @@
 TankCopDamage.IS_TANK = true
 
 TankCopDamage.armor_body_names = {
-	[Idstring("body_helmet"):key()] = true,
 	[Idstring("body_armor_back"):key()] = true,
 	[Idstring("body_armor_chest"):key()] = true,
 	[Idstring("body_armor_neck"):key()] = true,

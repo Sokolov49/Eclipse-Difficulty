@@ -1,5 +1,43 @@
 local ffo_heists = Eclipse.ffo_heists
 
+-- Megaphone events must be appended to this table in order for them to be synced to clients
+GroupAIStateBase.MEGAPHONE_EVENTS = {
+	"mga_killed_civ_1st",
+	"mga_killed_civ_2nd",
+	"mga_hostage_assault_delay",
+	"mga_generic_c",
+	"mga_robbers_clever",
+	"mga_leave"
+}
+table.list_append(GroupAIStateBase.EVENT_SYNC, GroupAIStateBase.MEGAPHONE_EVENTS)
+
+function GroupAIStateBase:_post_megaphone_event(event)
+	local pos = tweak_data.levels[Global.level_data.level_id].megaphone_pos or Vector3(0, 0, 0)
+	local sound_source = SoundDevice:create_source("megaphone")
+
+	sound_source:set_position(pos)
+	sound_source:post_event(event)
+	
+	if self._is_server then
+		local event_id = self:get_sync_event_id(event)
+		if event_id then
+			managers.network:session():send_to_peers_synched("group_ai_event", event_id, 0)
+		else
+			log("[RESTORATION] GroupAIStateBase:_post_megaphone_event: Tried to sync an inexistent event ID: " .. tostring(event))
+		end
+	end
+end
+
+local sync_event_orig = GroupAIStateBase.sync_event
+function GroupAIStateBase:sync_event(event_id, ...)
+	local event_name = self.EVENT_SYNC[event_id]
+	if table.contains(self.MEGAPHONE_EVENTS, event_name) then
+		self:_post_megaphone_event(event_name)
+	elseif event_name ~= "cloaker_spawned" then
+		return sync_event_orig(self, event_id, ...)
+	end
+end
+
 --Peak scripting
 function GroupAIStateBase:_get_scripted_tier()
 	local diff_rounded = self._difficulty_value >= 1 and 1 or self._difficulty_value < 0.5 and 0 or 0.5
@@ -106,29 +144,6 @@ Hooks:PostHook(GroupAIStateBase, "init", "eclipse_init", function(self)
 	self._marking_sentries = {}
 end)
 
--- Add the marksman enemy to special unit types
-Hooks:PostHook(GroupAIStateBase, "_init_misc_data", "eclipse_init_misc_data", function(self)
-	self._special_unit_types = {
-		shield = true,
-		medic = true,
-		taser = true,
-		tank = true,
-		spooc = true,
-		marksman = true,
-	}
-end)
-
-Hooks:PostHook(GroupAIStateBase, "on_simulation_started", "eclipse_on_simulation_started", function(self)
-	self._special_unit_types = {
-		shield = true,
-		medic = true,
-		taser = true,
-		tank = true,
-		spooc = true,
-		marksman = true,
-	}
-end)
-
 -- Restore scripted cloaker spawn noise
 local _process_recurring_grp_SO_original = GroupAIStateBase._process_recurring_grp_SO
 function GroupAIStateBase:_process_recurring_grp_SO(...)
@@ -176,7 +191,7 @@ end
 
 --Killing hostages in Pro Jobs increases diff
 local is_pro_job = Eclipse.utils.is_pro_job()
-Hooks:PostHook(GroupAIStateBase, "hostage_killed", "hits_hostage_killed", function(self)
+Hooks:PostHook(GroupAIStateBase, "hostage_killed", "hits_hostage_killed", function (self)
 	if is_pro_job then
 		self._hostage_killed_diff_add = math.random(75, 100) / 1000
 		self:add_difficulty(self._hostage_killed_diff_add)
@@ -360,6 +375,30 @@ Hooks:PreHook(GroupAIStateBase, "add_special_objective", "sh_add_special_objecti
 	objective_data.objective.pose = nil
 end)
 
+-- Setup sentry marking via host
+function GroupAIStateBase:register_marking_sentry(unit)
+	if unit:base().sentry_gun and unit:base():has_marking() then
+		self._marking_sentries[unit:key()] = unit
+	end
+end
+
+-- Remove sentries from marking table on destruction
+-- Have to work around this bc sh framework :weirdge:
+function GroupAIStateBase:unregister_marking_sentry(unit)
+	if unit:base().sentry_gun and unit:base():has_marking() then
+		self._marking_sentries[unit:key()] = nil
+	end
+end
+
+-- Do sentry marking if you are the host
+Hooks:PostHook(GroupAIStateBase, "update", "eclipse_sentry_update", function(self, t, dt)
+	if Network:is_server() then
+		for _, sentry in pairs(self._marking_sentries) do
+			sentry:base():_update_omniscience(t, dt)
+		end
+	end
+end)
+
 -- Set a minimum gunshot and bullet impact alert range in loud
 Hooks:PreHook(GroupAIStateBase, "propagate_alert", "sh_propagate_alert", function(self, alert_data)
 	if alert_data[1] == "bullet" and alert_data[3] and self:enemy_weapons_hot() then
@@ -419,7 +458,6 @@ function GroupAIStateBase:is_ai_trade_possible()
 	return not ai_disabled and (self._hostage_headcount > 0 or next(self._converted_police) or managers.trade:is_trading())
 end
 
-
 -- control freak thing
 local _upd_criminal_suspicion_progress_original = GroupAIStateBase._upd_criminal_suspicion_progress
 function GroupAIStateBase:_upd_criminal_suspicion_progress(...)
@@ -473,4 +511,40 @@ function GroupAIStateBase:_upd_criminal_suspicion_progress(...)
 	end
 	
 	return _upd_criminal_suspicion_progress_original(self, ...)
+end
+
+--setup for host to set diff based on events
+--probably fine if clients run it, but better safe than sorry
+if Network:is_server() then
+	--increase diff by x amount for each hostage killed (only by players)
+	Hooks:PostHook(GroupAIStateBase, "hostage_killed", "res_hostage_killed", function(self, killer_unit)
+		--vanilla checks to make sure its a player
+		if not alive(killer_unit) then
+			return
+		end
+
+		if killer_unit:base() and killer_unit:base().thrower_unit then
+			killer_unit = killer_unit:base():thrower_unit()
+
+			if not alive(killer_unit) then
+				return
+			end
+		end
+
+		local key = killer_unit:key()
+		local criminal = self._criminals[key]
+		if not criminal then
+			return
+		end
+
+		if not self._hunt_mode and self._assault_number and self._assault_number >= 1 then
+			self._megaphone_hostages_killed = (self._megaphone_hostages_killed or 0) + 1 -- have to track separately to self._hostages_killed because some may be killed before going loud
+
+			if self._megaphone_hostages_killed == 1 then
+				self:_post_megaphone_event("mga_killed_civ_1st")
+			elseif self._megaphone_hostages_killed == 4 then
+				self:_post_megaphone_event("mga_killed_civ_2nd")
+			end
+		end
+	end)
 end
