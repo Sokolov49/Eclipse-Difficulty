@@ -195,7 +195,7 @@ tweak_data.projectiles.frag = {
 	name_id = "bm_grenade_frag",
 }
 
-tweak_data.projectiles.dada_com = {
+projectiles.dada_com = {
 	damage = 42,
 	curve_pow = 1.2,
 	player_damage = 10,
@@ -204,7 +204,7 @@ tweak_data.projectiles.dada_com = {
 	sound_event = "mtl_explosion"
 }
 
-tweak_data.projectiles.dynamite = {
+projectiles.dynamite = {
 	damage = 96,
 	curve_pow = 2,
 	player_damage = 10,

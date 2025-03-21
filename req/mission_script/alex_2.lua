@@ -1,9 +1,17 @@
-local preferred = Eclipse.preferred
 return {
 	[104480] = {
-		groups = preferred.no_cops_agents_shields_bulldozers,
+		groups = {
+			tac_shield_wall = false,
+			tac_shield_wall_ranged = false,
+			tac_shield_wall_charge = false,
+			tac_bull_rush = false
+		}
 	},
 	[102793] = {
-		groups = preferred.no_cops_agents_shields,
-	},
+		groups = {
+			tac_shield_wall = false,
+			tac_shield_wall_ranged = false,
+			tac_shield_wall_charge = false
+		}
+	}
 }

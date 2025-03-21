@@ -1,40 +1,26 @@
 local spawn_1 = {
 	values = {
-		interval = 20,
-	},
+		interval = 20
+	}
 }
 local spawn_2 = {
 	values = {
-		interval = 30,
-	},
+		interval = 30
+	}
 }
 
 return {
-	-- Combine some navigation areas
-	[100303] = {
-		ai_area = {
-			{ 13, 58, 105 },
-			{ 36, 35, 103, 32, 108, 33, 34 },
-			{ 49, 170 },
-			{ 121, 165 },
-			{ 167, 61, 166, 60 },
-			{ 62, 169 },
-			{ 59, 168 },
-			{ 110, 64, 111 },
-			{ 63, 162 },
-		},
-	},
 	-- add point of no return and disable endless assault
 	[100875] = {
 		ponr = {
 			length = 240,
-			player_mul = { 1.5, 1, 0.85, 0.75 },
+			player_mul = { 1.5, 1, 0.85, 0.75 }
 		},
 	},
 	[100877] = {
 		values = {
-			enabled = false,
-		},
+			enabled = false
+		}
 	},
 	-- Slow down all spawnpoints cause this is a very cramped map
 	[102664] = spawn_1,
