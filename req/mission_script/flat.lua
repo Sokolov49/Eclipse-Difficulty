@@ -1,15 +1,15 @@
--- more ASS edits
--- also resmod stuff
+local scripted_enemy = Eclipse.scripted_enemy
+local preferred = Eclipse.preferred
 local normal, hard, eclipse = Eclipse.utils.diff_groups()
-local enabled_blocked_roof_access = math.random() < 0.45
+local enabled_blocked_roof_access = math.random() < 0.6
 local enabled = {
 	values = {
-        enabled = true,
+		enabled = true,
 	},
 }
 local disabled = {
 	values = {
-        enabled = false,
+		enabled = false,
 	},
 }
 local sniper_kills = {
@@ -22,10 +22,14 @@ local retrigger = {
 		trigger_times = 0,
 	},
 }
+local alley_spawn = {
+	groups = preferred.no_bulldozers,
+}
 local roof_spawn = {
 	values = {
 		interval = 40,
 	},
+	groups = preferred.no_cops_agents_shields_bulldozers,
 }
 return {
 	-- Add point of no return
@@ -33,63 +37,65 @@ return {
 		ponr = {
 			length = 180,
 			player_mul = { 1.33, 1.167, 1, 1 },
-		}
+		},
 	},
-	-- Make difficulty scaling smoother
-	[102841] = { 
+	-- make difficulty scaling smoother
+	[102841] = {
 		values = {
-			difficulty = 0.5
-		}
+			difficulty = 0.5,
+		},
 	},
-	[102842] = { 
+	[102842] = {
 		values = {
 			difficulty = 0.75,
-			enabled = true
-		}
+			enabled = true,
+		},
 	},
-	[102843] = { 
+	[102843] = {
 		values = {
 			difficulty = 1,
-			enabled = true
-		}
+			enabled = true,
+		},
 	},
 	-- Restore roof access blockade
 	[100095] = {
 		on_executed = {
 			{ id = 100569, remove = true },
-			{ id = 400064, delay = 0 }
-		}
+			{ id = 400064, delay = 0 },
+		},
 	},
 	[100297] = {
 		values = {
-			enabled = enabled_blocked_roof_access
+			enabled = enabled_blocked_roof_access,
 		},
 		on_executed = {
 			{ id = 103611, delay = 0 },
-			{ id = 400065, delay = 0 }
-		}
+			{ id = 400065, delay = 0 },
+		},
 	},
 	[100569] = enabled,
 	[103610] = enabled,
 	[103611] = enabled,
 	[103648] = {
 		on_executed = {
-			{ id = 103611, remove = true }
-		}
+			{ id = 103611, remove = true },
+		},
 	},
-	-- Stop with the smoke bombs, jeez....
+	-- top with the smoke bombs, jeez....
 	[103034] = disabled,
 	[103106] = disabled,
-	-- Don't remove ground level spawns at any point
-	[102092] = disabled, 
+	-- disable scripted spawn spam
+	[101745] = disabled,
+	-- don't remove ground level spawns at any point
+	[102092] = disabled,
 	[102097] = disabled,
-	-- Disable cloaker spawns on startup
+	-- disable cloaker spawns on startup
 	[102263] = {
 		on_executed = {
-			{ id = 400039, delay = 3 }
-		}
+			{ id = 400039, delay = 3 },
+		},
 	},
-	--Add missing navlinks
+	-- add missing navlinks
 	[103247] = {
 		on_executed = {
 			{ id = 102468, delay = 0 },
@@ -111,79 +117,95 @@ return {
 			{ id = 102399, delay = 0 },
 			{ id = 104708, delay = 0 },
 			{ id = 102401, delay = 0 },
-			{ id = 104707, delay = 0 }
-		}
+			{ id = 104707, delay = 0 },
+		},
 	},
-	--Trigger event spawns after each start of the assault wave
+	-- trigger event spawns after each start of the assault wave
 	[104656] = {
 		on_executed = {
 			{ id = 400015, delay = 30 },
 			{ id = 400020, delay = 60 },
-			{ id = 400037, delay = 75 }
-		}
+			{ id = 400037, delay = 75 },
+		},
 	},
-	--Spawn Shields after placing the last c4
+	-- spawn Shields after placing the last c4
 	[101787] = {
 		on_executed = {
-			{ id = 400043, delay = 0}
-		}
+			{ id = 400043, delay = 0 },
+		},
 	},
-	--Spawn Rooftop Heavy SWATs after killing all of the snipers
-	--Enable Cloaker spawns
+	-- spawn Rooftop Heavy SWATs after killing all of the snipers
+	-- enable Cloaker spawns
 	[104573] = {
 		on_executed = {
 			{ id = 400025, delay = 15 },
-			{ id = 400038, delay = 0 }
-		}
+			{ id = 400038, delay = 0 },
+		},
 	},
-	--Change chopper squad
+	--change chopper squad
 	[101658] = {
 		on_executed = {
 			{ id = 104561, remove = true },
-			{ id = 400032, delay = 17 }
-		}
+			{ id = 400032, delay = 17 },
+		},
 	},
-	--Trigger dozer spawn during the escape
+	-- trigger dozer spawn during the escape
 	[104706] = {
 		on_executed = {
-			{ id = 400040, delay = 0 }
-		}
+			{ id = 400040, delay = 0 },
+		},
 	},
-	--Cops now spawn when you open the red door rather than when killing Chavez (like in PDTH)
+	-- cops now spawn when you open the red door rather than when killing Chavez (like in PDTH)
 	[101853] = {
 		on_executed = {
-			{ id = 104691, remove = true}
-		}
+			{ id = 104691, remove = true },
+		},
 	},
-	--Spawn Heavy SWAT squad if it's overkill above
+	--spawn Heavy SWAT squad if it's overkill above
 	[102680] = {
 		on_executed = {
-			{ id = 104691, delay = 0},
-			{ id = 400001, delay = 7.5}
-		}
+			{ id = 104691, delay = 0 },
+			{ id = 400001, delay = 7.5 },
+		},
 	},
 	-- more oppressive open door amounts
-	[103455] = {
+	[103616] = { -- tweak 4th floor front doors
+		on_executed = {
+			{ id = 100517, delay = 2 }, -- normally executed by random elements in 103490, potential softlock if not executed
+		},
+	},
+	[103490] = {
 		values = {
 			amount = 0,
 			amount_random = 2,
 		},
 	},
-	[103490] = {
-		values = {
-			amount_random = 0,
+	[103491] = {
+		on_executed = {
+			{ id = 100517, remove = true },
 		},
 	},
-	[103618] = {
+	[103492] = {
+		on_executed = {
+			{ id = 100517, remove = true },
+		},
+	},
+	[103455] = { -- fewer open doors to the coke lab
 		values = {
 			amount = 0,
-			amount_random = 3,
+			amount_random = 2,
 		},
 	},
-	-- Disable roof/stairs reinforcement
+	[103618] = { -- fewer other open doors
+		values = {
+			amount = 1, -- potential softlock if none
+			amount_random = 2,
+		},
+	},
+	-- disable roof/stairs reinforcement
 	[102501] = disabled,
 	[103181] = disabled,
-	-- Adjust the Sniper kill objective
+	-- adjust the Sniper kill objective
 	[104516] = sniper_kills,
 	[104692] = sniper_kills,
 	[104693] = sniper_kills,
@@ -194,8 +216,8 @@ return {
 	[101599] = {
 		values = {
 			trigger_times = 0,
-			enabled = true
-		}
+			enabled = true,
+		},
 	},
 	[103143] = retrigger,
 	[103134] = retrigger,
@@ -212,17 +234,15 @@ return {
 	[100645] = retrigger,
 	[103111] = retrigger,
 	[100693] = retrigger,
-	[100287] = {
-		values = {
-			interval = 20
-		}
-	},
 	-- slow down roof spawns, these are really fuckng annoying
 	[104650] = roof_spawn,
 	[100504] = roof_spawn,
 	[100505] = roof_spawn,
 	[100509] = roof_spawn,
 	[100396] = roof_spawn,
+	-- adjust alleyway spawn preferreds
+	[100270] = alley_spawn,
+	[100287] = alley_spawn,
 	-- disable panic room reenforce (sh disables the other two points, and this heist doesnt really need it)
 	[103348] = disabled,
 	-- ambush line fix ?  hasnt been working for me since forever
@@ -234,7 +254,7 @@ return {
 	-- reduce delay on mask up when ambushed (this triggers loud)
 	[102329] = {
 		on_executed = {
-			{ id = 102332, delay = 1.5, },
+			{ id = 102332, delay = 1.5 },
 		},
 	},
 	-- reenable alleyway drop
@@ -243,8 +263,15 @@ return {
 			on_executed = {
 				{ delay = 0, id = 101591 },
 				{ delay = 0, id = 101573 },
-				{ delay = 0, id = 100350 }
-			}
-		}
+				{ delay = 0, id = 100350 },
+			},
+		},
+	},
+	-- Enable civilian on bridge
+	[103353] = enabled,
+	[103354] = {
+		values = {
+			SO_access = managers.navigation:convert_access_filter_to_number({ "civ_male" }),
+		},
 	},
 }

@@ -401,27 +401,27 @@ function CharacterTweakData:_presets(tweak_data, ...)
 
 	-- give bots normal weapon presets, laser aim hurts to look at
 	presets.weapon.gang_member.is_rifle.FALLOFF = {
-		{ r=300, acc={0.7, 0.9}, dmg_mul=5, recoil={0.25, 0.65}, mode={ 1, 0, 0, 0 } },
-		{ r=2500, acc={0.1, 0.6}, dmg_mul=3.5, recoil={0.25, 2}, mode={ 1, 0, 0, 0 } },
-		{ r=10000, acc={0, 0.15}, dmg_mul=0.5, recoil={2, 3}, mode={ 1, 0, 0, 0 } }
+		{ r=300, acc={0.7, 0.9}, dmg_mul=7, recoil={0.25, 0.65}, mode={ 1, 0, 0, 0 } },
+		{ r=2500, acc={0.1, 0.6}, dmg_mul=5, recoil={0.25, 2}, mode={ 1, 0, 0, 0 } },
+		{ r=10000, acc={0, 0.15}, dmg_mul=2, recoil={2, 3}, mode={ 1, 0, 0, 0 } }
 	}
 	
 	presets.weapon.gang_member.is_shotgun_pump.FALLOFF = { 
-		{ r=300, acc={0.7, 0.9}, dmg_mul=5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
-		{ r=1350, acc={0.1, 0.6}, dmg_mul=3.5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
-		{ r=4000, acc={0.0, 0.15}, dmg_mul=0.5, recoil={2,4}, mode={ 1, 0, 0, 0 } }
+		{ r=300, acc={0.7, 0.9}, dmg_mul=7, recoil={2,2}, mode={ 1, 0, 0, 0 } },
+		{ r=1350, acc={0.1, 0.6}, dmg_mul=5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
+		{ r=4000, acc={0.0, 0.15}, dmg_mul=2, recoil={2,4}, mode={ 1, 0, 0, 0 } }
 	}
 	
 	presets.weapon.gang_member.is_shotgun_mag.FALLOFF = { 
-		{ r=300, acc={0.7, 0.9}, dmg_mul=5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
-		{ r=1150, acc={0.1, 0.6}, dmg_mul=3.5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
-		{ r=4000, acc={0.0, 0.15}, dmg_mul=0.5, recoil={2,4}, mode={ 1, 0, 0, 0 } }
+		{ r=300, acc={0.7, 0.9}, dmg_mul=7, recoil={2,2}, mode={ 1, 0, 0, 0 } },
+		{ r=1150, acc={0.1, 0.6}, dmg_mul=5, recoil={2,2}, mode={ 1, 0, 0, 0 } },
+		{ r=4000, acc={0.0, 0.15}, dmg_mul=2, recoil={2,4}, mode={ 1, 0, 0, 0 } }
 	}
 	
 	presets.weapon.gang_member.is_lmg.FALLOFF = {
-		{ r=300, acc={0.6, 0.75}, dmg_mul=5, recoil={1, 2}, mode={ 1, 0, 0, 0 } },
-		{ r=2000, acc={0.5, 0.7}, dmg_mul=3.5, recoil={2, 5}, mode={ 1, 0, 0, 0 } },
-		{ r=10000, acc={0.1, 0.35}, dmg_mul=0.5, recoil={3, 7}, mode={ 1, 0, 0, 0 } }
+		{ r=300, acc={0.6, 0.75}, dmg_mul=7, recoil={1, 2}, mode={ 1, 0, 0, 0 } },
+		{ r=2000, acc={0.5, 0.7}, dmg_mul=5, recoil={2, 5}, mode={ 1, 0, 0, 0 } },
+		{ r=10000, acc={0.1, 0.35}, dmg_mul=2, recoil={3, 7}, mode={ 1, 0, 0, 0 } }
 	}
 	
 	presets.weapon.gang_member.is_pistol.FALLOFF = {
@@ -447,26 +447,26 @@ function CharacterTweakData:_presets(tweak_data, ...)
 	presets.move_speed.normal = {
 		stand = {
 			walk = {
-				ntl = { fwd = 180, strafe = 130, bwd = 90 },
-				cbt = { fwd = 220, strafe = 170, bwd = 130 },
-				hos = { fwd = 260, strafe = 210, bwd = 170 },
+				ntl = { fwd = 150, strafe = 120, bwd = 90 }, -- { fwd = 180, strafe = 130, bwd = 90 }
+				cbt = { fwd = 220, strafe = 170, bwd = 130 }, -- { fwd = 220, strafe = 170, bwd = 130 }
+				hos = { fwd = 260, strafe = 190, bwd = 170 }, -- { fwd = 260, strafe = 210, bwd = 170 }
 			},
 			run = {
-				ntl = { fwd = 300, strafe = 250, bwd = 200 },
-				cbt = { fwd = 375, strafe = 300, bwd = 225 },
-				hos = { fwd = 450, strafe = 350, bwd = 250 },
+				ntl = { fwd = 300, strafe = 250, bwd = 200 }, -- { fwd = 300, strafe = 250, bwd = 200 }
+				cbt = { fwd = 375, strafe = 300, bwd = 225 }, -- { fwd = 375, strafe = 300, bwd = 225 }
+				hos = { fwd = 450, strafe = 290, bwd = 250 }, -- { fwd = 450, strafe = 350, bwd = 250 }
 			},
 		},
 		crouch = {
 			walk = {
-				ntl = { fwd = 140, strafe = 90, bwd = 60 },
-				cbt = { fwd = 160, strafe = 120, bwd = 80 },
-				hos = { fwd = 200, strafe = 150, bwd = 120 },
+				ntl = { fwd = 140, strafe = 90, bwd = 60 }, -- { fwd = 140, strafe = 90, bwd = 60 }
+				cbt = { fwd = 160, strafe = 120, bwd = 80 }, -- { fwd = 160, strafe = 120, bwd = 80 }
+				hos = { fwd = 200, strafe = 150, bwd = 120 }, -- { fwd = 200, strafe = 150, bwd = 120 }
 			},
 			run = {
-				ntl = { fwd = 180, strafe = 130, bwd = 90 },
-				cbt = { fwd = 220, strafe = 170, bwd = 130 },
-				hos = { fwd = 260, strafe = 210, bwd = 170 },
+				ntl = { fwd = 180, strafe = 130, bwd = 90 }, -- { fwd = 180, strafe = 130, bwd = 90 }
+				cbt = { fwd = 220, strafe = 170, bwd = 130 }, -- { fwd = 220, strafe = 170, bwd = 130 }
+				hos = { fwd = 260, strafe = 210, bwd = 170 }, -- { fwd = 260, strafe = 210, bwd = 170 }
 			},
 		},
 	}

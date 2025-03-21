@@ -2173,35 +2173,13 @@ function GroupAITweakData:_init_enemy_spawn_groups_level() end
 
 Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", function(self, difficulty_index)
 	-- difficulty scaling
-	local map_scale_factor = 1
-	local map_scales = Eclipse.map_sizes
-
-	for _, vs in pairs(map_scales.very_small) do
-		if level_id == vs then
-			map_scale_factor = 0.5
-		end
+	local level_scale_mul = Eclipse.level_scale and Eclipse.level_scale.scale_multiplier(level_id) or 1
+	if level_id then
+		Eclipse:log("Map scale multiplier for " .. level_id .. " set to " .. level_scale_mul)
 	end
 
-	for _, s in pairs(map_scales.small) do
-		if level_id == s then
-			map_scale_factor = 0.75
-		end
-	end
-
-	for _, l in pairs(map_scales.large) do
-		if level_id == l then
-			map_scale_factor = 1.25
-		end
-	end
-
-	for _, vl in pairs(map_scales.very_large) do
-		if level_id == vl then
-			map_scale_factor = 1.5
-		end
-	end
-
-	local map_scale_force = map_scale_factor
-	local map_scale_spawnrate = math.sqrt(map_scale_factor)
+	local level_scale_force = level_scale_mul
+	local level_scale_spawnrate = math.sqrt(level_scale_mul)
 	
 	-- Assault Data
 	-- AI Tickrate
@@ -2242,9 +2220,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 
 	-- Spawncap
 	self.besiege.assault.force = { 
-		diff_lerp(5, 6) * map_scale_force,  
-		diff_lerp(7, 9) * map_scale_force,  
-		diff_lerp(9, 12) * map_scale_force
+		diff_lerp(5, 6) * level_scale_force,  
+		diff_lerp(7, 9) * level_scale_force,  
+		diff_lerp(9, 12) * level_scale_force
 	}
 	self.besiege.assault.force_balance_mul = { 1, 1.25, 1.5, 1.75 }
 
@@ -2258,10 +2236,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 	-- Spawnrate
 	self.spawn_kill_cooldown = 10
 	
-	self.besiege.assault.spawnrate = { 
-		diff_lerp(3, 2) / map_scale_spawnrate,
-		diff_lerp(2.5, 1.5) / map_scale_spawnrate,
-		diff_lerp(2, 1) / map_scale_spawnrate,
+	self.besiege.assault.spawnrate = {
+		diff_lerp(3, 2) / level_scale_spawnrate,
+		diff_lerp(2.5, 1.5) / level_scale_spawnrate,
+		diff_lerp(2, 1) / level_scale_spawnrate,
 	}
 	self.besiege.assault.spawnrate_balance_mul = { 2.5, 2, 1.5, 1 }
 
@@ -2272,10 +2250,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "eclipse__init_task_data", f
 
 	-- Recon spawn interval and spawncap
 	self.besiege.recon.interval_variation = 20
-	self.besiege.recon.force = { 
-		2 * math.sqrt(map_scale_force),
-		4 * math.sqrt(map_scale_force),
-		6 * math.sqrt(map_scale_force),
+	self.besiege.recon.force = {
+		2 * math.sqrt(level_scale_force),
+		4 * math.sqrt(level_scale_force),
+		6 * math.sqrt(level_scale_force),
 	}
 
 	self.besiege.push_delay = {

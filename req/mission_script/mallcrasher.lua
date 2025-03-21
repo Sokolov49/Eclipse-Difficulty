@@ -1,11 +1,12 @@
+local preferred = Eclipse.preferred
 local jump_SO = {
-	pre_func = function (self)
+	pre_func = function(self)
 		if not self._values.SO_access_original then
 			self._values.SO_access_original = self._values.SO_access
 			self._values.SO_access = managers.navigation:convert_access_filter_to_number({ "swat", "taser", "spooc" })
 		end
-	end
-}	
+	end,
+}
 local stairs_spawn = {
 	values = {
 		interval = 10,
@@ -13,21 +14,34 @@ local stairs_spawn = {
 }
 local skylight_spawn = {
 	values = {
-		interval = 45,
+		interval = 40,
 	},
-	groups = {
-		tac_shield_wall = false,
-		tac_shield_wall_ranged = false,
-		tac_shield_wall_charge = false,
-		tac_bull_rush = false,
-	},
+	groups = preferred.no_cops_agents_shields_bulldozers,
 }
 return {
+	-- Combine some navigation areas
+	[300000] = {
+		ai_area = {
+			{ 47, 54, 67, 68, 70, 112 },
+			{ 49, 61, 73 },
+			{ 41, 52 },
+			{ 29, 33, 42, 44 },
+			{ 3, 4 },
+			{ 45, 57, 60, 69 },
+			{ 58, 65 },
+			{ 76, 84 },
+			{ 81, 72 },
+			{ 55, 111 },
+			{ 86, 101, 104, 106, 108, 109 },
+			{ 24, 39 },
+			{ 90, 93, 94, 96 },
+		},
+	},
 	-- delay SWAT response
 	[300203] = {
 		on_executed = {
-			{ id = 300164, delay = 45 }
-		}
+			{ id = 300164, delay = 45 },
+		},
 	},
 	-- spawn point delays
 	[300314] = stairs_spawn,
@@ -52,8 +66,6 @@ return {
 	[302055] = jump_SO,
 	[302056] = jump_SO,
 	[302057] = jump_SO,
-	[302058] = jump_SO,
-	[302059] = jump_SO,
 	[302060] = jump_SO,
 	[302061] = jump_SO,
 	[302062] = jump_SO,
@@ -67,5 +79,6 @@ return {
 	[302070] = jump_SO,
 	[302071] = jump_SO,
 	[302072] = jump_SO,
-	[302073] = jump_SO
+	[302073] = jump_SO,
+	[302074] = jump_SO,
 }

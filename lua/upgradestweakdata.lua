@@ -910,7 +910,7 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.player.critical_hit_chance = {0.30}
 	self.values.player.armor_multiplier = {1.5}
 
-	self.values.player.run_speed_multiplier = {1.1}
+	self.values.player.run_speed_multiplier = {1.15} --1.1
 	self.values.player.run_dodge_chance = {0.25}
 	self.values.player.walk_speed_multiplier = {1.1}
 	self.values.player.crouch_speed_multiplier = {1.1}
