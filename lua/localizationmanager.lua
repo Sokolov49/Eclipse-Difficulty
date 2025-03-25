@@ -195,7 +195,7 @@ Hooks:AddHook("LocalizationManagerPostInit", "OPSkillDesc", function()
 		
 		menu_jail_workout_desc =		"BASIC: ##$basic##\nSpecial enemies marked by you take ##"..jail_workout_1_a.."%## additional damage.\n\nACE: ##$pro##\nWhen you stand still for ##3.5## seconds in stealth, you start highlighting people around you within a ##10## meter radius.",
 		
-		menu_jail_workout_desc =		"BASIC: ##$basic##\nIncreases the concealment of melee weapons by ##2##.\n\nACE: ##$pro##\nIncreases the concealment of all ballistic vests by ##4##.",
+		menu_thick_skin_beta_desc =		"BASIC: ##$basic##\nIncreases the concealment of melee weapons by ##2##.\n\nACE: ##$pro##\nIncreases the concealment of all ballistic vests by ##4##.",
 		
 		menu_marcus_dlc =				"Lucky Charm",
 		menu_marcus_dlc_desc =			"BASIC: ##$basic##\nYour odds of getting a higher quality item during a PAYDAY loot drop are increased by ##300%##.\n\nACE: ##$pro##\nEvery second you gain a small chance to regenerate ##1%## of your total health.",
