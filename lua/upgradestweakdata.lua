@@ -941,6 +941,9 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.player.regain_throwable_from_ammo[1].chance = 0.02
 	self.values.player.regain_throwable_from_ammo[1].chance_inc = 0.001
 	
+	-- fak heals 90hp on use
+	self.values.first_aid_kit.heal_amount = 9
+	
 	-- Uppers
 	self.definitions.first_aid_kit_hot_regen_1 = {
 		name_id = "menu_first_aid_kit_hot_regen_1",

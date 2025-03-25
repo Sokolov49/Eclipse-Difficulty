@@ -243,6 +243,7 @@ function SkillTreeTweakData:init(tweak_data)
 		"lmg_spray_recoil_multiplier", 
 		"minigun_spray_recoil_multiplier",
 		"player_first_aid_health_regen", --"first_aid_kit_hot_regen_1",
+		"first_aid_kit_hot_regen_1",
 		"jowi",
 		"x_1911",
 		"x_b92fs",
