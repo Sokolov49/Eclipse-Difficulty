@@ -941,6 +941,28 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.player.regain_throwable_from_ammo[1].chance = 0.02
 	self.values.player.regain_throwable_from_ammo[1].chance_inc = 0.001
 	
+	-- Uppers
+	self.definitions.first_aid_kit_hot_regen_1 = {
+		name_id = "menu_first_aid_kit_hot_regen_1",
+		category = "equipment_upgrade",
+		upgrade = {
+			value = 1,
+			upgrade = "first_aid_kit_hot_regen",
+			category = "first_aid_kit",
+		},
+	}
+	self.definitions.player_first_aid_health_regen = {
+		name_id = "menu_temporary_first_aid_health_regen",
+		category = "temporary",
+		upgrade = {
+			value = 1,
+			upgrade = "first_aid_health_regen",
+			category = "temporary",
+		},
+	}
+	self.values.first_aid_kit.first_aid_kit_hot_regen = { true }
+	self.values.temporary.first_aid_health_regen = { { 1, 60.1 } }
+	
 	-- Heavy Gun Expert
 	self.values.player.no_movement_penalty = { true }
 	self.definitions.player_no_movement_penalty = {
@@ -1738,57 +1760,30 @@ function UpgradesTweakData:init(tweak_data)
 			}
 		},
 		
-		hoxton = {
-			{"4"}
-		},	
-		cell_mates = {
-			{"10%"},
-			{"25%"}
-		},
-		freedom_call = {
-			{"20%"},
-			{"15%"}
-		},
-		awareness = {
-			{"10%"}
-		},
-		alpha_dog = {
-			{"5%"},
-			{"10%"}
-		},
-		up_you_go = {
-			{"30%", "10"},
-			{"40%"}
-		},
-		thick_skin = {
-			{"10", "2"},
-			{"20", "4"}
-		},
-		tea_time = {
-			{"50%"},
-			{"10%", "120"}
-		},
-		hidden_blade = {
-			{"10", "2"},
-			{"20", "4"}
-		},
-		running_from_death = {
-			{form("a", self.values.temporary.swap_weapon_faster[1]).."%", self.values.temporary.swap_weapon_faster[1][2]},
-			{form("a", self.values.temporary.increased_movement_speed[1]).."%", self.values.temporary.increased_movement_speed[1][2]}
-		},
-		second_chances = {
-			{},
-			{"2"}
-		},
-		tea_cookies = {
-			{self.values.first_aid_kit.quantity[1]},
-			{self.values.first_aid_kit.quantity[2] - self.values.first_aid_kit.quantity[1]}
-		},
-		bloodthirst = {
-			{"100%", "400%"},
-			{"15%", "10"}
-		}
+		hoxton = 					{{"4"}, 								{}},
+		freedom_call = 				{{"20%"}, 								{"15%"}},
+		hidden_blade = 				{{"2"}, 								{"95%"}},
+		thick_skin = 				{{"10"}, 								{"20"}},
+		awareness =					{{"10%"}, 								{}},
+		jail_workout = 				{{"3.5", "10"}, 						{}},
+		alpha_dog = 				{{"5%"}, 								{"10%"}},
+		cell_mates = 				{{"10%"}, 								{"25%"}},
+		thug_life = 				{{"1"}, 								{"75%"}},
+		tea_time = 					{{"50%"}, 								{"20%", "10"}},
+		perseverance = 				{{"", "3", "60%"}, 						{"6"}},
+		second_chances = 			{{""}, 									{"2"}},
+		tea_cookies = 				{{"3"}, 								{"7"}},
+		trigger_happy = 			{{"10%", "2", "4", "10%"}, 				{"8", "8"}},
+		backstab = 					{{"3%", "3", "35", "30%"}, 				{"3%", "1", "35", "30%"}},
+		prison_wife = 				{{"15", "2", "15"}, 					{"30", "2", "30"}},
+		jail_diet = 				{{"1%", "3", "35", "10%"}, 				{"1%", "1", "35", "10%"}},
+		akimbo = 					{{"-16", "50%"}, 						{"-8", "150%", "25%", "50%"}},
+		up_you_go = 				{{"30%", "10"}, {"40%"}},
+		dire_need = 				{{}, {"6"}},
+		running_like_wind = 		{{"30%", "5"}, {"20%", "30%"}},
+		thick_skin_beta = 			{{"2"}, {"4"}}
 	}
+	
 	self.skill_descs = {}
 	for skill_id, skill_desc in pairs(self.editable_skill_descs) do
 		self.skill_descs[skill_id] = {}

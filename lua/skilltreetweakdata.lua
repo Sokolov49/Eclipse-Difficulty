@@ -23,7 +23,8 @@ function SkillTreeTweakData:init(tweak_data)
 		"mastermind",
 		"enforcer",
 		"technician",
-		"ghost"
+		"ghost",
+		"hoxton"
 	}
 	
 	self.HIDE_TIER_BONUS = false
@@ -241,6 +242,7 @@ function SkillTreeTweakData:init(tweak_data)
 		"smg_spray_recoil_multiplier", 
 		"lmg_spray_recoil_multiplier", 
 		"minigun_spray_recoil_multiplier",
+		"player_first_aid_health_regen", --"first_aid_kit_hot_regen_1",
 		"jowi",
 		"x_1911",
 		"x_b92fs",
@@ -408,6 +410,43 @@ function SkillTreeTweakData:init(tweak_data)
 					"ecm_feedback",
 					"low_blow"
 				}
+			}
+		},
+			{
+				skill = "hoxton",
+				name_id = "st_menu_hoxton_pack",
+				background_texture = "guis/textures/pd2/skilltree/bg_fugitive",
+				tiers = {
+					{
+						"freedom_call",
+						"hidden_blade",
+						"thick_skin"
+					},
+					{
+						"awareness",
+						"thug_life",
+						"alpha_dog"
+					},
+					{
+						"akimbo",
+						"jail_workout",
+						"tea_time"
+					},
+					{
+						"perseverance",
+						"dire_need",
+						"tea_cookies"
+					},
+					{
+						"up_you_go",
+						"running_like_wind",
+						"drop_soap"
+					},
+					{
+						"prison_wife",
+						"jail_diet",
+						"hellotothemarcusreadingthis"
+					}
 			}
 		}
 	}
@@ -615,7 +654,7 @@ function SkillTreeTweakData:init(tweak_data)
 	self.skills.bandoliers[2].upgrades = {"player_pick_up_ammo_multiplier", "player_pick_up_ammo_multiplier_2"}
 	self.skills.bandoliers.name_id = "menu_bandoliers"
 	self.skills.bandoliers.desc_id = "menu_bandoliers_desc"
-	self.skills.portable_saw[1].upgrades = {"saw"}
+	self.skills.portable_saw[1].upgrades = {"saw_secondary"}
 	self.skills.portable_saw[2].upgrades = {"saw_extra_ammo_multiplier"}
 	self.skills.portable_saw.name_id = "menu_portable_saw"
 	self.skills.portable_saw.desc_id = "menu_portable_saw_desc"
@@ -958,202 +997,110 @@ function SkillTreeTweakData:init(tweak_data)
 	self.skills.silence_expert.name_id = "menu_silence_expert"
 	self.skills.silence_expert.desc_id = "menu_silence_expert_desc"
 
-	self.skills.master_craftsman = {
-		{
-			upgrades = {"player_crafting_weapon_multiplier", "player_crafting_mask_multiplier"},
-			cost = self.costs.default
-		},
-		{
-			upgrades = {"passive_player_xp_multiplier"},
-			cost = self.costs.pro
-		},
-		name_id = "menu_mastercraftsman",
-		desc_id = "menu_mastercraftsman_desc",
-		icon_xy = {1, 7}
-	}
-	self.skills.freedom_call[1].upgrades = {"player_climb_speed_multiplier_1"}
+	-- FUGITIVE
 	self.skills.freedom_call.name_id = "menu_freedom_call"
 	self.skills.freedom_call.desc_id = "menu_freedom_call_desc"
-	self.skills.awareness = {
-		{
-			upgrades = {"player_steelsight_normal_movement_speed"},
-			cost = self.costs.default
-		},
-		{
-			upgrades = {"player_damage_dampener_outnumbered_strong"},
-			cost = self.costs.pro
-		},
-		name_id = "menu_awareness",
-		desc_id = "menu_awareness_desc",
-		icon_xy = {7, 10}
-	}
-	self.skills.alpha_dog[2].upgrades = {"player_crouch_dodge_chance_2"}
+	self.skills.freedom_call[1].upgrades = {"player_climb_speed_multiplier_1"}
+	self.skills.hidden_blade.name_id = "menu_thick_skin_beta"
+	self.skills.hidden_blade.desc_id = "menu_thick_skin_beta_desc"
+	self.skills.hidden_blade[1].upgrades = {"player_melee_concealment_modifier"}
+	self.skills.hidden_blade[2].upgrades = {"player_ballistic_vest_concealment_1"}
+	self.skills.thick_skin.name_id = "menu_thick_skin"
+	self.skills.thick_skin.desc_id = "menu_thick_skin_desc"
+	self.skills.thick_skin.icon_xy = {2, 12}
+	self.skills.thick_skin[1].upgrades = {"player_damage_shake_addend"}
+	self.skills.thick_skin[2].upgrades = {"player_level_2_armor_addend", "player_level_3_armor_addend", "player_level_4_armor_addend"}
+	self.skills.awareness.name_id = "menu_awareness"
+	self.skills.awareness.desc_id = "menu_awareness_desc"
+	self.skills.awareness.icon_xy = {7, 10}
+	self.skills.awareness[1].upgrades = {"player_movement_speed_multiplier"}
+	self.skills.awareness[2].upgrades = {"player_steelsight_normal_movement_speed"}
+	self.skills.jail_workout.name_id = "menu_jail_workout"
+	self.skills.jail_workout.desc_id = "menu_jail_workout_desc"
+	self.skills.jail_workout.icon_xy = {6, 10}
+	self.skills.jail_workout[1].upgrades = {"player_marked_enemy_extra_damage"}
+	self.skills.jail_workout[2].upgrades = {"player_standstill_omniscience"}
 	self.skills.alpha_dog.name_id = "menu_alpha_dog"
 	self.skills.alpha_dog.desc_id = "menu_alpha_dog_desc"
-	self.skills.up_you_go[1].cost = self.costs.hightier
-	self.skills.up_you_go[2].cost = self.costs.hightierpro
-	self.skills.up_you_go[1].upgrades = {"player_revived_health_regain_solid_amount_1", "player_revived_health_regain_solid_wolverine"}
-	self.skills.up_you_go[2].upgrades = {"player_revived_health_regain_solid_amount_2", "player_revived_damage_resist_1"}
-	self.skills.up_you_go.icon_xy = {4, 13}
-	self.skills.hidden_blade = {
-		{
-			upgrades = {"player_melee_concealment_modifier"},
-			cost = self.costs.default
-		},
-		{
-			upgrades = {"player_ballistic_vest_concealment_1"},
-			cost = self.costs.pro
-		},
-		name_id = "menu_thick_skin_beta",
-		desc_id = "menu_thick_skin_beta_desc",
-		icon_xy = {1, 13}
-	}
-	self.skills.jail_workout = {
-		{
-			upgrades = {"player_marked_enemy_extra_damage"},
-			cost = self.costs.default
-		},
-		{
-			upgrades = {"player_standstill_omniscience"},
-			cost = self.costs.pro
-		},
-		name_id = "menu_jail_workout",
-		desc_id = "menu_jail_workout_desc",
-		icon_xy = {6, 10}
-	}
-	self.skills.running_from_death[1].cost = self.costs.default
-	self.skills.running_from_death[2].cost = self.costs.pro
-	self.skills.running_from_death.icon_xy = {2, 13}
-	self.skills.thick_skin = {
-		{
-			upgrades = {"player_tier_armor_multiplier_1"},
-			cost = self.costs.default
-		},
-		{
-			upgrades = {"player_level_2_armor_addend", "player_level_3_armor_addend", "player_level_4_armor_addend"},
-			cost = self.costs.pro
-		},
-		name_id = "menu_thick_skin",
-		desc_id = "menu_thick_skin_desc",
-		icon_xy = {2, 12}
-	}
-	self.skills.tea_time[1].cost = self.costs.default
-	self.skills.tea_time[2].cost = self.costs.pro
-	self.skills.second_wind = {
-		{
-			upgrades = {"temporary_damage_speed_multiplier"},
-			cost = self.costs.hightier
-		},
-		{
-			upgrades = {"player_level_2_dodge_addend_1", "player_level_3_dodge_addend_1", "player_level_4_dodge_addend_1"},
-			cost = self.costs.hightierpro
-		},
-		name_id = "menu_second_wind",
-		desc_id = "menu_second_wind_desc",
-		icon_xy = {7, 12}
-	}
-	self.skills.tea_cookies[2].upgrades = {"chico_injector", "temporary_chico_injector_1", "first_aid_kit_quantity_increase_2"}
-	self.skills.tea_cookies.name_id = "menu_tea_cookies"
+	self.skills.alpha_dog[2].upgrades = {"player_crouch_dodge_chance_2"}
+	self.skills.cell_mates.name_id = "menu_cell_mates"
+	self.skills.cell_mates.desc_id = "menu_cell_mates_desc"
+	self.skills.cell_mates[1].upgrades = {"player_gangster_damage_dampener_1"}
+	self.skills.cell_mates[2].upgrades = {"player_gangster_damage_dampener_2"}
+	self.skills.thug_life.name_id = "menu_thug_life"
+	self.skills.thug_life.desc_id = "menu_thug_life_desc"
+	self.skills.thug_life[1].upgrades = {"player_extra_corpse_dispose_amount"}
+	self.skills.thug_life[2].upgrades = {"player_cleaner_cost_multiplier"}
+	self.skills.tea_time.name_id = "menu_tea_time"
+	self.skills.tea_time.desc_id = "menu_tea_time_desc"
+	self.skills.second_chances.name_id = "menu_second_chances"
+	self.skills.second_chances.desc_id = "menu_second_chances_desc"
+	self.skills.second_chances.icon_xy = {5, 11}
+	self.skills.second_chances[1].upgrades = {"bodybags_bag"}
+	self.skills.second_chances[2].upgrades = {"bodybags_bag_quantity"}
 	self.skills.tea_cookies.desc_id = "menu_tea_cookies_desc"
-	self.skills.walking_bleedout = {
+	self.skills.tea_cookies[2].upgrades = {"first_aid_kit_quantity_increase_2"}
+	self.skills.dire_need.icon_xy = {4, 11}
+	self.skills.up_you_go.icon_xy = {3, 13}
+	self.skills.perseverance.icon_xy = {1, 5}
+	self.skills.running_like_wind = {
 		{
 			upgrades = {
-				"player_walking_bleedout_chance_1",
-				"player_walking_bleedout_temporary_health_mul_1",
-				"player_walking_bleedout_time_to_bleed_1",
-				"player_walking_bleedout_doctor_bag_self_revive"
+				"temporary_damage_speed_multiplier"
 			},
 			cost = self.costs.hightier
 		},
 		{
 			upgrades = {
-				"player_walking_bleedout_chance_2",
-				"player_walking_bleedout_fak_self_revive"
+				"player_team_damage_speed_multiplier_send"
 			},
 			cost = self.costs.hightierpro
 		},
-		name_id = "menu_perseverance",
-		desc_id = "menu_walking_bleedout_desc",
-		icon_xy = {5, 13}
+		name_id = "menu_scavenger_beta",
+		desc_id = "menu_scavenger_beta_desc",
+		icon_xy = {
+			7,
+			12
+		}
 	}
-	self.skills.more_blood_to_bleed = {
+	self.skills.hellotothemarcusreadingthis = {
 		{
 			upgrades = {
-				"player_walking_bleedout_temporary_health_mul_2"
+				"player_loot_drop_multiplier_1"
 			},
 			cost = self.costs.hightier
 		},
 		{
-			upgrades = {
-				"player_walking_bleedout_temporary_health_mul_3",
-				"player_walking_bleedout_time_to_bleed_2"
-			},
+			upgrades = {},
 			cost = self.costs.hightierpro
 		},
-		prerequisites = {"walking_bleedout"},
-		name_id = "menu_more_blood_to_bleed",
-		desc_id = "menu_more_blood_to_bleed_desc",
-		icon_xy = {7, 13}
+		name_id = "menu_marcus_dlc",
+		desc_id = "menu_marcus_dlc_desc",
+		icon_xy = {
+			7,
+			13
+		}
 	}
-	self.skills.time_heals = {
+	self.skills.akimbo = {
 		{
 			upgrades = {
-				"player_walking_bleedout_ticks_to_ressurection_1"
+				"akimbo_recoil_index_addend_2"
 			},
-			cost = self.costs.hightier
-		},
-		{
-			upgrades = {
-				"player_walking_bleedout_ticks_to_ressurection_2",
-				"player_walking_bleedout_fak_self_revive_additional"
-			},
-			cost = self.costs.hightierpro
-		},
-		prerequisites = {"walking_bleedout"},
-		name_id = "menu_time_heals",
-		desc_id = "menu_time_heals_desc",
-		icon_xy = {6, 13}
-	}
-	
-	self.skills.akimbo[1].upgrades = {
-		"player_unlock_akimbo_pistols",
-		"akimbo_recoil_multiplier_1",
-		"akimbo_recoil_multiplier_2"
-	}
-	self.skills.akimbo[2].upgrades = {"akimbo_extra_ammo_multiplier_1", "akimbo_extra_ammo_multiplier_2", "akimbo_recoil_multiplier_3"}
-	self.skills.akimbo.name_id = "menu_akimbo_skill"
-	self.skills.akimbo.desc_id = "menu_akimbo_skill_desc"
-	self.skills.bloodthirst.icon_xy = {0, 6}
-	self.skills.backstab = {
-		{
-			upgrades = {"player_counter_strike_spooc"},
-			cost = self.costs.hightier
-		},
-		{
-			upgrades = {"player_melee_kill_snatch_pager_chance"},
-			cost = self.costs.hightierpro
-		},
-		name_id = "menu_backstab",
-		desc_id = "menu_backstab_desc",
-		icon_xy = {2, 10}
-	}
-	self.skills.gunzerker = {
-		{
-			upgrades = {
-				"player_unlock_akimbo_shotguns"
-			},
-			cost = self.costs.hightier
+			cost = self.costs.default
 		},
 		{
 			upgrades = {
-				"player_unlock_akimbo_smg"
+				"akimbo_extra_ammo_multiplier_1",
+				"akimbo_recoil_index_addend_3"
 			},
-			cost = self.costs.hightierpro
+			cost = self.costs.pro
 		},
-		name_id = "menu_gunzerker",
-		desc_id = "menu_gunzerker_desc",
-		prerequisites = {"akimbo"},
-		icon_xy = {0, 13}
+		name_id = "menu_akimbo_skill_beta",
+		desc_id = "menu_akimbo_skill_beta_desc",
+		icon_xy = {
+			3,
+			11
+		}
 	}
 	
 	self.skill_switches[2].locks = {achievement = "frog_1"}
@@ -1186,7 +1133,6 @@ function SkillTreeTweakData:init(tweak_data)
 			{
 				upgrades = {
 						"team_xp_multiplier",
-						"player_loot_drop_multiplier_2"
 					},
 				cost = very_low,
 				icon_xy = {0, 14},

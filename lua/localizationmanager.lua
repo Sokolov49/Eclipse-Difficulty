@@ -39,9 +39,7 @@ Hooks:AddHook("LocalizationManagerPostInit", "OPSkillDesc", function()
 	local enforcer_tier5_1 = form("a", self.values.weapon.passive_damage_multiplier)
 	local enforcer_tier5_2 = form("b2", self.values.ammo_bag.interaction_speed_multiplier)
 	local technician_tier4_1 = form("a", self.values.weapon.passive_headshot_damage_multiplier)
-	local hoxton_tier1_1 = form("b", self.values.player.gangster_damage_dampener)
 	local hoxton_tier2_1 = form("c", self.values.player.damage_shake_addend, 10)
-	local hoxton_tier3_1 = form("b2", self.values.player.gangster_damage_dampener)
 	local hoxton_tier4_1 = form("a", self.values.weapon.special_damage_taken_multiplier)
 	local hoxton_tier5_1 = form("a", self.values.player.fugitive_tier_health_multiplier)
 	local hoxton_tier6_1 = form("b", self.values.player.camouflage_bonus)
@@ -128,43 +126,12 @@ Hooks:AddHook("LocalizationManagerPostInit", "OPSkillDesc", function()
 	local hitman_2_a = form("c", self.values.weapon.armor_piercing_chance_silencer)
 	local hitman_1_b = form("a2", self.values.weapon.silencer_damage_multiplier)
 	local hitman_2_b = form("c2", self.values.weapon.armor_piercing_chance_silencer)
+	
+	local jail_workout_1_a = (self.values.player.marked_enemy_damage_mul - 1) * 100
 
 	local mastercraftsman_1_a = form("b", self.values.player.crafting_weapon_multiplier)
 	local mastercraftsman_1_b = form("a", self.values.player.passive_xp_multiplier)
 	local awareness_1_b = form("b", self.values.temporary.dmg_dampener_outnumbered_strong[1])
-	local thick_skin_1_a = form("a", self.values.player.tier_armor_multiplier)
-	local thick_skin_1_b = form("c", self.values.player.level_2_armor_addend, 10)
-	local jail_workout_1_a = (self.values.player.marked_enemy_damage_mul - 1) * 100
-	local up_you_go_1_a = form("c", self.values.player.revived_health_regain_solid_amount)
-	local up_you_go_2_a = form("c", self.values.player.revived_health_regain_solid_wolverine)
-	local up_you_go_1_b = form("c2", self.values.player.revived_health_regain_solid_amount)
-	local up_you_go_2_b = form("b", self.values.temporary.revived_damage_resist[1])
-	local up_you_go_3_b = self.values.temporary.revived_damage_resist[1][2]
-	local second_wind_1_a = form("a", self.values.temporary.damage_speed_multiplier[1])
-	local second_wind_2_a = self.values.temporary.damage_speed_multiplier[1][2]
-	local second_wind_1_b = form("c", self.values.player.level_2_dodge_addend)
-	local tea_cookies_1_a = form("c", self.values.first_aid_kit.quantity, 1)
-	local tea_cookies_1_b = 3
-	local tea_cookies_2_b = form("c", self.values.temporary.chico_injector[1])
-	local tea_cookies_3_b = self.values.temporary.chico_injector[1][2]
-	local tea_cookies_4_b = form("c2", self.values.first_aid_kit.quantity, 1)
-	local walking_bleedout_1_a = form("c", self.values.player.walking_bleedout_chance)
-	local walking_bleedout_2_a = form("c", self.values.player.walking_bleedout_temporary_health_mul)
-	local walking_bleedout_3_a = form("g", self.walking_bleedout_walk_speed_penalty)
-	local walking_bleedout_4_a = form("f", self.walking_bleedout_reload_speed_penalty - 1)
-	local walking_bleedout_5_a = tweak_data.player.damage.DOWNED_TIME - self.values.player.walking_bleedout_time_to_bleed[1]
-	local walking_bleedout_6_a = self.walking_bleedout_time_to_fatal_state
-	local walking_bleedout_1_b = form("c2", self.values.player.walking_bleedout_chance)
-	local walking_bleedout_2_b = form("c", self.values.player.walking_bleedout_fak_self_revive)
-	local more_blood_to_bleed_1_a = form("c2", self.values.player.walking_bleedout_temporary_health_mul)
-	local more_blood_to_bleed_1_b = form("c3", self.values.player.walking_bleedout_temporary_health_mul)
-	local more_blood_to_bleed_2_b = tweak_data.player.damage.DOWNED_TIME - self.values.player.walking_bleedout_time_to_bleed[2]
-	local time_heals_1_a = self.values.player.walking_bleedout_ticks_to_ressurection[1]
-	local time_heals_1_b = self.values.player.walking_bleedout_ticks_to_ressurection[2]
-	local time_heals_2_b = form("c", self.values.player.walking_bleedout_fak_self_revive_additional)
-	local akimbo_1_a = 50
-	local akimbo_1_b = 25
-	local akimbo_2_b = 50
 	
 	local mr_wise_guy_1 = form("a", self.values.team.xp.multiplier)
 	local mr_wise_guy_2 = form("f", self.values.player.loot_drop_multiplier[2] - 1)
@@ -185,16 +152,6 @@ Hooks:AddHook("LocalizationManagerPostInit", "OPSkillDesc", function()
 	local hostage_situation_2 = 8
 
 	LocalizationManager:add_localized_strings({
-		menu_tea_cookies_desc =			"BASIC: ##$basic##\nAdds ##"..tea_cookies_1_a.."## more first aid kits to your inventory.\n\nACE: ##$pro##\nUnlocks ##"..tea_cookies_1_b.."## Injectors. Activating the Injector will heal you with ##"..tea_cookies_2_b.."%## of all damage taken for ##"..tea_cookies_3_b.."## seconds.\n\nAdds ##"..tea_cookies_4_b.."## more first aid kits to your inventory.",
-		menu_gunzerker_desc =			"BASIC: ##$basic##\nYou can dual wield two shotguns.\n\nACE: ##$pro##\nYou can dual wield two SMG.",
-		menu_time_heals_desc =			"BASIC: ##$basic##\nIf you keep yourself alive within ##"..time_heals_1_a.."## seconds, you can revive yourself.\n\nYour movement, interaction, reload speed and bleed-out time will be gradually recovered.\n\nACE: ##$pro##\nTime to keep yourself alive is reduced to ##"..time_heals_1_b.."## seconds.\nYou can revive yourself by using First Aid Kit with additional ##"..time_heals_2_b.."%## chance.",		
-		menu_more_blood_to_bleed_desc =	"BASIC: ##$basic##\nYou recieve ##"..more_blood_to_bleed_1_a.."%## more temporary health.\n\nACE: ##$pro##\nYou recieve ##"..more_blood_to_bleed_1_b.."%## even more temporary health. Maximum bleed-out time penalty is now ##"..more_blood_to_bleed_2_b.."## seconds.",		
-		menu_walking_bleedout_desc =	"BASIC: ##$basic##\nWhen you lose all your health instead of being downed you have a ##"..walking_bleedout_1_a.."%## chance to survive and gain ##"..walking_bleedout_2_a.."%## temporary health, but your movement and interaction speed will be reduced by ##"..walking_bleedout_3_a.."%##, and reload speed will be reduced by ##"..walking_bleedout_4_a.."%##.\n\nYour bleed-out time will be reduced every second down to ##"..walking_bleedout_5_a.."## seconds as long as you staying alive in that state.\n\nIf you going down after ##"..walking_bleedout_6_a.."## seconds, you fall immidiatly into the fatal state without a chance to fight back while laying down.\n\nYou can revive yourself before getting down by using a medic bag.\n\nACE: ##$pro##\nYou have additional ##"..walking_bleedout_1_b.."%## chance to survive.\n\nYou can revive yourself by using First Aid Kit with ##"..walking_bleedout_2_b.."%## chance.",
-		menu_up_you_go_beta_desc =		"BASIC: ##$basic##\nYou always receive ##"..up_you_go_1_a.."%## health of your total amount when you get revived.\n\nSynergy: If you have ##Berserker## skill owned, you will receive ##"..up_you_go_2_a.."%## health when you get revived.\n\nACE: ##$pro##\nYou receive ##"..up_you_go_1_b.."%## additional health when you get revived.\nYou take ##"..up_you_go_2_b.."%## less damage for ##"..up_you_go_3_b.."## seconds after being revived.",
-		menu_akimbo_skill_desc =		"BASIC: ##$basic##\nYou can dual wield two pistols.\n\nDual wielded weapons have ##"..akimbo_1_a.."%## stability penalty.\n\nACE: ##$pro##\nYour stability penalty with Akimbo weapons is set to ##"..akimbo_1_b.."%## and increases the ammo capacity of your Akimbo weapons to ##"..akimbo_2_b.."%##.",
-		menu_second_wind_desc =			"BASIC: ##$basic##\nWhen your armor breaks your movement speed is increased by ##"..second_wind_1_a.."%## for ##"..second_wind_2_a.."## seconds.\n\nACE: ##$pro##\nYour chance to dodge is increased by ##"..second_wind_1_b.."%## for ballistic vests.",
-		menu_jail_workout_desc =		"BASIC: ##$basic##\nSpecial enemies marked by you take ##"..jail_workout_1_a.."%## additional damage.\n\nACE: ##$pro##\nWhen you stand still for ##3.5## seconds in stealth, you start highlighting people around you within a ##10## meter radius.",
-		menu_thick_skin_desc =			"BASIC: ##$basic##\nYou gain an additional ##"..thick_skin_1_a.."%## more armor.\n\nACE: ##$pro##\nIncreases the armor of all ballistic vests by ##"..thick_skin_1_b.."##.",
 		menu_awareness_desc =			"BASIC: ##$basic##\nYour movement speed is unhindered while using steel sight.\n\nACE: ##$pro##\nWhen you are surrounded by three enemies or more, you receive ##"..awareness_1_b.."%## less damage from enemies.",		
 		menu_mastercraftsman_desc =		"BASIC: ##$basic##\nYour cost of weapon and mask crafting is reduced by ##"..mastercraftsman_1_a.."%##.\n\nACE: ##$pro##\nYou gain ##"..mastercraftsman_1_b.."%## more experience for completing days and jobs.",
 		menu_leadership =				"Teamwork",
@@ -233,15 +190,21 @@ Hooks:AddHook("LocalizationManagerPostInit", "OPSkillDesc", function()
 		menu_smooth_talker_desc =		"BASIC: ##$basic##\nYou can successfully answer ##2## additional pagers.\n\nACE: ##$pro##\nYou answer pagers ##"..smooth_talker_1_b.."%## faster.",
 		menu_hostage_taker_desc =		"BASIC: ##$basic##\nCivilians remain intimidated ##"..hostage_taker_1_a.."%## longer.\n\nACE: ##$pro##\nInteraction with hostages to move them is reduced by ##"..hostage_taker_1_b.."%##.",
 		
-		menu_shaped_charge_desc =		"BASIC: ##$basic##\nAdds ##3## more trip mines to your inventory.\n\nACE: ##$pro##\nTrip mines can be converted to shaped charges, used to breach certain safes and doors.",
-		menu_trip_miner_desc =			"BASIC: ##$basic##\nDecreases your trip mine deploy time by ##20%##.\n\nACE: ##$pro##\nAdds ##1## more trip mine to your inventory.",
+		menu_shaped_charge_desc =		"BASIC: ##$basic##\nAdds ##5## more trip mines to your inventory.\n\nACE: ##$pro##\nTrip mines can be converted to shaped charges, used to breach certain safes and doors.",
+		menu_trip_miner_desc =			"BASIC: ##$basic##\nDecreases your trip mine deploy time by ##20%##.\n\nACE: ##$pro##\nAdds ##3## more trip mines to your inventory.",
+		
+		menu_jail_workout_desc =		"BASIC: ##$basic##\nSpecial enemies marked by you take ##"..jail_workout_1_a.."%## additional damage.\n\nACE: ##$pro##\nWhen you stand still for ##3.5## seconds in stealth, you start highlighting people around you within a ##10## meter radius.",
+		
+		menu_jail_workout_desc =		"BASIC: ##$basic##\nIncreases the concealment of melee weapons by ##2##.\n\nACE: ##$pro##\nIncreases the concealment of all ballistic vests by ##4##.",
+		
+		menu_marcus_dlc =				"Lucky Charm",
+		menu_marcus_dlc_desc =			"BASIC: ##$basic##\nYour odds of getting a higher quality item during a PAYDAY loot drop are increased by ##300%##.\n\nACE: ##$pro##\nEvery second you gain a small chance to regenerate ##1%## of your total health.",
 
 		menu_gunzerker =				"Gunzerker",
 		menu_time_heals =				"Rehab",
 		menu_more_blood_to_bleed =		"More Blood to Bleed",
 		menu_walking_bleedout =			"Fatal Injury",
 		menu_second_wind =				"Second Wind",
-		menu_up_you_go_beta =			"Strong Stitches",
 		menu_mastercraftsman =			"Fast Learner",
 		menu_spotter =					"Spotter",
 		menu_aggressive_shots =			"Body Expertise",
@@ -257,21 +220,21 @@ Hooks:AddHook("LocalizationManagerPostInit", "OPSkillDesc", function()
 		bm_concussion =					"Flashbang",
 		bm_concussion_desc =			"If the cops can throw infinite amounts of these to burn your retinas out, so should you! \nThey may not like the taste of their own medicine, but it is their opinion and your choice.",
 		
-		menu_mastermind_tier_5 =		"Increases your doctor bag interaction speed by additional ##"..mastermind_tier5_1.."%##.\nDecreases your doctor bag deploy time by ##"..mastermind_tier5_2.."%##.",
-		menu_mastermind_tier_6 =		"The power of your intimidation is increased by ##"..mastermind_tier6_1.."%##. Reduces the asset costs in the Job Overview by ##"..mastermind_tier6_2.."%##.\n\nYou now a chance of finding cable ties in ammo boxes, ##20%## in loud and a guaranteed pickup during stealth.",
+		menu_mastermind_tier_5 =		"Increases your doctor bag interaction speed by additional ##10%##.\nDecreases your doctor bag deploy time by ##20%##.",
+		menu_mastermind_tier_6 =		"The power of your intimidation is increased by ##25%##. Reduces the asset costs in the Job Overview by ##"..mastermind_tier6_2.."%##.\n\nYou now a chance of finding cable ties in ammo boxes, ##20%## in loud and a guaranteed pickup during stealth.",
 		menu_menu_enforcer_tier_3 =		"Enemies are ##"..enforcer_tier3_1.."%## more easily threatened by you.\nIncreases your ammo bag interaction speed by ##"..enforcer_tier3_2.."%##.",
 		menu_menu_enforcer_tier_5 =		"You do ##"..enforcer_tier5_1.."%## more damage.\nIncreases your ammo bag interaction speed by ##"..enforcer_tier5_2.."%##.",
 		menu_technician_tier_4 =		"Increases your headshot damage by ##"..technician_tier4_1.."%##.",
-		menu_hoxton_tier_1 =			"The damage thugs deal to you is reduced by ##"..hoxton_tier1_1.."%##",
+		menu_hoxton_tier_1 =			"The damage thugs deal to you is reduced by ##10%##",
 		menu_hoxton_tier_2 =			"Your steadiness is increased by ##"..hoxton_tier2_1.."##.",
-		menu_hoxton_tier_3 =			"The damage thugs deal to you is reduced by ##"..hoxton_tier3_1.."%##",
+		menu_hoxton_tier_3 =			"The damage thugs deal to you is reduced by ##35%##",
 		menu_hoxton_tier_4 =			"You deal ##"..hoxton_tier4_1.."%## more damage against special enemies.",
 		menu_hoxton_tier_5 =			"You gain ##"..hoxton_tier5_1.."%## more health.",
 		menu_hoxton_tier_6 =			"You are ##"..hoxton_tier6_1.."%## less likely to be targeted by enemies.",
 
 		menu_bonus_exp =		 					"Mr. Wise Guy",
 		menu_bonus_exp_desc =		 				"Increasing experience to you and your crew.",
-		menu_bonus_exp_detailed_desc =				"You gain ##"..mr_wise_guy_1.."%## more experience to you and your crew for completing days and job.\n\nYour chance of getting a higher quality item during a PAYDAY is increased by ##"..mr_wise_guy_2.."%##.",
+		menu_bonus_exp_detailed_desc =				"You gain ##"..mr_wise_guy_1.."%## more experience to you and your crew for completing days and job.",
 		menu_bonus_small_money =	 				"Dead Presidents",
 		menu_bonus_small_money_desc =				"Increasing value of loose items that you grab.",
 		menu_bonus_small_money_detailed_desc =		"Adds ##"..dead_presidents_1.."%## more value to loose items that you pick up.",
@@ -309,115 +272,6 @@ Hooks:AddHook("LocalizationManagerPostInit", "OPSkillDesc", function()
 		menu_lootmule_desc =						"Sprint while carrying a bag.",
 		menu_lootmule_detailed_desc =				"You can now ##sprint## while carrying a bag. The movement penalties of the bag's weight still apply.",	
 	})
-
-	if Idstring("russian"):key() == SystemInfo:language():key() then
-		LocalizationManager:add_localized_strings({
-			menu_tea_cookies_desc =			"БАЗОВЫЙ: ##$basic##\nДобавляет ##"..tea_cookies_1_a.."## аптечки первой помощи в инвентарь.\n\nПРО: ##$pro##\nОткрывает ##"..tea_cookies_1_b.."## инъектора. Активируя инъектор, вы будете исцеляться на ##"..tea_cookies_2_b.."%## от всего получаемого урона в течение ##"..tea_cookies_3_b.."## секунд.\n\nДобавляет ещё ##"..tea_cookies_4_b.."## аптечек первой помощи в инвентарь.",
-			menu_gunzerker_desc =			"БАЗОВЫЙ: ##$basic##\nОткрывает парные дробовики.\n\nПРО: ##$pro##\nОткрывает парные пистолеты-пулеметы.",
-			menu_time_heals_desc =			"БАЗОВЫЙ: ##$basic##\nЕсли вы будете поддерживать себя живим на протяжении ##"..time_heals_1_a.."## секунд, то вы можете пережить падение.\n\nВаша скорость ходьбы, взаимодействия, перезарядки и время блидаута будет постепенно восстанавливатся.\n\nПРО: ##$pro##\nВремя поддерживания себя живым снижено до ##"..time_heals_1_b.."## секунд.\nАптечки первой помощи могут полностью вас вылечить с дополнительным ##"..time_heals_2_b.."%## шансом.",
-			menu_more_blood_to_bleed_desc =	"БАЗОВЫЙ: ##$basic##\nВы получаете на ##"..more_blood_to_bleed_1_a.."%## больше временного здоровья.\n\nПРО: ##$pro##\nВы получаете ещё на ##"..more_blood_to_bleed_1_b.."%## больше временного здоровья.\n\nМаксимальный штраф времени в блидауте теперь ##"..more_blood_to_bleed_2_b.."## секунд.",
-			menu_walking_bleedout_desc =	"БАЗОВЫЙ: ##$basic##\nС шансом ##"..walking_bleedout_1_a.."%## вы можете пережить смертельное попадание и получить ##"..walking_bleedout_2_a.."%## временного здоровья, но ваша скорость взаимодействия и передвижения снижается на ##"..walking_bleedout_3_a.."%##, а скорость перезарядки снижается на ##"..walking_bleedout_4_a.."%##.\n\nВремя блидаута снижается с каждой секундой максимум до ##"..walking_bleedout_5_a.."## секунд находясь в этом состоянии.\n\nНаходясь в этом состоянии ##"..walking_bleedout_6_a.."## секунд и более, если вас добили враги, то ваше падение становится фатальным, без возможности отстреливатся во время блидаута.\n\nИспользование медицинской сумки полностью вылечивает вас от смертельного состояния.\n\nПРО: ##$pro##\nВы получаете дополнительные ##"..walking_bleedout_1_b.."%## шанса чтобы пережить сметельное ранение.\n\nАптечки первой помощи могут полностью вас вылечить с шансом ##"..walking_bleedout_2_b.."%##.",
-			menu_up_you_go_beta_desc =		"БАЗОВЫЙ: ##$basic##\nВы всегда получаете ##"..up_you_go_1_a.."%## здоровья от вашего общего количества после того, как вас подняли.\n\nСинергия: если у вас открыт навык ##Берсеркер##, тогда ваше количество здоровья будет ##"..up_you_go_2_a.."%## после того, как вас подняли.\n\nПРО: ##$pro##\nВы получаете дополнительно ##"..up_you_go_1_b.."%## здоровья после того, как вас подняли.\nВы получаете на ##"..up_you_go_2_b.."%## меньше урона в течение ##"..up_you_go_3_b.."## секунд после того, как вас подняли.",
-			menu_akimbo_skill_desc =		"БАЗОВЫЙ: ##$basic##\nТеперь вы можете использовать парные пистолеты. У всего парного оружия стабильность снижена на ##"..akimbo_1_a.."%##.\n\nПРО: ##$pro##\nУ всего парного оружия стабильность снижена на ##"..akimbo_1_b.."%##, а количество их боеприпасов повышается на ##"..akimbo_2_b.."%##.",
-			menu_second_wind_desc =			"БАЗОВЫЙ: ##$basic##\nКогда вы лишаетесь брони во время боя, скорость вашего передвижения увеличивается на ##"..second_wind_1_a.."%## в течение ##"..second_wind_2_a.."## секунд.\n\nПРО: ##$pro##\nПри ношении баллистических бронежилетов, шанс увернуться от вражеского огня увеличен на ##"..second_wind_1_b.."%##.",
-			menu_jail_workout_desc =		"БАЗОВЫЙ: ##$basic##\nСпециальные юниты отмеченные вами получают на ##"..jail_workout_1_a.."%## больше урона.\n\nПРО: ##$pro##\nЕсли вы до поднятия тревоги стоите на месте ##3.5## секунды, не совершая никаких действий, то начнёте автоматически помечать всех людей на расстоянии в ##10## метров.",				
-			menu_thick_skin_desc =			"БАЗОВЫЙ: ##$basic##\nПрочность брони увеличена ещё на ##"..thick_skin_1_a.."%##.\n\nПРО: ##$pro##\nПрочность всех баллистических бронежилетов увеличена на ##"..thick_skin_1_b.."##.",
-			menu_awareness_desc =			"БАЗОВЫЙ: ##$basic##\nСкорость передвижения не изменяется, когда вы прицеливаетесь.\n\nПРО: ##$pro##\nКогда вы находитесь на средней дистанции к врагу, вы будете получать на ##"..awareness_1_b.."%## меньше урона.",
-			menu_mastercraftsman_desc =		"БАЗОВЫЙ: ##$basic##\nУменьшает цену улучшения оружия и покраски масок на ##"..mastercraftsman_1_a.."%##.\n\nПРО: ##$pro##\nВы получаете ##"..mastercraftsman_1_b.."%## больше опыта при завершении дней и контрактов.",
-
-			menu_ecm_feedback_desc =		"БАЗОВЫЙ: ##$basic##\nПозволяет взаимодействовать с генераторами помех, чтобы создать акустическую петлю. После взаимодействия, генератор может с вероятностью ##"..ecm_feedback_1_a.."## оглушать врагов в радиусе ##"..ecm_feedback_2_a.."## метров каждые ##"..ecm_feedback_3_a.."## секунды.\n\nПетля длится ##"..ecm_feedback_4_a.."## секунд.\n\nПРО: ##$pro##\nОткрывает ##"..ecm_feedback_1_b.."## Карманных генератора помех, который работает ##"..ecm_feedback_2_b.."## секунд каждый.\n\nВы моментально взаимодействуете с генератором помех. Время действия петли увеличено на ##"..ecm_feedback_3_b.."%##.\n\nГенератор помех перезаряжается с вероятностью ##"..ecm_feedback_4_b.."%## каждые ##"..ecm_feedback_5_b.."## минуты, позволяя снова включить петлю.",
-			menu_hitman_desc =				"БАЗОВЫЙ: ##$basic##\nУрон любого оружия с глушителем и шанс пробить вражескую броню увеличены на ##"..hitman_1_a.."%## и ##"..hitman_2_a.."%## соответственно.\n\nПРО: ##$pro##\nУрон любого оружия с глушителем и шанс пробить вражескую броню увеличены на дополнительные ##"..hitman_1_b.."%## и ##"..hitman_2_b.."%## соответственно.",
-			menu_silence_expert_desc =		"БАЗОВЫЙ: ##$basic##\nПовышает точность и стабильность оружия с установленным глушителем на ##"..silence_expert_1_a.."%##. Вы прицеливаетесь на ##"..silence_expert_2_a.."%## быстрее со всем оружием, на котором установлен глушитель.\n\nПРО: ##$pro##\nВаше вторичное оружие с установленным глушителем наносит дополнительные ##"..silence_expert_1_b.."## урона.",
-			menu_spotter_desc =				"БАЗОВЫЙ: ##$basic##\nУвеличивает продолжительность пометки врагов на ##"..spotter_1_a.."%##.\n\nПРО: ##$pro##\nОткрывает активы Наблюдателя в меню задания.\n\nВо время стелса, наблюдатель будет подсвечивать охрану для вас и вашей команды. После поднятия тревоги наблюдатель будет подсвечивать специальных юнитов.",
-			menu_cleaner_desc =				"БАЗОВЫЙ: ##$basic##\nВ инвентаре будет ##"..cleaner_1_a.."## мешкок с самого начала.\n\nВы можете купить мешки для трупов в меню активов для себя и команды. Актив содержит ##"..cleaner_2_a.."## мешка.\n\nПРО: ##$pro##\nВ инвентаре будет ##"..cleaner_1_b.."## дополнительный мешкок с самого начала.\n\nСкорость упаковки трупов увеличена на ##"..cleaner_2_b.."%##.",
-			menu_chameleon_desc =			"БАЗОВЫЙ: ##$basic##\nВы можете подсвечивать охрану и камеры в режиме исследования. Вы на ##"..chameleon_1_a.."%## скрытнее для гражданских и врагов до тех пор, пока не наденете маску.\n\nПРО: ##$pro##\nЕсли ваша скрытность ##"..chameleon_1_b.."## или ниже, охранники не не смогут вас заподозрить в режиме исследования.",
-			menu_cat_burglar_desc =			"БАЗОВЫЙ: ##$basic##\nУрон от падения с несмертельной высоты снижен на ##"..cat_burglar_1_a.."%##.\n\nПРО: ##$pro##\nПадая с несмертельной высоты вы приземляетесь бесшумно, а так же при падении вы не теряете здоровье.",
-
-			menu_iron_man_desc =			"БАЗОВЫЙ: ##$basic##\nПоказатель брони увеличен на ##"..iron_man_1_a.."%## .\n\nПРО: ##$pro##\nУвеличивает скорость восстановления брони у вас и у напарников на ##"..iron_man_1_b.."%##.\n\nКогда вы лишитесь брони, то она восстановится через ##"..iron_man_2_b.."## секунд даже будучи под обстрелом.",
-			menu_aggressive_shots_desc =	"БАЗОВЫЙ: ##$basic##\nВаши пистолеты-пулеметы и штурмовые винтовки в одиночном режиме стрельбы наносят ##"..body_expertise_1_a.."%## урона множителя попадания в голову стреляя по телу.\n\nУбийство в голову увеличивает вашу скорость перезарядки на дополнительные ##"..body_expertise_2_a.."%## в течение ##"..body_expertise_3_a.."## секунд.\n\nПРО: ##$pro##\nВаши пистолеты-пулеметы и штурмовые винтовки в одиночном режиме стрельбы наносят дополнительный ##"..body_expertise_1_b.."%## урона множителя попадания в голову стреляя по телу.\n\nУвеличивает скорость перезарядки снайперских винтовок на ##"..body_expertise_2_b.."%##.",
-			menu_sentry_gun_2x_desc =		"БАЗОВЫЙ: ##$basic##\nПозволяет устанавливать ##"..sentry_gun_2x_1_a.."## турели вместо одной.\n\nПРО: ##$pro##\nУвеличивает урон, наносимый вашими турелями на ##"..sentry_gun_2x_1_b.."%##.\n\nОткрывает менее заметную, приглушённую бронебойную турель с уменьшенной скорострельностью, но значительно увеличенным уроном.",
-			menu_sentry_gun_desc =			"БАЗОВЫЙ: ##$basic##\nОткрывает турель.\n\nПРО: ##$pro##\nЗдоровье и скорость вращения ваших турелей увеличено на ##"..sentry_gun_1_b.."%##.\n\nОткрывает особую модифицированную менее заметную турель с приглушённым стволом, бронебойными патронами, уменьшенной скорострельность для экономии патронов и увеличенным количеством урона.",
-			menu_master_craftsman_desc =	"БАЗОВЫЙ: ##$basic##\nУвеличивает радиус поражения мин на ##"..master_craftsman_1_a.."%##.\n\nПРО: ##$pro##\nУвеличивает радиус поражения мин еще на ##"..master_craftsman_1_b.."%##.\n\nСпециальные юниты, отмеченные вашими минами, получают на ##"..master_craftsman_2_b.."%## больше урона.",
-			menu_sharpshooter_beta_desc =	"БАЗОВЫЙ: ##$basic##\nВы получаете ##"..marksman_1_a.."%## точности для всех пистолетов-пулеметов, штурмовых и снайперских винтовок в режиме одиночной стрельбы.\n\nТакже вы получаете прибавку к стабильности на ##"..marksman_2_a.."%## не двигаясь и ##"..marksman_3_a.."%## при прицеливании из оружия с одиночным режимом стрельбы.\n\nПРО: ##$pro##\nУвеличена скорострельность на ##"..marksman_1_b.."%## и увеличена точность, при прицельной стрельбе на ##"..marksman_2_b.."%## из пистолетов-пулеметов, штурмовых и снайперских винтовок в режиме одиночной стрельбы.",
-			menu_discipline_desc = 			"БАЗОВЫЙ: ##$basic##\nВы можете прицеливаться, когда упали.\n\nПРО: ##$pro##\nПолучаемый урон снижен на ##"..discipline_1_b.."%##, если вы взаимодействуете с каким-либо предметом.",
-
-			menu_carbon_blade_desc =		"БАЗОВЫЙ: ##$basic##\nВы заменяете лезвия вашей пилы на углеродные, повышая тем самым её эффективность на ##"..carbon_blade_1_a.."%##.\n\nПРО: ##$pro##\nЛезвия пилы при использовании не изнашиваются с шансом ##"..carbon_blade_1_b.."%##. Лезвия становятся на ##"..carbon_blade_2_b.."%## эффективнее.\n\nСкорость смены лезвий портативной пилы OVE9000 увеличивается на ##"..carbon_blade_3_b.."%##.",
-			menu_overkill_desc =			"БАЗОВЫЙ: ##$basic##\nПосле убийства врага с помощью дробовика или пилы OVE9000, вы будете наносить на ##"..overkill_1_a.."%## больше урона в течение ##"..overkill_2_a.."## секунд.\n\nПРО: ##$pro##\nУвеличено время действия навыка на дополнительные ##"..overkill_1_b.."## секунд. Бонус к урону теперь применяется ко всему оружию. Навык должен быть активирован использованием дробовика или пилы OVE9000.\n\nТеперь вы можете прорезать щитовиков своей пилой OVE9000, а также атака врагов портативной пилой изнашивает лезвия на ##"..overkill_2_b.."%## меньше.\n\nВнимание: действие навыка не распространяется на гранатомёты, метательное, луки и арбалеты.",
-			menu_from_the_hip_desc =		"БАЗОВЫЙ: ##$basic##\nПовышает скорость прицеливания из дробовиков на ##"..from_the_hip_1_a.."%##.\n\nПРО: ##$pro##\nПри стрельбе по щитовику из дробовика от бедра, у вас есть шанс отбросить его назад с шансом ##"..from_the_hip_1_b.."%## и ##"..from_the_hip_2_b.."%## при прицеливании.",
-			menu_shotgun_cqb_desc =			"БАЗОВЫЙ: ##$basic##\nПовышает скорость перезарядки дробовиков на ##"..shotgun_cqb_1_a.."%##.\n\nПРО: ##$pro##\nПовышает точность вашего дробовика при стрельбе от бедра на ##"..shotgun_cqb_1_b.."%##.\n\nВаша скорострельность будет увеличена на ##"..shotgun_cqb_2_b.."%## при стрельбе от бедра из дробовиков с одиночным режимом стрельбы.",
-			menu_scavenger_desc =			"БАЗОВЫЙ: ##$basic##\nРадиус, с которого вы можете поднимать патроны увеличен на ##"..scavenger_1_a.."%##.\n\nПРО: ##$pro##\nКогда вы собираете боеприпасы, оставленные врагами, ваши напарники будут получать ##"..scavenger_1_b.."%## от собранного вами количества.\n\nНавык срабатывает только один раз за ##"..scavenger_2_b.."## секунд.",
-			menu_pack_mule_desc =			"БАЗОВЫЙ: ##$basic##\nПозволяет передвигаться с сумкой быстрее на ##"..pack_mule_1_b.."%##.\n\nПРО: ##$pro##\nПозволяет кидать сумки на ##"..pack_mule_1_a.."%## дальше.",
-
-			menu_pistol_beta_messiah_desc =	"БАЗОВЫЙ: ##$basic##\nВы самостоятельно поднимаетесь на ноги, если убьёте врага. Навык срабатывает только ##"..messiah_1_a.."## раз.\n\nПРО: ##$pro##\nВы сможете снова использовать навык, если воспользуетесь медицинской сумкой, но только один заряд за каждое использование медицинской сумки.\n\nНавык срабатывает еще ##"..messiah_1_b.."## раза.",
-			menu_stockholm_syndrome_desc =	"БАЗОВЫЙ: ##$basic##\nПри взаимодействии с гражданскими есть вероятность того, что он согласится вас поднять. Гражданские, поднявшие вас, могут дать вам патроны.\n\nПРО: ##$pro##\nВаши заложники не станут убегать с места, если были освобождены полицией. Как только вы попадёте в тюрьму, они попытаются обменять себя на вас. Этот эффект может сработать даже во время полицейского штурма, но только ##"..stockholm_syndrome_1_b.."## раз.",
-			menu_kilmer_desc =				"БАЗОВЫЙ: ##$basic##\nУвеличивает скорость перезарядки штурмовых винтовок на ##"..kilmer_1_a.."%##.\n\nПРО: ##$pro##\nПонижает множитель разброса штурмовых во время движения на ##"..kilmer_1_b.."%##.\n\nВы можете перезаряжать оружие во время спринта.",
-			menu_dominator_desc =			"БАЗОВЫЙ: ##$basic##\nВы можете брать врагов в заложники во время скрытного прохождения и во время штурма.\n\nПРО: ##$pro##\nВы можете брать ##2## врагов в заложники.\n\nДистанция, с которой вы можете брать заложников увеличена на ##"..dominator_1_b.."%##, как и сила вашего убеждения.",
-			menu_control_freak_desc =		"БАЗОВЫЙ: ##$basic##\nИспуганые гражданские которые пытаются сбежать или позвонить в полицию отмечаются синим вопросительным знаком. Это дает больше времени чтобы запугать их.\n\nПРО: ##$pro##\nШум, издаваемый вами, устрашает гражданских.",
-			menu_black_marketeer_desc =		"БАЗОВЫЙ: ##$basic##\nУменьшает цены на все ваши покупки на ##"..black_marketeer_1_a.."%##.\n\nПРО: ##$pro##\nУменьшает цены на все ваши покупки еще на ##"..black_marketeer_1_b.."%## и продажа предметов на ##"..black_marketeer_2_b.."%## выгоднее.",
-			menu_inside_man_desc =			"БАЗОВЫЙ: ##$basic##\nУменьшает цены в меню активов на ##"..inside_man_1_a.."%##.\n\nПРО: ##$pro##\nОткрывает особые активы Своего человека.",
-			menu_smooth_talker_desc =		"БАЗОВЫЙ: ##$basic##\nВы можете ответить на ##2## дополнительных пейджера.\n\nПРО: ##$pro##\nВы отвечаете на пейджер ##"..smooth_talker_1_b.."%## быстрее.",
-			menu_hostage_taker_desc =		"БАЗОВЫЙ: ##$basic##\nГражданские остаются запуганными на ##"..hostage_taker_1_a.."%## дольше.\n\nПРО: ##$pro##\nВзаимодейстие с заложниками для их перемещения снижено на ##"..hostage_taker_1_b.."%##.",
-
-			menu_gunzerker =				"Шизострел",
-			menu_time_heals =				"Реабилитация",
-			menu_more_blood_to_bleed =		"Больше крови для истекания",
-			menu_walking_bleedout =			"Смертельная травма",
-			menu_second_wind =				"Второй шанс",
-			menu_up_you_go_beta =			"Прочные швы",
-			menu_mastercraftsman =			"Прилежный ученик",
-			menu_spotter =					"Наблюдатель",
-			menu_aggressive_shots =			"Хирургическая точность",
-			menu_sentry_gun =				"Турель",
-			menu_scavenger =				"Мародер",
-			menu_control_freak =			"Контроль толпы",
-			menu_black_marketeer =			"Торговец с черного рынка",
-			menu_inside_man =				"Свой Человек",
-			menu_smooth_talker =			"Пустозвон",
-			menu_hostage_taker =			"Захват заложников",
-			menu_awareness =				"Стрельба с перебежками",
-
-			menu_mastermind_tier_5 =		"Увеличивает скорость взаимодействия с медицинскими сумками на ##"..mastermind_tier5_1.."%##.\nУвеличивает скорость для установки медицинских сумок на ##"..mastermind_tier5_2.."%##.",
-			menu_mastermind_tier_6 =		"Увеличивает силу запугивания на ##"..mastermind_tier6_1.."%##. Снижает стоимость поддержки в меню подготовки на ##"..mastermind_tier6_2.."%##.\n\nВы можете подбирать кабельные стяжки за каждую подобраную коробку с патронами с шансом ##20%##, а во время скрытного прохождения получаете гарантировано одну.",
-			menu_menu_enforcer_tier_3 =		"Вы на ##"..enforcer_tier3_1.."%## легче подавляете врагов.\nУскоряет взаимодействие с сумкой патронов на ##"..enforcer_tier3_2.."%##.",
-			menu_menu_enforcer_tier_5 =		"Вы наносите на ##"..enforcer_tier5_1.."%## больше урона.\nУскоряет взаимодействие с сумкой патронов на ##"..enforcer_tier5_2.."%##.",
-			menu_technician_tier_4 =		"Урон от попадания в голову увеличен на ##"..technician_tier4_1.."%##.",
-			menu_hoxton_tier_1 =			"Урон от бандитов снижен на ##"..hoxton_tier1_1.."%##",
-			menu_hoxton_tier_2 =			"Стойкость увеличена на ##"..hoxton_tier2_1.."## пунктов.",
-			menu_hoxton_tier_3 =			"Урон от бандитов снижен на ##"..hoxton_tier3_1.."%##",
-			menu_hoxton_tier_4 =			"Вы наносите на ##"..hoxton_tier4_1.."%## больше урона специальным юнитам.",
-			menu_hoxton_tier_5 =			"Здоровье увеличено на ##"..hoxton_tier5_1.."%##.",
-			menu_hoxton_tier_6 =			"Вы на ##"..hoxton_tier6_1.."%## менее приоритетная цель для врагов.",
-			
-			menu_bonus_exp =			 				"Мистер Умник",
-			menu_bonus_exp_desc =		 				"Увеличивает количество опыта вам и вашей команде.",
-			menu_bonus_exp_detailed_desc =				"Вы получаете ##"..mr_wise_guy_1.."%## больше опыта вам и вашей команде при завершении дней и контрактов.\n\nШанс получить предмет высокого качества при завершении контракта увеличивается на ##"..mr_wise_guy_2.."%##.",
-			menu_bonus_small_money =		 			"Мертвые президенты",
-			menu_bonus_small_money_desc =				"Увеличивает ценность мелкой добычи которую вы забрали.",
-			menu_bonus_small_money_detailed_desc =		"Ценность мелкой добычи увеличивается на ##"..dead_presidents_1.."%##.\n\nСнижено количество денег требуемых для перечисления в бонусный опыт ##"..dead_presidents_2.."%## когда вы нашли мелкую добычу.",
-			menu_good_luck_charm_desc =					"Вы можете зациклить изображение камеры тем самым отключить её.",
-			menu_good_luck_charm_detailed_desc =		"Вы можете зациклить изображение камеры на ##"..good_luck_charm_1.."## секунд и тем самым отключить её.",
-			menu_triathlete_desc =		 				"Увеличивает выносливость вам и вашей команде.",
-			menu_triathlete_detailed_desc =		 		"Увеличивает выносливость вам и вашей команде на ##"..triathlete_1.."%##.\n\nСкорость передвижения увеличена на ##"..triathlete_2.."%##.\n\nПозволяет бегать в любом направлении.",
-			menu_joker_desc =		 					"Взятый в заложники враг может сражаться на вашей стороне.",
-			menu_joker_detailed_desc =					"Вы можете перевести одного врага на свою сторону. Навык работает только после поднятия тревоги.\n\nПерешедшие противники наносят на ##"..joker_1.."%## больше урона и будет получать на ##"..joker_2.."%## меньше урона в зависимости от сложности.",
-			menu_ammo_reservoir_desc =		 			"Вы и ваша команда можете стрелять не расходуя боеприпасы используя ваши патроны.",
-			menu_ammo_reservoir_detailed_desc =			"Увеличивает вместительность магазинов вашего оружия ещё на ##"..ammo_reservoir_1.."## патронов.\n\nСразу после установки и использования сумки с патронами, вы и ваша команда можете стрелять не расходуя боеприпасы в течение ##"..ammo_reservoir_2.."## секунд. Чем больше амуниции вы восстановите из сумки, тем дольше будет эффект непрерывной стрельбы.",
-			menu_keys_under_the_carpet =				"Ключи под ковриком",
-			menu_keys_under_the_carpet_desc =			"Улучшает взлом замков.",
-			menu_keys_under_the_carpet_detailed_desc =	"Вы взламываете замки на ##"..keys_under_the_carpet_1.."%## быстрее.\n\nВы можете взламывать замки в режиме исследования.",
-			menu_infiltrator =							"Инфильтратор",
-			menu_infiltrator_desc =						"Улучшает режим исследования.",
-			menu_infiltrator_detailed_desc =			"Вы можете подбирать предметы, использовать ключ-карты к дверям и временным замкам и взаимодействовать с компьютерами в режиме исследования.",
-			menu_kick_starter_desc =					"Починка дрели ударом по ней.",
-			menu_kick_starter_detailed_desc =			"Теперь вы можете починить дрель или пилу, ударив по ним оружием ближнего боя. У вас есть ##"..kick_starter_1.."%## шанс, если та сломается. Данный навык срабатывает только один раз за поломку дрели или пилы.",
-			menu_fire_trap_desc =						"Модифицирует ваши мины в зажигательные.",
-			menu_fire_trap_detailed_desc =				"Ваши мины оставляют на месте огненную ловушку в течение ##"..fire_trap_1.."## секунд в ##"..fire_trap_2.."## метровом радиусе.",
-			menu_hostage_situation =					"Ситуация с заложниками",
-			menu_hostage_situation_desc =				"Прикрытие с помощью заложников.",
-			menu_hostage_situation_detailed_desc =		"Вы и ваши напарники будете получать в зависимости от сложности на ##"..hostage_situation_1.."## меньше урона за каждого связанного заложника. Данный эффект складывается до максимума в ##"..hostage_situation_2.."## заложников.",
-
-		})
-	end
 end)
 
 Hooks:Add("LocalizationManagerPostInit", "OrPack_loc", function(...)				
@@ -425,29 +279,6 @@ Hooks:Add("LocalizationManagerPostInit", "OrPack_loc", function(...)
 		menu_crimenet =								"Crime.NET",
 		menu_crimenet_offline =						"Crime.NET Offline",
 		menu_specialization =						"Perk",
-		OP_credits_help = 							"Meet the Original Pack Crew",
-		OP_credits = 								"Credits",
-		menu_OP_discord_desc = 						"Join Original Pack Discord server",
-		menu_OP_discord = 							"Discord",
-		menu_OP_changelog =							"Changelog",
-		menu_OP_changelog_desc =					"Changelog and update history.",
-		menu_find_game =							"Find Game",
-		menu_find_game_desc =						"Join to any lobby.",
-		menu_max_progress =							"Max Progress",
-		menu_max_progress_desc =					"Switch to the Maximum Progress mode.",
-		menu_normal_progress =						"Normal Progress",
-		menu_normal_progress_desc =					"Back to normal progress.",
-		menu_max_progress_dialog_title =			"Switching to Max Progress Mode",
-		menu_max_progress_dialog_message =			"Max Progress mode uses a different save file.\n\nSo everything that you gain in Normal Mode will be safe, you can come back any time.\nGame will restart on its own as soon as you confirm switching to Max Progress.\n\nDo you want switch to Max Progress Mode?",
-		menu_normal_progress_dialog_title =			"Switching to Normal Progress",
-		menu_normal_progress_dialog_message =		"Game will restart on its own as soon as you confirm switching to Normal Progress.\n\nDo you want switch to Normal Progress?",
-		dialog_what_is_max_progress =				"What is Max Progress Mode?",
-		dialog_what_is_max_progress_text =			"In Max Progress Mode you get all items, weapons, masks, materials, and etc. for free. One for each type of item. (Only those items that you have from DLC)\nMaximum Infamy rank and 100 level.\nThis mode uses a different save file, which allows you to switch between the max and normal modes without spoiling your progress and also has its own progress of achievements. But you can only play with those players who also have the Max Progress enabled.\n\nStarter money kit:\nOffshore Account - $1.000.000.000\nSpending cash - $150.000.000\nContinental coins - © 250.000\n\nDo you want switch to Max Progress Mode?",
-		menu_always_show_body_bags_title =			"Show body bags counter",
-		menu_always_show_accuracy_title =			"Show accuracy counter",
-		menu_always_show_kills_title =				"Show kill counter",
-		heist_arm =									"Armored Transport",
-		menu_challenge_pink_panther_objective =		"On day 1 of the Framing Frame job, steal 9 sold paintings without being seen.",
 		menu_silencer_radius_silent =				"Noise suppression: Silent",
 		menu_silencer_radius_very_small =			"Noise suppression: Very High",
 		menu_silencer_radius_small =				"Noise suppression: High",
@@ -457,11 +288,7 @@ Hooks:Add("LocalizationManagerPostInit", "OrPack_loc", function(...)
 		menu_asset_lock_additional_assets =			"Requires the ''Inside Man'' Skill to unlock",
 		menu_asset_lock_buy_bodybags_asset =		"Requires the ''Cleaner'' Skill to unlock",
 		menu_asset_lock_buy_spotter_asset =			"Requires the ''Spotter'' Skill to unlock",
-		bm_menu_unlock_akimbo =						"Requires the Akimbo skill",
-		bm_menu_unlock_gunzerker =					"Requires the Gunzerker skill",
-		bm_menu_unlock_overpowered =				"Locked to reputation level 85",
 		menu_offshore_remains =						"Offshore Remains",
-		achievement_cac_15 =						"C-Forever",
 		bm_wp_upg_bonus_team_exp_money_p3_desc =	"+5% Experience & money reward for you and your crew.",
 		bm_menu_skill_locked_chico_injector =		"Requires the Uppers skill",
 		bm_menu_skill_locked_pocket_ecm_jammer =	"Requires the ECM Feedback skill",
@@ -540,152 +367,4 @@ Hooks:Add("LocalizationManagerPostInit", "OrPack_loc", function(...)
 		cn_menu_contract_day =						"$stages day",
 		menu_OP_title =								"Original Pack",
 	})
-		
-	if Idstring("russian"):key() == SystemInfo:language():key() then
-		LocalizationManager:add_localized_strings({
-			menu_crimenet_offline =							"Crime.NET Оффлайн",
-			menu_specialization =							"Перк",
-			OP_credits_help = 								"Познакомтесь с командой Original Pack",
-			OP_credits = 									"Титры",
-			menu_OP_discord_desc = 							"Присоединяйтесь к Дискорд серверу Original Pack",
-			menu_OP_discord = 								"Дискорд",
-			menu_OP_changelog =								"Изменения",
-			menu_OP_changelog_desc =						"Список изменений и версии которые выходили ранее.",
-			menu_find_game =								"Найти игру",
-			menu_find_game_desc =							"Присоединится к любому лобби.",
-			menu_max_progress =								"Максимальный прогресс",
-			menu_max_progress_desc =						"Переключение на максимальный прогресс, у вас будет все чего вы хотите для игры. Что-то вроде творческого режима.",
-			menu_max_progress_dialog_title =				"Переключение на максимальный прогресс",
-			menu_max_progress_dialog_message =				"В режиме Максимального прогресса используется другой файл сохранения.\n\nТо есть все что вы успели наиграть в обычном режиме сохранится, вы в любой момент сможете вернутся назад и продолжить с теми ресурсами которые вы успели заработать.\nИгра перезапустится самостоятельно как только вы подтвердите переход на Максимальный прогресс.\n\nВы хотите перейти в режим Максимального прогресса?",
-			menu_normal_progress =							"Обычный прогресс",
-			menu_normal_progress_desc =						"Вернутся назад в обычный режим.",
-			menu_normal_progress_dialog_title =				"Переключение на обычный прогресс",
-			menu_normal_progress_dialog_message =			"Игра перезапустится самостоятельно как только вы подтвердите переход на обычный прогресс.\n\nВы хотите перейти в обычный прогресс?",
-			dialog_what_is_max_progress =					"Что такое Максимальный прогресс?",
-			dialog_what_is_max_progress_text =				"Максимальный прогресс - это режим, в котором открыты все игровые предметы, оружие, маски, материалы и тд.\nВсё по одному экземпляру (Только те предметы, из DLC которых вы имеете).\nТак же вы будете максимального ранга Дурной репутации и 100 уровня.\nЭтот режим использует другой файл сохранения, что позваляет переключатся между максимальным и обычным режимами без вреда прогрессу и так же имеет свой прогресс достижений. Но играть вы сможете только с теми игроками у кого также включен Максимальный прогресс.\n\nНачальные средства:\nОфшорный счет - $1.000.000.000\nНаличные - $150.000.000\nКонтиненталь монеты - ©250.000\n\nВы хотите перейти в Максимальный прогресс?",
-			menu_always_show_body_bags_title =				"Показывать мешки для трупов",
-			menu_always_show_accuracy_title =				"Показывать счетчик точности",
-			menu_always_show_kills_title =					"Показывать счетчик убийств",
-			heist_arm =										"Транспорт",
-			menu_challenge_pink_panther_objective =			"Завершите первый день контракта ''Подстава с картинами'', украв 9 картин, не поднимая тревогу.",
-			menu_silencer_radius_silent =					"Подавление шума: Бесшумно",
-			menu_silencer_radius_very_small =				"Подавление шума: Очень большое",
-			menu_silencer_radius_small =					"Подавление шума: Большое",
-			menu_silencer_radius_medium =					"Подавление шума: Среднее",
-			menu_silencer_radius_high =						"Подавление шума: Слабое",
-			menu_silencer_radius_very_high =				"Подавление шума: Очень слабое",
-			menu_asset_lock_additional_assets =				"Требуется навык ''Свой человек''",
-			menu_asset_lock_buy_bodybags_asset =			"Требуется навык ''Чистильщик''",
-			menu_asset_lock_buy_spotter_asset =				"Требуется навык ''Наблюдатель''",
-			bm_menu_unlock_akimbo =							"Требуется навык ''Акимбо''",
-			bm_menu_unlock_gunzerker =						"Требуется навык ''Шизострел''",
-			bm_menu_unlock_overpowered =					"Заблокировано до уровня репутации 85",
-			menu_offshore_remains =							"Офшорный счет",
-			bm_wp_upg_bonus_team_exp_money_p3_desc =		"+5% опыта и денег для вас и вашей команды",
-			bm_menu_skill_locked_chico_injector =			"Требуется навык ''Колеса''",
-			bm_menu_skill_locked_pocket_ecm_jammer =		"Требуется навык ''Акустическая петля''",
-			loading_op_gameplay_title =						"Советы Original Pack",
-			loading_op_trivia_title =						"Прочее о Original Pack",
-			loading_op_gameplay_1 =							"''События'', ''Классческие'' и некоторые другие контракты выпадают только в Crime.NET. Их невозможно купить в брокере контрактов.", 
-			loading_op_gameplay_2 =							"Светошумовые гранаты не мигают и издают звука перед взрывом, но их всё еще можно найти и сломать.",
-			loading_op_gameplay_3 =							"Медиков можно встретить только на Защите убежища или Противостоянии.",
-			loading_op_gameplay_4 =							"Во время стелса задоминированые охранники не требуют ответа на пейджер.",
-			loading_op_gameplay_5 =							"Максимум можно ответить на 4 пейджера, без навыка на 2. Если вы ответили на 2 пейджера, то товарщи у которых нет навыка больше не смогут ответить на пейджер, иначе поднимится тревога.",
-			loading_op_gameplay_6 =							"Если сложность контракта ''Сложно'' или ниже, то вы можете отвечать на максимальное количество пейджеров без необходимых на это навыков.",
-			loading_op_gameplay_7 =							"Когда вы бежите, то в радиусе 2 метров вас могут услышать. Если вы стреляете из оружия с глушителем, то пулю которая ударилась в стену или землю могут услышать в радиусе 1 метра.",
-			loading_op_gameplay_8 =							"Даже если ваше оружие с глушителем, оно все равно издает шум. Это зависит от того, какой глушитель установлен и самого оружия.",
-			loading_op_gameplay_9 =							"У гражданских, которых вы запугали со временем исчезает индикатор. Так что будьте на чеку. Так же есть навык который заранее указывает, что гражданский встал и скоро будет звонить полиции или убегать.",
-			loading_op_gameplay_10 =						"Количество задоминированых врагов зависит от количества товарищей в команде с навыком ''Доминатор'' вплоть до 4.",
-			loading_op_gameplay_11 =						"Если вам нужно открыть сейф или дверь с помощью С4, то вам необходим определенный навык в ветке Техника.",
-			loading_op_gameplay_12 =						"В большинстве случаев покупка контрактов не окупается его прохождением. Так что в некоторых случаях лучше подождать выпадения лучшего контракта в Crime.NET.",
-			loading_op_gameplay_13 =						"Дрель издает шум в радиусе 10 метров, который может потревожить мимо стоящих гражданских и охранников. Навыки в древе Техника могут уменьшить шум.",
-			loading_op_gameplay_14 =						"В игре есть перки, которые улучшают возможности в режиме исследования. Например: вы можете взамывать замки, подбирать предметы, взаимодействовать с компьютерами не надевая маски.",
-			loading_op_gameplay_15 =						"Ценность сумок зависит от двух факотов - сложности контракта и уровня оплаты. Чем выше эти два фактора, тем больше цена за сумки.",
-			loading_op_gameplay_16 =						"Вы можете разблокировать Карманные Генераторы Помех открытием навыка Акустическая Петля ПРО.",
-			loading_op_gameplay_17 =						"Если ваш напарник упал, то убедитесь что он лежит не на открытой местности. Иначе пытаясь поднять его подстрелят и вас, тогда придется поднимать вас обоих.",
-			loading_op_gameplay_18 =						"Не стеснятесь пользоватся укрытиями столько времени, сколько необходимо. Даже если придется сидеть полчаса.",
-			loading_op_gameplay_19 =						"Получение очков перков идет по курсу 10.000 к 1. Если контракт дает меньше 10.000 опыта, то очки начислятся не будут.",
-			loading_op_gameplay_20 =						"Если вы не хотите играть с нуля, то специально для вас в меню есть опция ''Максимальный прогресс''. Но играть вы сможете только с такими же игроками у кого включен максимальный прогресс.",
-			loading_op_gameplay_21 =						"Максимальная сложность до 5й Дурной репутации - ''Жажда Смерти''. После вам будет доступны ''Хаос'' и при достижении 20 ранга ''Серии Преступлений'' вам будет доступен ''Смертный приговор''. Найти их можно только в Crime.NET.",
-			loading_op_gameplay_22 =						"Достижения в Original Pack не идут в прогресс достижений Steam.",
-			loading_op_gameplay_23 =						"Новое убежище, Профили навыков, монеты Континенталь, Серия Преступлений и Противостояние - всё это открывается с 5го уровня Дурной Репутации.",
-			loading_op_gameplay_24 =						"Если вы стреляете сковзь стены или щиты, то урон снижается на 80%.",
-			loading_op_gameplay_25 =						"В режиме ''Серия преступлений'' установлена уникальная сложность игры - ''Смертный приговор''. Вас встретят юниты ''Zeal'', у которых повышенные урон и здоровье. Чтобы дать им отпор, вам необходимо собрать все свои силы и навыки.",
-			loading_op_gameplay_26 =						"Рестарт доступен только после провала тихого прохождения и только до того как начнется первый штурм.",
-			loading_op_gameplay_27 =						"Контракты от ''События'' можно приобрести каждую пятницу 13-е или октябрь 31-го.",
-			loading_op_gameplay_28 =						"Если вы собираетесь на громкое ограбление без патронов, то выживаемость вашей команды снизится до 75-50%.",
-			loading_op_gameplay_29 =						"Оружие со взрывными и зажигательными снарядами полезнее обычных, но боезапас восполняется только из сумок с патронами.",
-			loading_op_gameplay_30 =						"Если побег доступен и вы собираетесь скрытся, удостоверьтесь что вся команда восполнила своё здоровье. Иначе кто-то из вас сможет недобежать до побега.",
-			loading_op_gameplay_31 =						"Когда штурм закончился, враги могут сдатся даже если у вас нет навыка ''Доминатор''. Полезно когда в округе нет гражданских, которых можно связать.",
-			loading_op_gameplay_32 =						"При убийстве гражданского вы теряете опыт. За каждого убитого снимается 1%, на уровне сложности OVERKILL - 2%, а на Жажде Смерти - 3%.",
-			loading_op_gameplay_33 =						"Лазерные целеуказатели могут потревожить гражданских и охранников. Фонарики игнорируются, так как каждый охранник имеет свой фонарь и не вызывает подозрения нежели лазерные целеуказатели.",
-			loading_op_gameplay_34 =						"Не с кем играть? Загляните в Дискорд сервер по ссылке в главном меню.",
-			loading_op_gameplay_35 =						"Посмотрите Original Pack Изменения нажав кнопку в главном меню, уверен вы найдете там больше полезной информации о старых обновлениях которые добавили элементы которые могут быть полезными при прохождении.",
-			loading_op_gameplay_36 =						"У некоторых контрактов уровень оплаты меняется каждый день.",
-			loading_op_gameplay_37 =						"Штурмовики могут с легкостью подавлять врагов, предоставляя защиту своим напарникам. Подавленные враги будут забывать про свое текущие задачи, хуже стрелять или вовсе постараются вас избежать.",
-			loading_op_gameplay_38 =						"Пробуйте действовать скрытно. Это позволит вам выполнить часть заданий, даже если в конечном итоге ограбление придется завершать громко.",
-			loading_op_gameplay_39 =						"Полиция будет тратить больше времени на подготовку к штурму, если у вас есть заложники.",
-			loading_op_gameplay_40 =						"Если вы будете играть в дни выхода PAYDAY 2 и PAYDAY: The Heist, то сможете приобрести Классические контракты.",
-			loading_op_gameplay_41 =						"Уничтожение обычных камер заставляет охранников их проверять.",
-			loading_op_gameplay_42 =						"Отстреливайтесь от врагов, когда пересекаете открытые пространства. Даже если вы не попадете, то запугаете их и понизите их точность стрельбы. Это позволит безопаснее пройти этот участок.",
-			loading_op_gameplay_43 =						"Если вы будете получать много урона или падать во время перерывов, то полиция начнет штурм раньше.",
-			loading_op_gameplay_44 =						"Точная стрельба - один из залогов успеха.",
-			loading_op_gameplay_45 =						"Если у вас низкий уровень репутации, то контракт с высоким уровнем оплаты может дать мало опыта.",
-			loading_op_gameplay_46 =						"На уровне сложности Жажда Смерти и выше, вам будут встречаться Отряды Клокеров. Держитесь вместе и никого не оставляйте позади.",
-			loading_op_gameplay_47 =						"Вы можете услышать, когда полицейские бросают светошумовые гранаты. Отвернитесь или уничтожьте ее до того, как она взорвется.",
-			loading_op_gameplay_48 =						"Перки тоже сбрасываются при получении уровня Бесславия.",
-			loading_op_gameplay_49 =						"Особое Оружие открывается при получении 85-ого Уровня Репутации.",
-			loading_op_gameplay_50 =						"На уровнях сложности выше OVERKILL охранники и гражданские могут услышать речь грабителей при скрытном прохождении.",
-			loading_op_gameplay_51 =						"Наблюдатель и Камеры-шпионы будут помечать Особых Врагов при громокм прохождении.",
-			loading_op_gameplay_52 =						"Техник может значительно улучшать дрели, а также блокировать проходы, предоставлять поддержку на расстоянии и помогать в борьбе с Особыми Врагами при помощи своих Мин-сенсоров.",
-			loading_op_gameplay_53 =						"При наличии соответствующего навыка дрель попытается починиться сама после поломки, однако только один раз. Если дрель не починилась, то это придется делать одному из грабителей.",
-			loading_op_gameplay_54 =						"Манипулятор может помогать всей команде небольшими бонусами, доступом к услугам своего человека, Вдохновением и уменьшением отдачи оружия.",
-			loading_op_gameplay_55 =						"Вдохновение увеличивает скорость взаимодействия напарника.",
-			loading_op_gameplay_56 =						"Турели уязвимы к взырвчатке.",
-			loading_op_gameplay_57 =						"Пока работает Генератор Помех турель будет атаковать полицейских, а не грабителей.",
-			loading_op_gameplay_58 =						"Древо навыков Беглец может использоваться в дополнение к другим древам, но может и быть собственной ролью, если вложить достаточное количество очков навыков.",
-			loading_op_gameplay_59 =						"Призрак - мастер скрытности. Однако, он также крайне способен в ближнем бою и может скрытно выполнять задания, пока его команда отвлекает врагов во время громкого прохождения.",
-			loading_op_gameplay_60 =						"Перк Мистер Умник складывается.",
-			loading_op_gameplay_61 =						"Награды за посылки Гейджа меняются каждый день.",
-			loading_op_gameplay_62 =						"Играйте осторожно и не торопитесь. Не стесняйтесь отступать в безопасное место, если ситуация выходит из под контроля.",
-			loading_op_gameplay_63 =						"Полицейские будут пытаться помешать вам выполнять задачи: останавливать взлом компьютеров, ломать дрели и воровать сумки. Постарайтесь следить за своими целями.",
-			loading_op_gameplay_64 =						"Сбор достаточного количества мелкой добычи даст небольшой бонус к опыту.",
-			loading_op_gameplay_65 =						"Каждое оружие имеет свое применение. Не бойтесь экспериментировать.",
-			loading_op_gameplay_66 =						"Всегда ищите надежное место, в которое вы сможете укрыться в случае турдной ситуации.",
-			loading_op_gameplay_67 =						"Взырвчатка имеет большой радиус взрыва.",
-			loading_op_gameplay_68 =						"Лучше иметь разделенные роли в команде, чем когда каждый будет пытаться делать все понемногу.",
-			loading_op_gameplay_69 =						"Самый очевидный подход не всегда самый лучший.",
-			loading_op_gameplay_70 =						"Во время того, как вашего напарника поднимают, старайтесь отвлекать врагов огнем.",
-			loading_op_gameplay_71 =						"Акустическая петля работает через стены.",
-			loading_op_gameplay_72 =						"Пули ударившись от любой обьект издают шум и могут потревожить гражданских и охранников. на сложностях Хаос и Смертный приговор.",
-			loading_op_gameplay_73 =						"Если вы играете в ограблении, которое не позволяет вам вернуться в определенные зоны, убедитесь, что все воспользовались разложенными аптечками и сумками с патронами, прежде чем двигаться дальше.",
-			loading_op_gameplay_74 =						"Хаос и Смертный приговор открываются на уровне 95 или ранге Бесславия 1.",
-			loading_op_gameplay_75 =						"Жажда смерти открывается на уровне 80.",
-			loading_op_gameplay_76 =						"Надевая более легкую броню на более высоких уровнях сложности, вам нужно быть более осторожным и соответственно выбирать свои бои. Ваши товарищи по команде могут защитить вас своей более тяжелой броней, в то время как вы можете переносить добычу быстрее, чем они.",
-			loading_op_gameplay_77 =						"Подумайте о том, чтобы оставаться в режиме наблюдения во время скрытности, вы сможете пойти куда угодно, чтобы проверить положение товарищей по команде, отметить охранников, использовать шестое чувство в более выгодных позициях или воспользоваться своими привилегиями.",
-			loading_op_gameplay_78 =						"Не размещайте все свое снаряжение в одном месте, так как в конечном итоге вы останетесь без ресурсов, если вас загонят в угол где-нибудь в другом месте.",
-			loading_op_trivia_1 =							"В 2015 и 2016 годах ничего особенного не произошло.",
-			menu_prof_mod_contract =						"В случае неудачи контракт будет отменен.",
-			menu_prof_mod_hostage =							"Количество заложников неизвестно во время штурма.",
-			menu_prof_mod_flash =							"Cветошумовые гранаты, брошенные противником, не имеют задержки.",
-			menu_prof_mod_inventory =						"Особое снаряжение не передается если игрок попал под стражу.",	
-			menu_achievements_teamwork_players_2_to_4 =		"2-4 Игроков",
-			menu_cn_legend_hidden =							"##Скрытые## контракты",
-			menu_cn_legend_hate =							"Уровень ненависти",
-			menu_holiday_exp_bonus =						"Праздничные дни",
-			menu_killed_civs_reduction_exp =				"Штраф убийства гражданских",
-			menu_loose_money_collected_exp =				"Найдена мелкая добыча",
-			menu_one_down_additional =						"Текущая волна:",
-			menu_one_down_additional_2 =					"Количество очков опыта увеличено на",
-			menu_killed_civs =								"Убиты гражданские! Количество очков опыта снижено на ",
-			menu_collected_packages =						"Найдены посылки Гейджа. Количество очков опыта увеличено на ",
-			menu_loose_money =								"Найдена мелкая добыча. Количество очков опыта увеличено на ",
-			cn_menu_contract_length_header =				"Длительность:",
-			cn_menu_contract_day =							"$stages День",
-			cn_menu_contract_length =						"$stages Дня",
-			cn_menu_community =								"Сообщество",
-			cn_menu_pro_job =								"PRO JOB",
-			menu_es_next_level =							"Следующий уровень:",
-		})
-	end
 end)

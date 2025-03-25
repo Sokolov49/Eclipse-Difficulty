@@ -433,3 +433,88 @@ function PlayerDamage:update_downed(t, dt)
 	end
 	return false
 end
+
+Hooks:PostHook(PlayerDamage, "_upd_health_regen", "marcusization", function(self, t, dt)
+	if self._has_good_luck_charm == nil then
+		self._has_good_luck_charm = managers.skilltree:skill_completed("hellotothemarcusreadingthis")
+	end
+	
+	if self._has_good_luck_charm then
+		local max_health = self:_max_health()
+		if self:get_real_health() < max_health then
+			local chance = math.random(1000)
+			if chance == 666 or chance == 777 then
+				local regen_rate = 0.01
+				local health_to_add = max_health * regen_rate
+				self:change_health(health_to_add)
+			end
+		end
+	end
+end)
+
+function PlayerDamage:play_whizby(position)
+	self._unit:sound():play_whizby({
+		position = position
+	})
+	
+	if has_tough_guy then
+		self._unit:camera():play_shaker("whizby", 0.1)
+	else
+		self._unit:camera():play_shaker("whizby", 0.225) --357
+	end
+
+	if not _G.IS_VR then
+		managers.rumble:play("bullet_whizby")
+	end
+end
+
+--Tear gas damage slowly scales when the player is exposed to it
+local damage_killzone_original = PlayerDamage.damage_killzone
+function PlayerDamage:damage_killzone(attack_data, ...)
+	if attack_data.variant ~= "teargas" then
+		return damage_killzone_original(self, attack_data, ...)
+	end
+
+	local damage_info = {
+		result = {
+			variant = "killzone",
+			type = "hurt",
+		},
+	}
+
+	if self._god_mode or self._invulnerable or self._mission_damage_blockers.invulnerable then
+		self:_call_listeners(damage_info)
+		return
+	elseif self:incapacitated() or self._unit:movement():current_state().immortal then
+		self._last_teargas_hit_t = nil
+		return
+	end
+
+	local t = managers.player:player_timer():time()
+	if not self._last_teargas_hit_t or self._last_teargas_hit_t + 5 < t then
+		self._teargas_damage_ramp = -0.1
+	else
+		self._teargas_damage_ramp = math.min(self._teargas_damage_ramp + 0.1, 1)
+	end
+
+	self._last_teargas_hit_t = t
+
+	self._unit:sound():play("player_hit")
+
+	self:_hit_direction(attack_data.col_ray.origin, attack_data.col_ray.ray)
+
+	if self._bleed_out then
+		return
+	end
+
+	attack_data.damage = managers.player:modify_value("damage_taken", attack_data.damage, attack_data) * self._teargas_damage_ramp
+
+	self._unit:movement():subtract_stamina(10 * self._teargas_damage_ramp)
+
+	self:mutator_update_attack_data(attack_data)
+	self:_check_chico_heal(attack_data)
+
+	self:_calc_health_damage(attack_data)
+
+	self:_call_listeners(damage_info)
+end

@@ -858,6 +858,7 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.coach.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
 	self.sko12.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
 	self.supernova.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
+	self.boot.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
 
 	self.benelli_npc.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
 	self.saiga_npc.muzzleflash = "effects/payday2/particles/weapons/shotgun/sho_muzzleflash"
@@ -2702,6 +2703,17 @@ Hooks:PostHook(WeaponTweakData, "init", "eclipse_init", function(self, tweak_dat
 	self.kacchainsaw_flamethrower.fire_mode_data.fire_rate = 60 / 2000
 	self.kacchainsaw_flamethrower.dot_data_name = "weapon_kacchainsaw_flamethrower"
 
+	-- halve akimbo ammo
+	self.x_czech.AMMO_MAX = 180 --with akimbo, 270 (+90) / og value, 420
+	self.x_g18c.AMMO_MAX = 160 --with akimbo, 240 (+80) / og value, 520
+	self.x_chinchilla.AMMO_MAX = 48 --with akimbo, 72 (+24) / og value, 84
+	self.x_g17.AMMO_MAX = 136 --with akimbo, 202 (+68) / og value, 340
+	self.x_g22c.AMMO_MAX = 128 --with akimbo, 192 (+64) / og value, 224
+	self.x_usp.AMMO_MAX = 104 --with akimbo, 156 (+52) / og value, 156
+	self.x_packrat.AMMO_MAX = 120 --with akimbo, 180 (+60) / og value, 240
+	self.x_b92fs.AMMO_MAX = 112 --with akimbo, 168 (+56) / og value,  336
+	self.x_1911.AMMO_MAX = 120 --with akimbo, 180 (+60) / og value, 160
+	self.jowi.AMMO_MAX = 160 --with akimbo, 240 (+80) / og value, 340
 
 	-- removed shit
 	self.x_akmsu.use_data.selection_index = 4

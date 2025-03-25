@@ -160,7 +160,7 @@ PlayerInventoryGui._update_info_skilltree = function(self, name)
 	text_string = text_string .. "\n"
 	
 	-- get rid of "hoxton" for now
-	local trees = {"mastermind", "enforcer", "technician", "ghost"}
+	local trees = {"mastermind", "enforcer", "technician", "ghost", "hoxton" }
 	
 	for i,tree in ipairs(trees) do
 		local points, progress, num_skills = managers.skilltree:get_tree_progress_new(tree)

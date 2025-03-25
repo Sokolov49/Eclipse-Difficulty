@@ -189,28 +189,45 @@ tweak_data.projectiles.arblast_arrow_poison = create_poison_arrow(tweak_data.pro
 tweak_data.projectiles.frag = {
 	damage = 30, --96
 	curve_pow = 1.6, --2
-	player_damage = 10, --1
+	player_damage = 4, --1
 	--player_dmg_mul = 1 / 4,
-	range = 1000, --450
+	range = 650, --450
 	name_id = "bm_grenade_frag",
 }
 
-projectiles.dada_com = {
+tweak_data.projectiles.dada_com = {
 	damage = 42,
 	curve_pow = 1.2,
-	player_damage = 10,
-	range = 750,
+	player_damage = 6,
+	range = 725,
 	name_id = "bm_grenade_dada_com",
 	sound_event = "mtl_explosion"
 }
 
-projectiles.dynamite = {
-	damage = 96,
+tweak_data.projectiles.dynamite = {
+	damage = 50,
 	curve_pow = 2,
 	player_damage = 10,
-	range = 1250,
+	range = 850,
 	name_id = "bm_grenade_frag",
 	effect_name = "effects/payday2/particles/explosions/dynamite_explosion"
+}
+
+tweak_data.projectiles.fir_com = {
+	damage = 3,
+	curve_pow = 0.1,
+	player_damage = 3,
+	fire_dot_data = {
+		dot_trigger_chance = 65,
+		dot_damage = 25,
+		dot_length = 2.1,
+		dot_trigger_max_distance = 3000,
+		dot_tick_period = 0.5
+	},
+	range = 500,
+	name_id = "bm_grenade_fir_com",
+	sound_event = "white_explosion",
+	effect_name = "effects/payday2/particles/explosions/grenade_incendiary_explosion"
 }
 
 tweak_data.projectiles.frag_com = deep_clone(tweak_data.projectiles.frag)
@@ -342,6 +359,7 @@ tweak_data.projectiles.rocket_ray_frag.player_dmg_mul = 1 / 4
 
 -- cop tear gas
 tweak_data.projectiles.cs_grenade_quick.damage_per_tick = 1.5
+tweak_data.projectiles.cs_grenade_quick.damage_tick_period = 0.25
 tweak_data.projectiles.cs_grenade_quick.radius = 385
 
 -- FFO ponr
@@ -366,18 +384,19 @@ else
 end
 
 for _, projectile in pairs(tweak_data.projectiles) do
-	-- More noticeable explosive damage dropoff to encourage accurate shooting
+	--[[ More noticeable explosive damage dropoff to encourage accurate shooting
 	if projectile.curve_pow then
 		projectile.curve_pow = 2
-	end
+	end ]]--
 
 	if projectile.player_damage and projectile.damage then
 		projectile.player_damage = projectile.damage * (projectile.player_dmg_mul or 0.25)
 	end
 	
+	--[[
 	if projectile.range then
 		if projectile.range >= 50 then
 			projectile.range = projectile.range * 2
 		end
-	end
+	end ]]--
 end

@@ -49,6 +49,7 @@
 					<post :hook_id="crewmanagementgui"/>
 					<post :hook_id="skilltreegui"/>
 					<post :hook_id="skilltreeguinew"/>
+					<post :hook_id="menuscenemanager"/>
 				</group>
 
 				<post :hook_id="gameplaycentralmanager"/>
@@ -73,6 +74,7 @@
 				<post :hook_id="dlcmanager"/>
 				<post :hook_id="groupaimanager"/>
 				<post :hook_id="explosionmanager"/>
+				<post :hook_id="killzonemanager"/>
 			</group>
 
 			<group :hook_id="network/">
@@ -85,7 +87,9 @@
 
 			<group :hook_id="tweak_data/">
 				<post :hook_id="blackmarket/projectilestweakdata"/>
+				<post :hook_id="blackmarket/maskstweakdata"/>
 				<post :hook_id="blackmarket/meleeweaponstweakdata"/>
+				<post :hook_id="blackmarket/playerstyletweakdata"/>
 				<post :hook_id="equipmentstweakdata"/>
 				<post :hook_id="charactertweakdata"/>
 				<post :hook_id="timespeedeffecttweakdata"/>
@@ -112,6 +116,7 @@
 				<post :hook_id="tipstweakdata"/>
 				<post :hook_id="moneytweakdata"/>
 				<post :hook_id="armorskinstweakdata"/>
+				<post :hook_id="MissionDoorTweakData"/>
 			</group>
 
 			<group :hook_id="units/">
@@ -120,6 +125,7 @@
 					<post :hook_id="playerequipment"/>
 					<post :hook_id="huskplayerdamage"/>
 					<post :hook_id="playercamera"/>
+					<post :hook_id="playersound"/>
 					<post :hook_id="playermovement"/>
 					<post :hook_id="huskplayerinventory"/>
 					<post :hook_id="HuskPlayerMovement"/>
@@ -233,6 +239,7 @@
 					<post :hook_id="carrydata"/>
 					<post :hook_id="timergui"/>
 					<post :hook_id="drill"/>
+					<post :hook_id="securitycamera"/>
 				</group>
 
 				<group :hook_id="weapons/">

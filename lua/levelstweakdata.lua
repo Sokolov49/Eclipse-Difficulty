@@ -33,4 +33,39 @@ Hooks:PostHook(LevelsTweakData, "init", "eclipse_init", function(self)
 			},
 		},
 	}
+	
+	self.framing_frame_1.player_style = "slaughterhouse"
+	self.framing_frame_3.player_style = "slaughterhouse"
+	self.election_day_1.player_style = "slaughterhouse"
+	self.election_day_2.player_style = "slaughterhouse"
+	self.alex_1.player_style = "slaughterhouse"
+	self.alex_3.player_style = "slaughterhouse"
+	self.watchdogs_1.player_style = "slaughterhouse"
+	self.watchdogs_2.player_style = "slaughterhouse"
+	self.firestarter_1.player_style = "slaughterhouse"
+	self.firestarter_2.player_style = "sneak_suit"
+	self.welcome_to_the_jungle_1.player_style = "slaughterhouse"
+	self.welcome_to_the_jungle_2.player_style = "slaughterhouse"
+	self.crojob2.player_style = "slaughterhouse"
+	self.crojob3.player_style = "slaughterhouse"
+	self.arm_cro.player_style = "jumpsuit"
+	self.arm_und.player_style = "jumpsuit"
+	self.arm_hcm.player_style = "jumpsuit"
+	self.arm_par.player_style = "jumpsuit"
+	self.arm_fac.player_style = "jumpsuit"
+	self.arm_for.player_style = "jumpsuit"
+	self.kosugi.player_style = "sneak_suit"
+	self.pines.player_style = "winter_suit"
+
+	self.dinner.player_style = "slaughterhouse"
+	self.cane.player_style = "winter_suit"
+	self.pal.player_style = "poolrepair"
+	self.man.player_style = "slaughterhouse"
+	self.mad.player_style = "winter_suit"
+	self.moon.player_style = "winter_suit"
+
+	self.dah.player_style = "slaughterhouse"
+	self.wwh.player_style = "winter_suit"
+	self.brb.player_style = "winter_suit"
+
 end)
