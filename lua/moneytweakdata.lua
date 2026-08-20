@@ -762,9 +762,9 @@ function MoneyTweakData:init(tweak_data)
 		self.small_loot.vault_loot_coins = (money_mul * 3800)
 		self.small_loot.vault_loot_ring = (money_mul * 2400)
 		self.small_loot.vault_loot_jewels = (money_mul * 3400)
-		self.bag_values.money = 14250
-		self.bag_values.default = 10200
-		self.bag_values.gold = 23375
+		self.bag_values.money = 22250
+		self.bag_values.default = 16200
+		self.bag_values.gold = 36375
 	end
 	if job_id == "hvh" or job_id == "nail" or job_id == "help" or job_id == "haunted" then
 		self.bag_values.sandwich = 150000
