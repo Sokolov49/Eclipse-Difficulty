@@ -325,6 +325,17 @@ tweak_data.projectiles.cluster_incendiary.effect_name = "effects/payday2/particl
 tweak_data.projectiles.cluster_incendiary.sound_event = "white_explosion"
 tweak_data.projectiles.cluster_incendiary.dot_data_name = "cluster_incendiary"
 
+-- Perk deck throwables
+tweak_data.blackmarket.projectiles.chico_injector.base_cooldown = nil
+tweak_data.blackmarket.projectiles.smoke_screen_grenade.base_cooldown = nil
+tweak_data.blackmarket.projectiles.pocket_ecm_jammer.base_cooldown = nil
+tweak_data.blackmarket.projectiles.tag_team.base_cooldown = nil
+
+tweak_data.blackmarket.projectiles.chico_injector.max_amount = 3
+tweak_data.blackmarket.projectiles.smoke_screen_grenade.max_amount = 3
+tweak_data.blackmarket.projectiles.pocket_ecm_jammer.max_amount = 3
+tweak_data.blackmarket.projectiles.tag_team.max_amount = 3
+
 -- Flare Gun
 tweak_data.projectiles.flun_flare.damage = 0.4
 tweak_data.projectiles.flun_flare.airdrop_unit = nil

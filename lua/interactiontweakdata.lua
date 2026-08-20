@@ -144,4 +144,41 @@ Hooks:PostHook(InteractionTweakData, "init", "eclipse_init", function(self)
 		upgrade = "hack_interaction_speed_multiplier",
 		category = "player",
 	}
+	
+	self.open_door_with_keys.requires_mask_off_upgrade = {
+		category = "player",
+		upgrade = "mask_off_pick_lock"
+	}
+	self.pick_lock_deposit_transport.requires_mask_off_upgrade = {
+		category = "player",
+		upgrade = "mask_off_pick_lock"
+	}
+	self.pick_lock_easy.requires_mask_off_upgrade = {
+		category = "player",
+		upgrade = "mask_off_pick_lock"
+	}
+	self.pick_lock_easy_no_skill.requires_mask_off_upgrade = {
+		category = "player",
+		upgrade = "mask_off_pick_lock"
+	}
+	self.pick_lock_hard.requires_mask_off_upgrade = {
+		category = "player",
+		upgrade = "mask_off_pick_lock"
+	}
+	self.pick_lock_hard_no_skill.requires_mask_off_upgrade = {
+		category = "player",
+		upgrade = "mask_off_pick_lock"
+	}
+	self.pick_lock_hard_no_skill_deactivated.requires_mask_off_upgrade = {
+		category = "player",
+		upgrade = "mask_off_pick_lock"
+	}
+	self.cas_security_door.requires_mask_off_upgrade = {
+		category = "player",
+		upgrade = "mask_off_pick_lock"
+	}
+	self.lockpick_locker.requires_mask_off_upgrade = {
+		category = "player",
+		upgrade = "mask_off_pick_lock"
+	}
 end)

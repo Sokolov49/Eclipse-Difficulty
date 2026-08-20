@@ -589,488 +589,211 @@ Hooks:PostHook(SkillTreeTweakData, "init", "eclipse_init", function(self, tweak_
 	-- PERK DECKS --
 
 	-- categories
-	self.specialization_category = {
-		{
-			name_id = "menu_st_category_all",
-			category = "all",
-		},
-		{
-			name_id = "menu_st_category_health",
-			category = "health",
-		},
-		{
-			name_id = "menu_st_category_healing",
-			category = "healing",
-		},
-		{
-			name_id = "menu_st_category_armor",
-			category = "armor",
-		},
-		{
-			name_id = "menu_st_category_armor_gating",
-			category = "armor_gating",
-		},
-		{
-			name_id = "menu_st_category_resistance",
-			category = "resistance",
-		},
-		{
-			name_id = "menu_st_category_support",
-			category = "support",
-		},
-		{
-			name_id = "menu_st_category_dodge",
-			category = "dodge",
-		},
-		{
-			name_id = "menu_st_category_special",
-			category = "special",
-		},
+	self.specialization_convertion_rate = {
+		10000,
+		10000,
+		10000,
+		10000,
+		10000,
+		10000,
+		10000,
+		10000,
+		10000,
+		10000
 	}
-
-	-- ccf
-	self.specializations[1].category = { "support", "health" }
-	-- mus
-	self.specializations[2].category = { "health" }
-	-- arm
-	self.specializations[3].category = "armor"
-	-- rog
-	self.specializations[4].category = "dodge"
-	-- hit
-	self.specializations[5].category = "dodge"
-	-- crk
-	self.specializations[6].category = { "armor", "resistance" }
-	-- tct
-	self.specializations[7].category = { "support", "resistance" }
-	-- inf
-	self.specializations[8].category = { "resistance", "healing" }
-	-- soc
-	self.specializations[9].category = { "armor", "armor_gating" }
-	-- gmb
-	self.specializations[10].category = { "healing", "support" }
-	-- grd
-	self.specializations[11].category = { "health", "healing" }
-	-- yak
-	self.specializations[12].category = "dodge"
-	-- exp
-	self.specializations[13].category = "healing"
-	-- man
-	self.specializations[14].category = { "resistance", "support" }
-	-- anr
-	self.specializations[15].category = { "armor_gating", "armor" }
-	-- bik
-	self.specializations[16].category = { "healing", "armor_gating" }
-	-- kpn
-	self.specializations[17].category = { "health", "resistance" }
-	-- sic
-	self.specializations[18].category = { "dodge", "support" }
-	-- stc
-	self.specializations[19].category = { "health", "resistance" }
-	-- tgt
-	self.specializations[20].category = { "support", "healing" }
-	-- hck
-	self.specializations[21].category = { "healing", "health" }
-	-- lch
-	self.specializations[22].category = { "health", "resistance" }
-
-	-- This is for applying custom atlas without typing texture_bundle_folder for every single deck
-	-- P.S. 2, 4 ,6 and 8 cards for custom perk decks still will use vanilla atlas
-	local generic_perk_deck_cards = { 2, 4, 6, 8 } -- For 2, 4, 6 and 8 cards that every deck have
-
-	local unique_perk_deck_cards = { 1, 3, 5, 7, 9 } -- For unique perk deck cards
-	local perk_decks_eclipse_atlas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 } -- CC -> Ex-pres use default atlas so need reapply to use new one
-
-	-- Applying atlas changes for 2, 4, 6 and 8 cards
-	for i, _ in ipairs(self.specializations) do
-		for _, k in ipairs(generic_perk_deck_cards) do
-			self.specializations[i][k].texture_bundle_folder = "eclipse"
-		end
-	end
-
-	-- Applying atlas changes for 1, 3, 5, 7 and 9 cards for Crew Chief, Muscle , ... Ex-Pres
-	for _, i in ipairs(perk_decks_eclipse_atlas) do
-		for _, k in ipairs(unique_perk_deck_cards) do
-			self.specializations[i][k].texture_bundle_folder = "eclipse"
-		end
-	end
-
-	-- crew chief
-	self.specializations[1][1].upgrades = { "team_resource_trading_health", "team_resource_trading_no_downs" }
-	self.specializations[1][3].upgrades = { "player_extra_hostages_chief", "player_passive_intimidate_range_mul" }
-	self.specializations[1][5].upgrades = { "team_resource_trading_ammo" }
-	self.specializations[1][7].upgrades = { "team_hostage_health_multiplier", "team_hostage_stamina_multiplier", "cable_tie_quantity_2" }
-	self.specializations[1][7].icon_xy = { 0, 1 }
-	self.specializations[1][9].upgrades = { "team_resource_trading_assault_delay", "team_resource_trading_before_first_assault", "player_passive_loot_drop_multiplier" }
-	self.specializations[1][9].icon_xy = { 7, 8 }
-
-	-- muscle
-	self.specializations[2][1].upgrades = { "player_panic_suppression" }
-	self.specializations[2][1].icon_xy = { 3, 1 }
-	self.specializations[2][3].upgrades = { "player_extra_health_multiplier_1" }
-	self.specializations[2][3].icon_xy = { 2, 1 }
-	self.specializations[2][5].upgrades = { "player_uncover_multiplier" }
-	self.specializations[2][5].icon_xy = { 1, 1 }
-	self.specializations[2][7].upgrades = { "cooldown_health_ratio_invulnerable", "temporary_health_ratio_invulnerable" }
-	self.specializations[2][7].texture_bundle_folder = "mrwi"
-	self.specializations[2][7].icon_xy = { 3, 0 }
-	self.specializations[2][9].upgrades = { "player_extra_health_multiplier_2" }
-
-	-- armorer
-	self.specializations[3][1].upgrades = { "player_armor_regen_timer_multiplier_passive" }
-	self.specializations[3][1].icon_xy = { 6, 1 }
-	self.specializations[3][3].upgrades = { "player_passive_armor_movement_penalty_multiplier" }
-	self.specializations[3][3].icon_xy = { 2, 4 }
-	self.specializations[3][5].upgrades = { "player_tier_armor_multiplier_1", "player_tier_armor_multiplier_2", "player_tier_armor_multiplier_3" }
-	self.specializations[3][7].upgrades = { "cooldown_crewmate_damage_reduction" }
-	self.specializations[3][7].icon_xy = { 1, 4 }
-	self.specializations[3][9].upgrades = { "cooldown_armor_break_invulnerable", "player_passive_loot_drop_multiplier" }
-	self.specializations[3][9].icon_xy = { 0, 4 }
-
-	-- rogue
-	self.specializations[4][3].upgrades = { "player_unseen_increased_crit_chance_1", "player_unseen_temp_increased_dodge_chance" }
-	self.specializations[4][3].icon_xy = { 5, 9 }
-	self.specializations[4][9].upgrades = { "player_unseen_temp_increased_crit_chance_1", "player_passive_loot_drop_multiplier" }
-	self.specializations[4][9].icon_xy = { 4, 9 }
-
-	-- hitman
-	self.specializations[5][1].upgrades = { "player_chain_hitman_kills", "temporary_chain_hitman_dodge_1" }
-	self.specializations[5][1].icon_xy = { 7, 2 }
-	self.specializations[5][3].upgrades = { "temporary_dodge_outnumbered" }
-	self.specializations[5][3].icon_xy = { 0, 3 }
-	self.specializations[5][5].upgrades = { "temporary_chain_hitman_dodge_2" }
-	self.specializations[5][5].icon_xy = { 1, 3 }
-	self.specializations[5][7].upgrades = { "player_cheat_death_chance_1" }
-	self.specializations[5][7].icon_xy = { 2, 3 }
-	self.specializations[5][9].upgrades = { "player_cheat_death_inc", "player_passive_loot_drop_multiplier" }
-	self.specializations[5][9].icon_xy = { 3, 3 }
-
-	-- crook
-	self.specializations[6][1].upgrades = { "player_bv_stamina_reduction_multiplier" }
-	self.specializations[6][1].icon_xy = { 1, 9 }
-	self.specializations[6][3].upgrades = { "player_bv_health_damage_reduction" }
-	self.specializations[6][3].icon_xy = { 3, 9 }
-	self.specializations[6][5].upgrades = { "player_bv_ap_rnds_protection" }
-	self.specializations[6][5].icon_xy = { 2, 9 }
-	self.specializations[6][7].upgrades = { "player_level_2_armor_multiplier_1", "player_level_3_armor_multiplier_1", "player_level_4_armor_multiplier_1" }
-	self.specializations[6][9].upgrades = { "player_bv_no_armor_suppression", "player_passive_loot_drop_multiplier" }
-	self.specializations[6][9].icon_xy = { 0, 9 }
-
-	-- tactician (ex-burglar)
-	self.specializations[7][1].upgrades = { "second_deployable_1" }
-	self.specializations[7][1].icon_xy = { 5, 8 }
-	self.specializations[7][3].upgrades = { "player_drill_speed_multiplier1", "player_drill_speed_multiplier2", "player_drill_melee_hit_restart_chance_1" }
-	self.specializations[7][3].icon_xy = { 3, 8 }
-	self.specializations[7][5].upgrades = { "player_near_teammate_damage_multiplier" }
-	self.specializations[7][5].icon_xy = { 2, 8 }
-	self.specializations[7][7].upgrades = { "player_electrocuting_drill", "player_drill_autorepair_1", "player_drill_autorepair_2" }
-	self.specializations[7][7].icon_xy = { 4, 8 }
-	self.specializations[7][9].upgrades = { "player_no_secondary_deployable_penalty", "deploy_interact_faster_1", "player_passive_loot_drop_multiplier" }
-	self.specializations[7][9].icon_xy = { 6, 8 }
-
-	-- infiltrator
-	self.specializations[8][9].upgrades = { "cooldown_melee_kill_health_leech", "player_passive_loot_drop_multiplier" }
-
-	-- socio
-	table.delete(self.specializations[9][7].upgrades, "player_tier_armor_multiplier_3")
-	self.specializations[9][5].upgrades = { "cooldown_melee_kill_armor_leech", "player_damage_dampener_close_contact_1" }
-
-	-- Gambler
-	self.specializations[10][1].upgrades = { "player_pickup_restore_health_1" }
-	self.specializations[10][3].upgrades = { "player_pickup_restore_team_ammo" }
-	self.specializations[10][5].upgrades = { "player_pickup_restore_team_health" }
-	self.specializations[10][7].upgrades = { "player_pickup_restore_health_2", "player_passive_health_multiplier_1", "player_passive_health_multiplier_2" }
-	self.specializations[10][9].upgrades = { "player_increased_pickup_area_gambler", "player_passive_loot_drop_multiplier" }
-
-	-- Grinder
-	self.specializations[11][1].upgrades = { "player_damage_to_hot_1" }
-	self.specializations[11][3].upgrades = { "player_extra_health_multiplier_1", "player_armor_to_health_conversion", "player_fall_damage_multiplier", "player_decreased_drama_hurt" }
-	self.specializations[11][3].icon_xy = { 2, 1 }
-	self.specializations[11][5].upgrades = { "cooldown_headshot_regen_health_bonus" }
-	self.specializations[11][5].texture_bundle_folder = "mrwi"
-	self.specializations[11][5].icon_xy = { 1, 0 }
-	self.specializations[11][7].upgrades = { "player_extra_health_multiplier_2" }
-	self.specializations[11][7].icon_xy = { 4, 1 }
-	self.specializations[11][9].upgrades = { "player_damage_to_hot_2", "player_damage_to_hot_extra_ticks" }
-
-	-- Yakuza
-	self.specializations[12][1].upgrades = {}
-	self.specializations[12][1].name_id = "menu_work_in_progress_beta"
-	self.specializations[12][1].desc_id = "menu_work_in_progress_beta"
-	self.specializations[12][1].short_id = "menu_work_in_progress_beta"
-	self.specializations[12][3].upgrades = {}
-	self.specializations[12][3].name_id = "menu_work_in_progress_beta"
-	self.specializations[12][3].desc_id = "menu_work_in_progress_beta"
-	self.specializations[12][3].short_id = "menu_work_in_progress_beta"
-	self.specializations[12][5].upgrades = {}
-	self.specializations[12][5].name_id = "menu_work_in_progress_beta"
-	self.specializations[12][5].desc_id = "menu_work_in_progress_beta"
-	self.specializations[12][5].short_id = "menu_work_in_progress_beta"
-	self.specializations[12][7].upgrades = {}
-	self.specializations[12][7].name_id = "menu_work_in_progress_beta"
-	self.specializations[12][7].desc_id = "menu_work_in_progress_beta"
-	self.specializations[12][7].short_id = "menu_work_in_progress_beta"
-	self.specializations[12][9].upgrades = {}
-	self.specializations[12][9].name_id = "menu_work_in_progress_beta"
-	self.specializations[12][9].desc_id = "menu_work_in_progress_beta"
-	self.specializations[12][9].short_id = "menu_work_in_progress_beta"
-
-	-- Ex-President
-	self.specializations[13][5].upgrades = { "player_armor_max_health_store_multiplier", "player_armor_health_store_no_waste" }
-	self.specializations[13][7].upgrades = { "player_armor_health_store_amount_3", "player_passive_health_multiplier_2" }
-
-	-- Maniac
-	table.insert(self.specializations[14][3].upgrades, "player_panic_suppression")
-
-	-- Anarchist
-	self.specializations[15][3].upgrades = {
-		"player_health_decrease_1",
-		"player_level_2_anarchist_armor_multiplier",
-		"player_level_3_anarchist_armor_multiplier",
-		"player_level_4_anarchist_armor_multiplier",
-		"player_level_5_anarchist_armor_multiplier",
-		"player_level_6_anarchist_armor_multiplier",
-		"player_level_7_anarchist_armor_multiplier",
+	local basically_nothing = 25
+	local very_low = 50
+	local low = 100
+	local medium = 200
+	local high = 300
+	local very_high = 500
+	local top = 700
+	
+	self.specializations = {
+		{
+			name_id = "menu_bonus_exp",
+			desc_id = "menu_bonus_exp_desc",
+			{
+				upgrades = {
+						"team_xp_multiplier",
+						"player_loot_drop_multiplier_2"
+					},
+				cost = basically_nothing,
+				icon_xy = {0, 14},
+				name_id = "menu_bonus_exp",
+				desc_id = "menu_bonus_exp_detailed_desc"
+			}
+		},
+		{
+			name_id = "menu_bonus_small_money",
+			desc_id = "menu_bonus_small_money_desc",
+			{
+				upgrades = {
+					"player_small_loot_multiplier_1",
+				},
+				cost = very_low,
+				icon_xy = {1, 14},
+				name_id = "menu_bonus_small_money",
+				desc_id = "menu_bonus_small_money_detailed_desc"
+			}
+		},
+		{
+			name_id = "menu_shocking_drill",
+			desc_id = "menu_shocking_drill_desc",
+			{
+				upgrades = {
+					"player_electrocuting_drill",
+					"player_drill_autorepair_1",
+					"player_drill_autorepair_2",
+					"player_drill_speed_multiplier1",
+					"player_drill_speed_multiplier2"
+				},
+				cost = high,
+				icon_xy = {4, 2},
+				name_id = "menu_shocking_drill",
+				desc_id = "menu_shocking_drill_detailed_desc"
+			}
+		},
+		{
+			name_id = "menu_hostage_resources",
+			desc_id = "menu_hostage_resources_desc",
+			{
+				upgrades = {
+					"team_hostage_health_multiplier",
+					"team_hostage_stamina_multiplier",
+					"cable_tie_quantity_2",
+					"team_resource_trading_health",
+					"team_resource_trading_no_downs"
+				},
+				cost = low,
+				icon_xy = {7, 3},
+				name_id = "menu_hostage_resources",
+				desc_id = "menu_hostage_resources_detailed_desc"
+			}
+		},
+		{
+			name_id = "menu_panic",
+			desc_id = "menu_panic_desc",
+			{
+				upgrades = {
+					"player_panic_suppression",
+					"player_uncover_multiplier",
+					"player_passive_armor_movement_penalty_multiplier"
+				},
+				cost = high,
+				icon_xy = {1, 1},
+				name_id = "menu_panic",
+				desc_id = "menu_panic_detailed_desc"
+			}
+		},
+		{
+			name_id = "menu_notburglar",
+			desc_id = "menu_notburglar_desc",
+			{
+				upgrades = {
+					"second_deployable_1",
+					"player_no_secondary_deployable_penalty",
+					"player_near_teammate_damage_multiplier",
+					"deploy_interact_faster_1"
+				},
+				cost = very_high,
+				icon_xy = {1, 0},
+				name_id = "menu_notburglar",
+				desc_id = "menu_notburglar_detailed_desc"
+			}
+		},
+		{
+			name_id = "menu_refundable",
+			desc_id = "menu_refundable_desc",
+			{
+				upgrades = {
+					"player_regain_throwable_from_ammo_1"
+				},
+				cost = low,
+				icon_xy = {2, 0},
+				name_id = "menu_refundable",
+				desc_id = "menu_refundable_detailed_desc"
+			}
+		},
+		{
+			name_id = "menu_payday3_stealth",
+			desc_id = "menu_payday3_stealth_desc",
+			{
+				upgrades = {
+					"player_mask_off_pick_lock"
+				},
+				cost = very_high,
+				icon_xy = {6, 14},
+				name_id = "menu_payday3_stealth",
+				desc_id = "menu_payday3_stealth_detailed_desc"
+			}
+		},
+		{
+			name_id = "menu_smokebomb_upgrade",
+			desc_id = "menu_smokebomb_upgrade_desc",
+			{
+				upgrades = {
+					"player_smoke_grenade_no_armor_suppression",
+					"player_smoke_grenade_dodge_buff",
+					"player_smoke_grenade_lingering_effect"
+				},
+				cost = medium,
+				icon_xy = {4, 1},
+				name_id = "menu_smokebomb_upgrade",
+				desc_id = "menu_smokebomb_upgrade_detailed_desc"
+			}
+		},			
+		{
+			name_id = "menu_use_a_spoon",
+			desc_id = "menu_use_a_spoon_desc",
+			{
+				upgrades = {
+					"player_drill_melee_hit_restart_chance_1"
+				},
+				cost = medium,
+				icon_xy = {0, 15},
+				name_id = "menu_use_a_spoon",
+				desc_id = "menu_use_a_spoon_detailed_desc"
+			}
+		},
+		{
+			name_id = "menu_pdth_skin",
+			desc_id = "menu_pdth_skin_desc",
+			{
+				upgrades = {
+					"player_bv_health_damage_reduction",
+					"player_bv_ap_rnds_protection",
+					"player_bv_no_armor_suppression"
+				},
+				cost = high,
+				icon_xy = {2, 12},
+				name_id = "menu_pdth_skin",
+				desc_id = "menu_pdth_skin_detailed_desc"
+			}
+		},
+		{
+			name_id = "menu_john_hitman",
+			desc_id = "menu_john_hitman_desc",
+			{
+				upgrades = {
+					"player_chain_hitman_kills", 
+					"temporary_chain_hitman_dodge_1",
+					"temporary_chain_hitman_dodge_2",
+					"player_cheat_death_chance_1",
+					"player_cheat_death_inc"
+				},
+				cost = top,
+				icon_xy = {4, 12},
+				name_id = "menu_john_hitman",
+				desc_id = "menu_john_hitman_detailed_desc"
+			}
+		}
 	}
-	self.specializations[15][5].upgrades = { "player_headshot_to_armor" }
-	self.specializations[15][5].icon_xy = { 1, 0 }
-	self.specializations[15][5].texture_bundle_folder = nil
-	self.specializations[15][7].upgrades = { "player_health_decrease_2" }
-	table.delete(self.specializations[15][1].upgrades, "temporary_armor_break_invulnerable_1")
-
-	-- Biker
-	self.specializations[16][1].upgrades = {}
-	self.specializations[16][1].name_id = "menu_work_in_progress_beta"
-	self.specializations[16][1].desc_id = "menu_work_in_progress_beta"
-	self.specializations[16][1].short_id = "menu_work_in_progress_beta"
-	self.specializations[16][3].upgrades = {}
-	self.specializations[16][3].name_id = "menu_work_in_progress_beta"
-	self.specializations[16][3].desc_id = "menu_work_in_progress_beta"
-	self.specializations[16][3].short_id = "menu_work_in_progress_beta"
-	self.specializations[16][5].upgrades = {}
-	self.specializations[16][5].name_id = "menu_work_in_progress_beta"
-	self.specializations[16][5].desc_id = "menu_work_in_progress_beta"
-	self.specializations[16][5].short_id = "menu_work_in_progress_beta"
-	self.specializations[16][7].upgrades = {}
-	self.specializations[16][7].name_id = "menu_work_in_progress_beta"
-	self.specializations[16][7].desc_id = "menu_work_in_progress_beta"
-	self.specializations[16][7].short_id = "menu_work_in_progress_beta"
-	self.specializations[16][9].upgrades = {}
-	self.specializations[16][9].name_id = "menu_work_in_progress_beta"
-	self.specializations[16][9].desc_id = "menu_work_in_progress_beta"
-	self.specializations[16][9].short_id = "menu_work_in_progress_beta"
-
-	-- Kingpin
-	table.delete(self.specializations[17][9].upgrades, "player_passive_health_multiplier_4")
-
-	-- Sicario
-	self.specializations[18][3].upgrades = { "player_smoke_grenade_no_armor_suppression" }
-	self.specializations[18][3].texture_bundle_folder = "eclipse"
-	self.specializations[18][3].icon_xy = { 0, 10 }
-	self.specializations[18][5].upgrades = { "player_passive_dodge_chance_1", "player_passive_dodge_chance_2", "player_passive_dodge_chance_3" }
-	self.specializations[18][5].texture_bundle_folder = nil
-	self.specializations[18][5].icon_xy = { 3, 2 }
-	self.specializations[18][7].upgrades = { "player_smoke_grenade_dodge_buff" }
-	self.specializations[18][7].texture_bundle_folder = "eclipse"
-	self.specializations[18][7].icon_xy = { 1, 10 }
-	self.specializations[18][9].upgrades = { "player_smoke_grenade_lingering_effect", "player_passive_loot_drop_multiplier" }
-
-	-- Stoic
-	self.specializations[19][3].upgrades = { "player_armor_to_health_conversion", "player_fall_damage_multiplier", "player_decreased_drama_hurt" }
-	self.specializations[19][7].upgrades = { "player_emergency_throwable_regen_speed" }
-	self.specializations[19][7].texture_bundle_folder = "eclipse"
-	self.specializations[19][7].icon_xy = { 2, 10 }
-
-	-- Tag Team
-	table.insert(self.specializations[20][1].upgrades, "player_tag_team_kill_extension_1")
-	table.insert(self.specializations[20][9].upgrades, "player_tag_team_kill_extension_2")
-
-	-- Hacker
-	table.delete(self.specializations[21][3].upgrades, "player_passive_health_multiplier_2")
-	self.specializations[21][3].texture_bundle_folder = nil
-	self.specializations[21][3].icon_xy = { 1, 6 }
-	table.insert(self.specializations[21][7].upgrades, "player_passive_health_multiplier_2")
-	table.delete(self.specializations[21][7].upgrades, "player_pocket_ecm_kill_dodge_1")
-	self.specializations[21][7].texture_bundle_folder = nil
-	self.specializations[21][7].icon_xy = { 2, 6 }
-	table.delete(self.specializations[21][9].upgrades, "player_passive_dodge_chance_2")
-
-	-- Leech
-	self.specializations[22][1].upgrades = {
-		"temporary_copr_ability_new_1",
-		"copr_ability",
-		"player_copr_kill_life_leech_1",
-		"player_copr_activate_bonus_health_ratio_1",
-	}
-	self.specializations[22][3].texture_bundle_folder = "eclipse"
-	self.specializations[22][3].icon_xy = { 6, 9 }
-	self.specializations[22][5].upgrades = {
-		"temporary_copr_ability_new_2",
-		"player_copr_teammate_heal_1",
-	}
-	self.specializations[22][7].upgrades = {
-		"player_emergency_throwable_regen_speed",
-	}
-	self.specializations[22][7].texture_bundle_folder = "eclipse"
-	self.specializations[22][7].icon_xy = { 7, 9 }
-	self.specializations[22][9].upgrades = {
-		"player_passive_loot_drop_multiplier",
-		"player_passive_health_multiplier_3",
-		"player_copr_kill_life_leech_2",
-		"player_copr_teammate_heal_2",
-	}
-
-	local wildcard_perkdeck = {
-		{
-			cost = 200,
-			desc_id = "menu_deck_wildcard_1_desc",
-			short_id = "menu_deck_wildcard_1_short",
-			name_id = "menu_deck_wildcard_1",
-			upgrades = {
-				"passive_player_xp_multiplier",
-			},
-			icon_xy = {
-				7,
-				3,
-			},
-		},
-		{
-			cost = 300,
-			desc_id = "menu_deckall_2_desc",
-			name_id = "menu_deckall_2",
-			upgrades = {
-				"player_regain_throwable_from_ammo_1",
-			},
-			icon_xy = {
-				0,
-				8,
-			},
-		},
-		{
-			cost = 400,
-			desc_id = "menu_deck_wildcard_3_desc",
-			short_id = "menu_deck_wildcard_3_short",
-			name_id = "menu_deck_wildcard_3",
-			upgrades = {
-				"passive_player_cash_multiplier",
-			},
-			icon_xy = {
-				7,
-				3,
-			},
-		},
-		{
-			cost = 600,
-			desc_id = "menu_deckall_4_desc",
-			name_id = "menu_deckall_4",
-			upgrades = {
-				"player_passive_suspicion_bonus",
-				"player_buy_bodybags_asset",
-				"player_additional_assets",
-				"player_buy_spotter_asset",
-			},
-			icon_xy = {
-				3,
-				0,
-			},
-		},
-		{
-			cost = 1000,
-			desc_id = "menu_deck_wildcard_5_desc",
-			short_id = "menu_deck_wildcard_5_short",
-			name_id = "menu_deck_wildcard_5",
-			upgrades = {
-				"passive_player_xp_multiplier_2",
-			},
-			icon_xy = {
-				7,
-				3,
-			},
-		},
-		{
-			cost = 1600,
-			desc_id = "menu_deckall_6_desc",
-			name_id = "menu_deckall_6",
-			upgrades = {
-				"armor_kit",
-			},
-			icon_xy = {
-				5,
-				0,
-			},
-		},
-		{
-			cost = 2400,
-			desc_id = "menu_deck_wildcard_7_desc",
-			short_id = "menu_deck_wildcard_7_short",
-			name_id = "menu_deck_wildcard_7",
-			upgrades = {
-				"passive_player_cash_multiplier_2",
-			},
-			icon_xy = {
-				7,
-				3,
-			},
-		},
-		{
-			cost = 3200,
-			desc_id = "menu_deckall_8_desc",
-			name_id = "menu_deckall_8",
-			upgrades = {
-				"passive_doctor_bag_interaction_speed_multiplier",
-			},
-			icon_xy = {
-				7,
-				0,
-			},
-		},
-		{
-			cost = 4000,
-			desc_id = "menu_deck_wildcard_9_desc",
-			short_id = "menu_deck_wildcard_9_short",
-			name_id = "menu_deck_wildcard_9",
-			upgrades = {
-				"player_passive_loot_drop_multiplier",
-				"passive_player_xp_multiplier_3",
-				"passive_player_cash_multiplier_3",
-			},
-			icon_xy = {
-				7,
-				3,
-			},
-		},
-		name_id = "menu_st_spec_23",
-		desc_id = "menu_st_spec_23_desc",
-		category = "special",
-	}
-
-	self.specializations[23] = wildcard_perkdeck
-
-	-- Generic changes to all perk decks
-	for _, perkdeck in pairs(self.specializations) do
-		-- card cost
-		perkdeck[1].cost = 400
-		perkdeck[2].cost = 300
-		perkdeck[3].cost = 600
-		perkdeck[4].cost = 400
-		perkdeck[5].cost = 900
-		perkdeck[6].cost = 550
-		perkdeck[7].cost = 1200
-		perkdeck[8].cost = 700
-		perkdeck[9].cost = 1500
-
-		-- wildcard upgrades
-		perkdeck[2].upgrades = { "player_regain_throwable_from_ammo_1" }
-		perkdeck[2].texture_bundle_folder = "eclipse"
-		perkdeck[2].icon_xy = { 0, 8 }
-		perkdeck[4].upgrades = { "player_passive_suspicion_bonus", "player_buy_bodybags_asset", "player_additional_assets", "player_buy_spotter_asset" }
-		perkdeck[4].texture_bundle_folder = "eclipse"
-		perkdeck[6].upgrades = { "armor_kit" }
-		perkdeck[6].texture_bundle_folder = "eclipse"
-		perkdeck[8].upgrades = { "passive_doctor_bag_interaction_speed_multiplier" } -- get rid of the 5% damage buff it's stupid anyways
-		perkdeck[8].texture_bundle_folder = "eclipse"
-	end
 
 	-- Buncha default upgrade fuckery
+	table.insert(self.default_upgrades, "player_chico_preferred_target")
+	table.insert(self.default_upgrades, "player_tag_team_base")
+	table.insert(self.default_upgrades, "player_pocket_ecm_jammer_base")
 	table.insert(self.default_upgrades, "temporary_double_drop_damage_multiplier")
 	table.insert(self.default_upgrades, "sentry_gun_rot_speed_multiplier")
 	table.insert(self.default_upgrades, "passive_player_xp_multiplier")

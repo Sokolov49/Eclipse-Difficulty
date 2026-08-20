@@ -742,3 +742,48 @@ function PlayerInventoryGui:_get_armor_stats(name)
 
 	return base_stats, mods_stats, skill_stats
 end
+
+Hooks:PreHook(PlayerInventoryGui, "_round_everything", "PlayerInventoryGui_update_legends", function(self)
+	self:_update_specialization_box()
+end)
+
+function PlayerInventoryGui:_update_specialization_box()
+	local box = self._boxes_by_name.specialization
+
+	if box then
+		local current_specialization = managers.skilltree:get_specialization_value("current_specialization")
+		local specialization_data = tweak_data.skilltree.specializations[current_specialization]
+		local texture_rect_x = 0
+		local texture_rect_y = 0
+		local specialization_text = managers.localization:text(specialization_data.name_id) or " "
+		local guis_catalog = "guis/"
+
+		if specialization_data then
+			local current_tier = managers.skilltree:get_specialization_value(current_specialization, "tiers", "current_tier")
+			local max_tier = managers.skilltree:get_specialization_value(current_specialization, "tiers", "max_tier")
+			local tier_data = specialization_data[max_tier]
+
+			if tier_data then
+				texture_rect_x = tier_data.icon_xy and tier_data.icon_xy[1] or 0
+				texture_rect_y = tier_data.icon_xy and tier_data.icon_xy[2] or 0
+
+				if tier_data.texture_bundle_folder then
+					guis_catalog = guis_catalog .. "dlcs/" .. tostring(tier_data.texture_bundle_folder) .. "/"
+				end
+			end
+		end
+
+		local icon_atlas_texture = guis_catalog .. "textures/pd2/skilltree/op_icons_atlas"
+
+		self:update_box(box, {
+			text = specialization_text,
+			image = icon_atlas_texture,
+			image_rect = {
+				texture_rect_x * 64,
+				texture_rect_y * 64,
+				64,
+				64
+			}
+		}, true)
+	end
+end

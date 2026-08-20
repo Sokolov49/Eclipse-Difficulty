@@ -113,3 +113,21 @@ Hooks:PostHook(MenuComponentManager, "mouse_pressed", "EclipseTipsViewerMenuComp
 		end
 	end
 end)
+
+function MenuComponentManager:create_skilltree_new_gui(node)
+	self:close_skilltree_new_gui()
+
+	self._skilltree_gui = NewSkillTreeGui:new(self._ws, self._fullscreen_ws, node)
+	self._new_skilltree_gui_active = true
+
+	self:enable_skilltree_gui()
+end
+
+function MenuComponentManager:create_skilltree_gui(node)
+	self:close_skilltree_gui()
+
+	self._skilltree_gui = SkillTreeGui:new(self._ws, self._fullscreen_ws, node)
+	self._old_skilltree_gui_active = true
+
+	self:enable_skilltree_gui()
+end
