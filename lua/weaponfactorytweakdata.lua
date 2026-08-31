@@ -2804,6 +2804,12 @@ Hooks:PostHook(WeaponFactoryTweakData, "_add_charms_to_all_weapons", "eclipse_ad
 		if is_silencer and not part_data.no_silencer_balancing then
 			self:_balance_silencer(part_id, is_barrel_ext)
 		end
+		
+		local is_unlockable = part_data.is_a_unlockable and part_data.is_a_unlockable == true
+		if is_unlockable then
+			part_data.is_a_unlockable = false
+		end
+		
 
 		local is_underbarrel = part_data.perks and table.contains(part_data.perks, "underbarrel")
 		if is_underbarrel and not part_data.no_underbarrel_balancing then
