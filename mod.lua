@@ -18,6 +18,7 @@ if not Eclipse then
 			disable_christmas = false,
 			early_control_music = true,
 			can_secure_loot = true,
+			saturation_value = 0.2,
 			targeting_priority_mul = {
 				base_priority = 1,
 				player_aim = 1.5,
@@ -696,6 +697,12 @@ if not Eclipse then
 
 		local menu_id_team_ai_targeting_enemies = "eclipse_menu_team_ai_targeting_enemies"
 		MenuHelper:NewMenu(menu_id_team_ai_targeting_enemies)
+		
+		function MenuCallbackHandler:eclipse_saturation_setting_edit(item)
+			local value = item:value()
+
+			Eclipse.settings.saturation_value = value
+		end
 
 		MenuHelper:AddSlider({
 			id = "team_ai_targeting_enemies_spooc",
@@ -811,6 +818,23 @@ if not Eclipse then
 
 		nodes[menu_id_team_ai_targeting_enemies] = MenuHelper:BuildMenu(menu_id_team_ai_targeting_enemies, { back_callback = "eclipse_save" })
 		MenuHelper:AddMenuItem(nodes[menu_id_team_ai_targeting], menu_id_team_ai_targeting_enemies, "eclipse_menu_team_ai_targeting_enemies", "eclipse_menu_team_ai_targeting_enemies_desc")
+		
+		MenuHelper:AddSlider({
+			id = "saturation_setting",
+			title = "eclipse_menu_saturation_setting",
+			desc = "eclipse_menu_saturation_setting_desc",
+			callback = "eclipse_saturation_setting_edit",
+			value = Eclipse.settings.saturation_value,
+			is_percentage = false,
+			show_value = true,
+			min = -0.4,
+			max = 0.4,
+			step = 0.1,
+			display_precision = 2,
+			priority = 100,
+		})
+		
+		MenuHelper:AddMenuItem(nodes["modify_video"], "eclipse_saturation_setting_edit", "eclipse_menu_saturation_setting", "eclipse_menu_saturation_setting_desc")
 	end)
 
 	-- Load settings
