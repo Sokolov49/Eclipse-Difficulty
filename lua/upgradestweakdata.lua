@@ -19,7 +19,7 @@ function UpgradesTweakData:_init_pd2_values(tweak_data)
 		armor = { 0, 2, 4.5, 7, 10, 14, 18 },
 		movement = { 1, 0.95, 0.9, 0.85, 0.775, 0.7, 0.625 },
 		concealment = { 30, 26, 23, 21, 18, 12, 1 },
-		dodge = { 0.1, 0.05, 0, -0.05, -0.2, -0.25, -0.55 },
+		dodge = { 0.10, 0.05, 0, -0.05, -0.2, -0.25, -0.55 },
 		damage_shake = { 1, 0.9, 0.8, 0.7, 0.55, 0.4, 0.25 },
 		stamina = { 1, 0.95, 0.9, 0.85, 0.8, 0.75, 0.7 },
 		regen_timer = { 3, 3.25, 3.5, 3.75, 4, 4.5, 5 },
@@ -2620,6 +2620,61 @@ function UpgradesTweakData:init(tweak_data)
 
 	-- Perk Decks
 	-------------
+	
+	-- Overdrill
+	self.specialization_descs[3][1].multiperk = "90%"
+	self.specialization_descs[3][1].multiperk2 = "60"
+	self.specialization_descs[3][1].multiperk3 = "30%"
+	
+	-- Hostage resources
+	self.specialization_descs[4][1].multiperk = "20%"
+	self.specialization_descs[4][1].multiperk2 = "5%"
+	self.specialization_descs[4][1].multiperk3 = "5%"
+	self.specialization_descs[4][1].multiperk4 = "4"
+	self.specialization_descs[4][1].multiperk5 = "4"
+	
+	-- Panic
+	self.specialization_descs[5][1].multiperk = "25%"
+	self.specialization_descs[5][1].multiperk2 = "20%"
+	
+	-- Tactician
+	self.specialization_descs[6][1].multiperk = "100%"
+	self.specialization_descs[6][1].multiperk2 = "20%"
+	self.specialization_descs[6][1].multiperk3 = "7m"
+	
+	-- Grenade refund
+	self.specialization_descs[7][1].multiperk = "50"
+	
+	-- Smokebomb
+	self.specialization_descs[9][1].multiperk = "25%"
+	self.specialization_descs[9][1].multiperk2 = "3"
+	
+	-- Kickstarter
+	self.specialization_descs[10][1].multiperk = "3"
+	
+	-- Crook
+	self.specialization_descs[11][1].multiperk = "25%"
+	
+	-- Joshua Wicked
+	self.specialization_descs[12][1].multiperk = "20%"
+	
+	-- Armorer
+	self.specialization_descs[13][1].multiperk = "15%"
+	self.specialization_descs[13][1].multiperk2 = "2"
+	self.specialization_descs[13][1].multiperk3 = "60"
+	
+	-- Gambler
+	self.specialization_descs[14][1].multiperk = "25%"
+
+	-- Anarchy
+	self.specialization_descs[15][1].multiperk = "75%"
+	
+	-- Prowler
+	self.specialization_descs[17][1].multiperk = "15%"
+	self.specialization_descs[17][1].multiperk2 = "20%"
+	self.specialization_descs[17][1].multiperk3 = "10%"
+	
+	self.values.temporary.chico_injector = {{ 0.75, 12 }} -- increase duration to 12 seconds
 
 	-- Crew Chief
 	self.definitions.team_resource_trading_health = {
@@ -2695,15 +2750,6 @@ function UpgradesTweakData:init(tweak_data)
 			value = 1,
 		},
 	}
-	self.specialization_descs[1][1].multiperk = "20%"
-	self.specialization_descs[1][3].multiperk = "2"
-	self.specialization_descs[1][3].multiperk2 = "50%"
-	self.specialization_descs[1][3].multiperk3 = "50%"
-	self.specialization_descs[1][5].multiperk = "4"
-	self.specialization_descs[1][7].multiperk = "5%"
-	self.specialization_descs[1][7].multiperk2 = "4"
-	self.specialization_descs[1][9].multiperk = "10"
-	self.specialization_descs[1][9].multiperk2 = "doubled"
 
 	-- Muscle (uses same extra hp upgrade as grinder)
 	self.values.player.uncover_multiplier[1] = 1.25
@@ -2728,12 +2774,6 @@ function UpgradesTweakData:init(tweak_data)
 			category = "temporary",
 		},
 	}
-	self.specialization_descs[2][3].multiperk = "30%"
-	self.specialization_descs[2][5].multiperk = "25%"
-	self.specialization_descs[2][7].multiperk = "25%"
-	self.specialization_descs[2][7].multiperk2 = "2"
-	self.specialization_descs[2][7].multiperk3 = "60"
-	self.specialization_descs[2][9].multiperk = "30%"
 
 	-- Armorer
 	self.values.player.armor_regen_timer_multiplier_passive[1] = 0.85
@@ -2770,26 +2810,10 @@ function UpgradesTweakData:init(tweak_data)
 			category = "temporary",
 		},
 	}
-	self.specialization_descs[3][1].multiperk = "15%"
-	self.specialization_descs[3][3].multiperk = "20%"
-	self.specialization_descs[3][5].multiperk = "15%"
-	self.specialization_descs[3][7].multiperk = "20%"
-	self.specialization_descs[3][7].multiperk2 = "10"
-	self.specialization_descs[3][7].multiperk3 = "60"
-	self.specialization_descs[3][9].multiperk = "2"
-	self.specialization_descs[3][9].multiperk2 = "60"
 
 	-- All dodge decks
 	self.values.player.passive_dodge_chance = { 0.05, 0.1, 0.15 }
 	self.values.player.tier_dodge_chance = { 0.1, 0.15, 0.2 }
-	self.specialization_descs[4][1].multiperk = "5%"
-	self.specialization_descs[4][5].multiperk = "5%"
-	self.specialization_descs[4][7].multiperk = "5%"
-	self.specialization_descs[6][1].multiperk = "5%"
-	self.specialization_descs[7][1].multiperk = "10%"
-	self.specialization_descs[13][5].multiperk3 = "5%"
-	self.specialization_descs[18][5].multiperk = "15%"
-	self.specialization_descs[21][5].multiperk2 = "5%"
 
 	-- Rogue Specific
 	self.values.temporary.unseen_dodge = {
@@ -2807,13 +2831,6 @@ function UpgradesTweakData:init(tweak_data)
 			category = "temporary",
 		},
 	}
-	self.specialization_descs[4][3].multiperk = "4"
-	self.specialization_descs[4][3].multiperk2 = "10%"
-	self.specialization_descs[4][3].multiperk3 = "6"
-	self.specialization_descs[4][9].multiperk = "4"
-	self.specialization_descs[4][9].multiperk2 = "20%"
-	self.specialization_descs[4][9].multiperk3 = "6"
-	self.specialization_descs[4][9].multiperk4 = "200%"
 
 	-- Hitman
 	self.definitions.player_chain_hitman_kills = {
@@ -2874,19 +2891,6 @@ function UpgradesTweakData:init(tweak_data)
 		},
 	}
 	self.values.player.cheat_death_inc = { 0.04 }
-	self.specialization_descs[5][1].multiperk = "3"
-	self.specialization_descs[5][1].multiperk2 = "10"
-	self.specialization_descs[5][1].multiperk3 = "10%"
-	self.specialization_descs[5][1].multiperk4 = "10"
-	self.specialization_descs[5][3].multiperk = "10%"
-	self.specialization_descs[5][5].multiperk = "3"
-	self.specialization_descs[5][5].multiperk2 = "10"
-	self.specialization_descs[5][5].multiperk3 = "10%"
-	self.specialization_descs[5][5].multiperk4 = "10"
-	self.specialization_descs[5][7].multiperk = "20%"
-	self.specialization_descs[5][9].multiperk = "3"
-	self.specialization_descs[5][9].multiperk2 = "10"
-	self.specialization_descs[5][9].multiperk3 = "4%"
 
 	-- Crook
 	self.values.player.bv_stamina_reduction_multiplier = { 0.7 }
@@ -2932,9 +2936,6 @@ function UpgradesTweakData:init(tweak_data)
 			category = "player",
 		},
 	}
-	self.specialization_descs[6][1].multiperk = "30%"
-	self.specialization_descs[6][3].multiperk = "25%"
-	self.specialization_descs[6][7].multiperk = "25%"
 
 	-- Tactician (ex-Burglar)
 	self.values.player.near_teammate_damage_multiplier = {
@@ -2976,15 +2977,6 @@ function UpgradesTweakData:init(tweak_data)
 			category = "player",
 		},
 	}
-	self.specialization_descs[7][1].multiperk = "half"
-	self.specialization_descs[7][3].multiperk = "30%"
-	self.specialization_descs[7][3].multiperk2 = "3"
-	self.specialization_descs[7][5].multiperk = "20%"
-	self.specialization_descs[7][5].multiperk2 = "7m"
-	self.specialization_descs[7][7].multiperk = "90%"
-	self.specialization_descs[7][7].multiperk2 = "60"
-	self.specialization_descs[7][9].multiperk = "full"
-	self.specialization_descs[7][9].multiperk2 = "100%"
 
 	-- Infiltrator
 	self.values.player.melee_kill_health_regen = { 1 }
@@ -2998,8 +2990,6 @@ function UpgradesTweakData:init(tweak_data)
 			category = "cooldown",
 		},
 	}
-	self.specialization_descs[8][9].multiperk = "10"
-	self.specialization_descs[8][9].multiperk2 = "5"
 
 	-- Sociopath
 	self.on_killshot_cooldown = 2
@@ -3016,12 +3006,6 @@ function UpgradesTweakData:init(tweak_data)
 		},
 	}
 	self.values.player.killshot_close_regen_armor_bonus[1] = 2
-	self.specialization_descs[9][3].multiperk = "20"
-	self.specialization_descs[9][3].multiperk2 = "2"
-	self.specialization_descs[9][5].multiperk = "40"
-	self.specialization_descs[9][5].multiperk2 = "2"
-	self.specialization_descs[9][7].multiperk = "20"
-	self.specialization_descs[9][7].multiperk2 = "2"
 
 	-- Infil / Socio shared melee card
 	self.max_melee_weapon_dmg_mul_stacks = 4
@@ -3029,12 +3013,6 @@ function UpgradesTweakData:init(tweak_data)
 		1,
 		1,
 	}
-	self.specialization_descs[8][1].multiperk2 = "1"
-	self.specialization_descs[8][1].multiperk3 = "100%"
-	self.specialization_descs[8][1].multiperk4 = "4"
-	self.specialization_descs[9][1].multiperk2 = "1"
-	self.specialization_descs[9][1].multiperk3 = "100%"
-	self.specialization_descs[9][1].multiperk4 = "4"
 
 	-- Gambler
 	self.values.player.pickup_restore_health = { 0.3, 0.6 }
@@ -3088,12 +3066,6 @@ function UpgradesTweakData:init(tweak_data)
 			category = "player",
 		},
 	}
-	self.specialization_descs[10][1].multiperk = "3"
-	self.specialization_descs[10][3].multiperk = "25%"
-	self.specialization_descs[10][5].multiperk = "50%"
-	self.specialization_descs[10][7].multiperk = "100%"
-	self.specialization_descs[10][7].multiperk2 = "20%"
-	self.specialization_descs[10][9].multiperk = "100%"
 
 	-- Grinder
 	self.damage_to_hot_data.stacking_cooldown = 1
@@ -3155,18 +3127,6 @@ function UpgradesTweakData:init(tweak_data)
 
 	self.values.player.fall_damage_multiplier = { 0.5 }
 
-	self.specialization_descs[11][1].multiperk = "1"
-	self.specialization_descs[11][1].multiperk2 = "0.3"
-	self.specialization_descs[11][1].multiperk3 = "3"
-	self.specialization_descs[11][1].multiperk4 = "1"
-	self.specialization_descs[11][3].multiperk = "30%"
-	self.specialization_descs[11][3].multiperk2 = "50%"
-	self.specialization_descs[11][5].multiperk = "10"
-	self.specialization_descs[11][5].multiperk2 = "5"
-	self.specialization_descs[11][7].multiperk = "30%"
-	self.specialization_descs[11][9].multiperk = "2"
-	self.specialization_descs[11][9].multiperk2 = "0.3"
-	self.specialization_descs[11][9].multiperk3 = "4.5"
 
 	-- Yakuza
 	self.values.player.damage_health_ratio_multiplier = { 0.30 }
@@ -3192,11 +3152,6 @@ function UpgradesTweakData:init(tweak_data)
 			category = "player",
 		},
 	}
-	self.specialization_descs[12][1].multiperk = "30%"
-	self.specialization_descs[12][3].multiperk = "80%"
-	self.specialization_descs[12][5].multiperk = "15%"
-	self.specialization_descs[12][7].multiperk = "30%"
-	self.specialization_descs[12][9].multiperk = "30%"
 
 	-- Ex-President
 	self.values.player.body_armor.skill_max_health_store = { 4, 3.75, 3.5, 3.25, 2.5, 1.75, 1 }
@@ -3214,19 +3169,10 @@ function UpgradesTweakData:init(tweak_data)
 		},
 	}
 
-	self.specialization_descs[13][1].multiperk = "2"
-	self.specialization_descs[13][3].multiperk = "2"
-	self.specialization_descs[13][3].multiperk2 = "10%"
-	self.specialization_descs[13][5].multiperk = "50%"
-	self.specialization_descs[13][7].multiperk = "2"
-	self.specialization_descs[13][7].multiperk2 = "10%"
 
 	-- Maniac
 	self.cocaine_stacks_convert_levels = { 600 / 8, 60 }
 	self.values.player.cocaine_stack_absorption_multiplier = { 1.5 }
-	self.specialization_descs[14][1].multiperk6 = "75"
-	self.specialization_descs[14][7].multiperk2 = "60"
-	self.specialization_descs[14][9].multiperk = "50%"
 
 	-- Anarchist
 	self.values.player.armor_grinding = { {
@@ -3335,8 +3281,6 @@ function UpgradesTweakData:init(tweak_data)
 		{ 3.5, 6 },
 		{ 4, 8 },
 	} }
-	self.specialization_descs[15][3].multiperk = "75%"
-	self.specialization_descs[15][7].multiperk2 = "50%"
 
 	-- Biker
 	self.wild_trigger_time = 16
@@ -3354,21 +3298,9 @@ function UpgradesTweakData:init(tweak_data)
 			1,
 		},
 	}
-	self.specialization_descs[16][1].multiperk = "7.5"
-	self.specialization_descs[16][1].multiperk3 = "2"
-	self.specialization_descs[16][1].multiperk4 = "16"
-	self.specialization_descs[16][5].multiperk = "1/6"
-	self.specialization_descs[16][5].multiperk2 = "16"
-	self.specialization_descs[16][5].multiperk3 = "1"
-	self.specialization_descs[16][9].multiperk = "1/6"
-	self.specialization_descs[16][9].multiperk2 = "16"
-	self.specialization_descs[16][9].multiperk3 = "1"
 
 	-- Kingpin
 	self.chico_injector_criminal_hurt_drama_mul = 0.1
-	self.specialization_descs[17][1].multiperk3 = "45"
-	self.specialization_descs[17][9].multiperk3 = "5 points"
-	self.specialization_descs[17][9].multiperk3 = "1"
 
 	-- Sicario
 	self.definitions.player_smoke_grenade_no_armor_suppression = {
@@ -3424,9 +3356,6 @@ function UpgradesTweakData:init(tweak_data)
 		},
 	}
 	self.values.player.smoke_grenade_lingering_effect = { 3 }
-	self.specialization_descs[18][3].multiperk = "30%"
-	self.specialization_descs[18][7].multiperk = "25%"
-	self.specialization_descs[18][9].multiperk = "3"
 
 	-- Stoic
 	self.values.player.body_armor.damage_control_passive = {
@@ -3451,10 +3380,6 @@ function UpgradesTweakData:init(tweak_data)
 		},
 	}
 
-	self.specialization_descs[19][1].multiperk3 = "16"
-	self.specialization_descs[19][3].multiperk = "50%"
-	self.specialization_descs[19][7].multiperk = "25%"
-	self.specialization_descs[19][7].multiperk2 = "35%"
 
 	-- Tag Team
 	self.values.player.tag_team_kill_extension = {
@@ -3486,12 +3411,6 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.player.tag_team_base.kill_health_gain = 0.5
 	self.values.player.tag_team_base.tagged_health_gain_ratio = 1
 	self.values.player.tag_team_damage_absorption = { { kill_gain = 0.15, max = 0.6 } }
-	self.specialization_descs[20][1].multiperk2 = "5"
-	self.specialization_descs[20][1].multiperk3 = "5"
-	self.specialization_descs[20][1].multiperk4 = "1.5"
-	self.specialization_descs[20][5].multiperk = "1.5"
-	self.specialization_descs[20][5].multiperk2 = "6"
-	self.specialization_descs[20][9].multiperk = "2.5"
 
 	-- Hacker
 	self.values.player.pocket_ecm_heal_on_kill = {
@@ -3500,10 +3419,6 @@ function UpgradesTweakData:init(tweak_data)
 	self.values.team.pocket_ecm_heal_on_kill = {
 		0.5,
 	}
-	self.specialization_descs[21][3].multiperk = "10%"
-	self.specialization_descs[21][5].multiperk = "15"
-	self.specialization_descs[21][7].multiperk = "10%"
-	self.specialization_descs[21][9].multiperk = "5"
 
 	-- Leech
 	self.copr_ability_cooldown = 60
@@ -3563,16 +3478,6 @@ function UpgradesTweakData:init(tweak_data)
 		},
 	}
 
-	self.specialization_descs[22][1].multiperk = "25%"
-	self.specialization_descs[22][1].multiperk2 = "2"
-	self.specialization_descs[22][1].multiperk3 = "6"
-	self.specialization_descs[22][1].multiperk4 = "60"
-	self.specialization_descs[22][3].multiperk2 = "60%"
-	self.specialization_descs[22][5].multiperk2 = "2"
-	self.specialization_descs[22][7].multiperk = "25%"
-	self.specialization_descs[22][7].multiperk2 = "35%"
-	self.specialization_descs[22][9].multiperk = "20%"
-	self.specialization_descs[22][9].multiperk2 = "4"
 
 	-- Wildcard Perkdeck
 	self.values.player.passive_xp_multiplier = { 1.1, 1.25, 1.45 }
@@ -3622,11 +3527,6 @@ function UpgradesTweakData:init(tweak_data)
 			category = "player",
 		},
 	}
-	self.specialization_descs[23][1].multiperk = "10%"
-	self.specialization_descs[23][3].multiperk = "10%"
-	self.specialization_descs[23][5].multiperk = "15%"
-	self.specialization_descs[23][7].multiperk = "15%"
-	self.specialization_descs[23][9].multiperk = "20%"
 
 	-- Grenade Case
 	self.grenade_crate_base = 4
@@ -3675,6 +3575,23 @@ function UpgradesTweakData:init(tweak_data)
 	}
 	self.values.saw.enemy_slicer[1] = 2
 	self.values.player.pocket_ecm_jammer_base.affects_comms = false
+	self.values.player.mask_off_pick_lock = {true}
+	self.definitions.player_mask_off_pick_lock = {
+		category = "feature",
+		name_id = "menu_player_mask_off_pick_lock",
+		upgrade = {
+			category = "player",
+			upgrade = "mask_off_pick_lock",
+			value = 1
+		}
+	}
+	self.values.player.pocket_ecm_jammer_base = {}
+	self.values.player.pocket_ecm_jammer_base.affects_cameras = true
+	-- self.values.player.pocket_ecm_jammer_base.cooldown_drain = 6
+	self.values.player.pocket_ecm_jammer_base.affects_pagers = false
+	self.values.player.pocket_ecm_jammer_base.feedback_interval = 0.8
+	self.values.player.pocket_ecm_jammer_base.duration = 12
+	self.values.player.pocket_ecm_jammer_base.feedback_range = 1400
 end
 
 -- Add Team AI ability definitions

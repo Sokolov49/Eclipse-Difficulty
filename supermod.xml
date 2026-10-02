@@ -76,6 +76,7 @@
 					<post :hook_id="ingamecontractgui"/>
 					<post :hook_id="blackmarketgui"/>
 					<post :hook_id="playerinventorygui"/>
+					<post :hook_id="skilltreegui"/>
 					<post :hook_id="skilltreeguinew"/>
 					<post :hook_id="missionbriefinggui"/>		
 					<post :hook_id="crewmanagementgui"/>
@@ -116,6 +117,7 @@
 				<post :hook_id="groupaimanager"/>
 				<post :hook_id="explosionmanager"/>
 				<post :hook_id="killzonemanager"/>
+				<post :hook_id="skilltreemanager"/>
 				<post :hook_id="firemanager"/>
 				<post :hook_id="trademanager"/>
 				<post :hook_id="hudmanagerpd2"/>
@@ -388,6 +390,7 @@
 		<!-- Perk decks and skill trees icons -->
 		<file name="guis/textures/pd2/skilltree_2/icons_atlas_2.texture"/>
 		<file name="guis/dlcs/eclipse/textures/pd2/specialization/icons_atlas.texture"/>
+		<file name="guis/textures/pd2/skilltree/op_icons_atlas.texture"/>
 
 		<!-- Safehouse Raid contract broker image (by Jarey) -->
 		<file name="guis/dlcs/bro/textures/pd2/crimenet/chill_combat.texture"/>

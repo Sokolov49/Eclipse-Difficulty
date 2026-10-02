@@ -1,6 +1,6 @@
 Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "eclipse__init_projectiles", function(self, tweak_data)
 	-- Tweak cooldowns
-	self.projectiles.chico_injector.base_cooldown = 45 -- Kingpin Injector
+	self.projectiles.chico_injector.base_cooldown = nil -- Kingpin Injector
 	self.projectiles.damage_control.base_cooldown = 16 -- Stoic Hip Flask
 
 	-- Remove the projectile anti-cheat
